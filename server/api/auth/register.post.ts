@@ -1,5 +1,5 @@
 import { sendError } from "h3"
-import { createUser } from "~~/server/db/users"
+import { createUser, getUserByEmail } from "~~/server/db/users"
 import { userTransformer } from "~~/server/transformers/user"
 import { H3Event } from "h3"
 import { IUser } from "~~/types/IUser"
@@ -11,8 +11,13 @@ const body = await readBody(event)
 const { email, password, repeatPassword, name}:IUser = body
 
 if(!email || !password || !repeatPassword || !name){
-    return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid params'}))
+    return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid parameters'}))
 }
+const userExists = await getUserByEmail(email)
+if(userExists){
+    return sendError(event, createError({statusCode: 400, statusMessage: 'User with this email already exists'}))
+}
+
 if(password !== repeatPassword){
     return sendError(event, createError({statusCode: 400, statusMessage: 'Passwords do not match'}))
 }
@@ -21,7 +26,7 @@ const userData = { email, password, name, profileImage: 'https://picsum.photos/2
 
 const user = await createUser(userData)
 
-    return {
-        body: userTransformer(user)
-    }
+return {
+    body: userTransformer(user)
+}
 })

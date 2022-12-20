@@ -1,42 +1,55 @@
 <template>
-    <div class="pt-5 space-y-6 w-full">
-        <h1 class="mb-20 text-5xl">Sign In</h1>
-        <UIInput label="Email" placeholder="user@email.com" type="email" v-model="loginData.email"/>
-        <UIInput label="Password" placeholder="*********" type="password" v-model="loginData.password"/>
-        <div>
-        <UIButton @click="handleLogin" name="Sign In" :disabled="loginDisabled"/>
-        </div>
-        <UIButton @click="useRouter().push('/register');" type="text" name="Create new account"/>
-    </div> 
+  <div class="pt-5 space-y-6 w-full">
+    <h1 class="mb-20 text-5xl">Sign In</h1>
+    <UIInput
+      label="Email"
+      placeholder="user@email.com"
+      type="email"
+      v-model="loginData.email"
+    />
+    <UIInput
+      label="Password"
+      placeholder="*********"
+      type="password"
+      v-model="loginData.password"
+    />
+    <p class="text-red-500">{{ loginError }}</p>
+    <UIButton @click="handleLogin" name="Sign In" :disabled="loginDisabled" />
+    <UIButton
+      @click="useRouter().push('/register')"
+      type="text"
+      name="Create new account"
+    />
+  </div>
 </template>
  
 <script lang="ts" setup>
 definePageMeta({
-  layout: "login",
-});
+  layout: 'login',
+})
 const loginData = reactive({
-  email: "",
-  password: "",
+  email: '',
+  password: '',
   loading: false,
-});
+})
+const loginError = ref('')
 const loginDisabled = computed(() => {
-  return !loginData.email || !loginData.password || loginData.loading;
-});
-console.log(loginDisabled);
+  return !loginData.email || !loginData.password || loginData.loading
+})
 
 const handleLogin = async () => {
-  const { login } = useAuth();
+  const { login } = useAuth()
 
-  loginData.loading = true;
+  loginData.loading = true
   try {
     await login({
       email: loginData.email,
       password: loginData.password,
-    });
-  } catch (error) {
-    console.log(error);
+    })
+  } catch (error: any) {
+    loginError.value = error.statusMessage
   } finally {
-    loginData.loading = false;
+    loginData.loading = false
   }
-};
+}
 </script>

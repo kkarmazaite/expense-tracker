@@ -12,7 +12,7 @@ export default defineEventHandler(async (event: H3Event) =>{
     const {email, password}:ILogin = body
 
     if(!email || !password){
-        return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid params'}))
+        return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid parameters'}))
     }
     const user = await getUserByEmail(email)
 

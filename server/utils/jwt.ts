@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 import { IUser } from '~~/types/IUser'
 import { H3Event } from "h3"
 import { IToken } from '~~/types/IToken'
-//todo type
+
 const generateAccessToken = (user:IUser) : string =>{
     const config = useRuntimeConfig()
 

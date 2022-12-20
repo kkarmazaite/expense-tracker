@@ -10,5 +10,5 @@ export default defineEventHandler( async (event: H3Event) => {
     }
     deleteCookie(event, 'refresh_token')
     
-    return { message: 'User successfully logout' }
+    return { message: 'User successfully logged out' }
 })

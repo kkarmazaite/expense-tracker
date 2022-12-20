@@ -1,11 +1,14 @@
 import {prisma} from '.'
 import bcrypt from 'bcrypt'
+import { IUser } from '~~/types/IUser'
 
-//Todo type
-export const createUser = (userData: any) => {
+export const createUser = async(userData: IUser) => {
+    const password = userData.password as string
+    const encryptedPassword = await bcrypt.hash(password, 10)
+
     const finalUserData = {
         ...userData,
-        password: bcrypt.hashSync(userData.password, 10)
+        password: encryptedPassword
     }
     return prisma.user.create({
         data: finalUserData
@@ -20,7 +23,7 @@ export const getUserByEmail = (email: string) => {
     })
 }
 
-export const getUserById = (userId: any) => {
+export const getUserById = (userId: string) => {
     return prisma.user.findUnique({
         where:{
             id: userId

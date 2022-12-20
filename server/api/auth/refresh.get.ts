@@ -1,4 +1,3 @@
-import { rejects } from "assert"
 import { sendError } from "h3"
 import { getRefreshTokenByToken } from "~~/server/db/refreshTokens"
 import { getUserById } from "~~/server/db/users"
