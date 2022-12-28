@@ -1,7 +1,7 @@
 <template>
   <button
     :disabled="disabled"
-    class="w-full px-5 py-1 rounded-full"
+    class="w-full px-5 py-1 rounded-full flex justify-center items-center"
     :class="{
       'bg-gray-400 hover:bg-gray-400 text-white':
         type === 'regular' && disabled,
@@ -10,17 +10,13 @@
     }"
     @click="(event) => emits('onClick', event)"
   >
-    {{ name }}
+    <slot />
   </button>
 </template>
 
 <script setup>
 const emits = defineEmits(['onClick'])
 const props = defineProps({
-  name: {
-    type: String,
-    required: true,
-  },
   type: {
     type: String,
     default: 'regular',
@@ -30,5 +26,4 @@ const props = defineProps({
     default: false,
   },
 })
-console.log(props.type === 'regular', props.disabled)
 </script>

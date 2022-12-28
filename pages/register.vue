@@ -21,11 +21,9 @@
       v-model="registrationData.repeatPassword"
     />
     <p class="text-red-500">{{ registrationError }}</p>
-    <UIButton
-      @click="handleRegistration"
-      name="Create account"
-      :disabled="registrationDisabled"
-    />
+    <UIButton @click="handleRegistration" :disabled="registrationDisabled">
+      Create account
+    </UIButton>
   </div>
 </template>
  

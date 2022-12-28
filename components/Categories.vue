@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white">
-        <h2>Categories</h2>
-    </div>
+  <UICard>
+    <h2>Categories</h2>
+  </UICard>
 </template>

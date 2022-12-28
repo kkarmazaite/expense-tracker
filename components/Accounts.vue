@@ -1,5 +1,6 @@
 <template>
-  <div class="bg-white">
-    <h2>Accounts</h2>
-  </div>
+  <UICard title="accounts">
+    <template v-slot:card-content> Hue</template>
+    <template v-slot:modal-content> Hue2</template>
+  </UICard>
 </template>

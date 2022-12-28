@@ -14,12 +14,12 @@
       v-model="loginData.password"
     />
     <p class="text-red-500">{{ loginError }}</p>
-    <UIButton @click="handleLogin" name="Sign In" :disabled="loginDisabled" />
-    <UIButton
-      @click="useRouter().push('/register')"
-      type="text"
-      name="Create new account"
-    />
+    <UIButton @click="handleLogin" :disabled="loginDisabled">
+      Sign In
+    </UIButton>
+    <UIButton @click="useRouter().push('/register')" type="text">
+      Create new account
+    </UIButton>
   </div>
 </template>
  
