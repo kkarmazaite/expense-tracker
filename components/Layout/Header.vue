@@ -1,14 +1,14 @@
 <template>
   <div class="bg-white w-full flex justify-between items-center p-5">
-    <UILogo/> 
+    <UILogo />
     <div v-if="user">
-        <span>Hi, {{user.name}}</span> 
-        <button @click="logout()">Logout</button>
+      <span>Hi, {{ user.name }}</span>
+      <button @click="logout()">Logout</button>
     </div>
-</div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-const { useAuthUser, logout } = useAuth();
-const user = useAuthUser();
+const { useAuthUser, logout } = useAuth()
+const user = useAuthUser()
 </script>
