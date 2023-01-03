@@ -12,12 +12,15 @@
       items-center
       bg-black bg-opacity-50
     "
-    @click="showModal = false"
+    @click="closeModal()"
   >
-    <div
-      class="text-center bg-white w-[500px] h-[500px] rounded-md"
-      @click.stop
-    >
+    <div class="bg-white rounded-md p-5 pb-10 w-[500px]" @click.stop>
+      <div class="flex justify-between items-center mb-10">
+        <h2 class="text-3xl capitalize break-words">{{ title }}</h2>
+        <UIButton type="plain" class="text-xl" @click="closeModal()">
+          <font-awesome-icon icon="fa-solid fa-xmark" />
+        </UIButton>
+      </div>
       <slot />
     </div>
   </div>
@@ -26,45 +29,16 @@
 <script setup>
 const emits = defineEmits(['closeModal'])
 const props = defineProps({
+  title: {
+    type: String,
+    default: '',
+  },
   showModal: {
     type: Boolean,
     default: false,
   },
 })
 const closeModal = () => {
-  props.showModal = false
   emits('closeModal')
 }
 </script>
-<style scoped>
-.modal {
-  text-align: center;
-  background-color: white;
-  height: 500px;
-  width: 500px;
-  margin-top: 10%;
-  padding: 60px 0;
-  border-radius: 20px;
-}
-
-h6 {
-  font-weight: 500;
-  font-size: 28px;
-  margin: 20px 0;
-}
-
-p {
-  font-size: 16px;
-  margin: 20px 0;
-}
-
-button {
-  background-color: #ac003e;
-  width: 150px;
-  height: 40px;
-  color: white;
-  font-size: 14px;
-  border-radius: 16px;
-  margin-top: 50px;
-}
-</style>

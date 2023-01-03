@@ -1,20 +1,32 @@
 <template>
   <div class="bg-white rounded-md p-2">
-    <div v-if="title" class="flex justify-between">
-      <h2 class="capitalize text-bold text-2xl">{{ title }}</h2>
-      <UIButton class="w-auto px-2" @click="showModal = true">
+    <div v-if="cardTitle" class="flex justify-between">
+      <h2 class="capitalize text-bold text-2xl">{{ cardTitle }}</h2>
+      <UIButton
+        type="plain"
+        class="w-auto px-2 text-xl"
+        @click="showModal = true"
+      >
         <font-awesome-icon icon="fa-solid fa-plus" />
       </UIButton>
     </div>
     <slot name="card-content" />
-    <UIModal :showModal="showModal" @click="showModal = false">
+    <UIModal
+      :title="modalTitle"
+      :showModal="showModal"
+      @closeModal="showModal = false"
+    >
       <slot name="modal-content" />
     </UIModal>
   </div>
 </template>
 <script setup>
 const props = defineProps({
-  title: {
+  cardTitle: {
+    type: String,
+    default: '',
+  },
+  modalTitle: {
     type: String,
     default: '',
   },

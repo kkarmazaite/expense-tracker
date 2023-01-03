@@ -7,6 +7,7 @@
         type === 'regular' && disabled,
       'bg-blue-500 hover:bg-blue-400 text-white': type === 'regular',
       'text-blue-500 hover:text-blue-400': type === 'text',
+      'text-gray-500 hover:text-gray-400 w-auto px-2': type === 'plain',
     }"
     @click="(event) => emits('onClick', event)"
   >
