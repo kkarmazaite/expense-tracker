@@ -1,31 +1,20 @@
 <template>
   <div class="w-full">
-    <label
-      for=""
-      v-if="props.label"
-      class="block pl-3 ml-px text-sm font-medium text-gray-700"
-    >
-      {{ props.label }}</label
-    >
+    <label for="" v-if="props.label" class="block pl-3 ml-px text-sm font-medium text-gray-700">
+      {{ label }}</label>
     <div class="mt-1">
-      <input
-        :value="props.modelValue"
-        @input="(event) => emits('update:modelValue', event.target.value)"
-        class="
+      <input :value="props.modelValue" @input="(event) => emits('update:modelValue', event.target.value)" class="
           block
           w-full
           px-4
           border-b border-gray-300
           focus:border-blue-500
           sm:text-sm
-        "
-        :type="props.type"
-        :placeholder="props.placeholder"
-      />
+        " :type="props.type" :placeholder="props.placeholder" />
     </div>
   </div>
 </template>
-<script setup>
+<script lang="ts" setup>
 const emits = defineEmits(['update:modelValue'])
 const props = defineProps({
   modelValue: {

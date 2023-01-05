@@ -5,10 +5,19 @@
   </NuxtLayout>
 </template>
 
-<script lang="ts" setup>
-const { initAuth, useAuthLoading } = useAuth()
-const isAuthLoading = useAuthLoading()
-onBeforeMount(() => {
-  initAuth()
+<script lang="ts">
+import { defineComponent } from 'vue'
+
+export default defineComponent({
+  setup() {
+    const { initAuth, useAuthLoading } = useAuth()
+    const isAuthLoading = useAuthLoading()
+    onBeforeMount(() => {
+      initAuth()
+    })
+    return {
+      isAuthLoading,
+    }
+  },
 })
 </script>

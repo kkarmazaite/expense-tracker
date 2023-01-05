@@ -1,7 +1,5 @@
 <template>
-  <div
-    v-if="showModal"
-    class="
+  <div v-if="props.showModal" class="
       fixed
       top-0
       bottom-0
@@ -11,12 +9,10 @@
       justify-center
       items-center
       bg-black bg-opacity-50
-    "
-    @click="closeModal()"
-  >
+    " @click="closeModal()">
     <div class="bg-white rounded-md p-5 pb-10 w-[500px]" @click.stop>
       <div class="flex justify-between items-center mb-10">
-        <h2 class="text-3xl capitalize break-words">{{ title }}</h2>
+        <h2 class="text-3xl capitalize break-words">{{ props.title }}</h2>
         <UIButton type="plain" class="text-xl" @click="closeModal()">
           <font-awesome-icon icon="fa-solid fa-xmark" />
         </UIButton>
@@ -25,10 +21,12 @@
     </div>
   </div>
 </template>
-
-<script setup>
-const emits = defineEmits(['closeModal'])
+<script lang="ts" setup>
 const props = defineProps({
+  modalKeyName: {
+    type: String,
+    required: true
+  },
   title: {
     type: String,
     default: '',
@@ -38,7 +36,6 @@ const props = defineProps({
     default: false,
   },
 })
-const closeModal = () => {
-  emits('closeModal')
-}
+const { closeModal } = useModal(props.modalKeyName)
+
 </script>

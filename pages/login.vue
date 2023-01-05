@@ -1,18 +1,8 @@
 <template>
   <div class="pt-5 space-y-6 w-full">
     <h1 class="mb-20 text-5xl">Sign In</h1>
-    <UIInput
-      label="Email"
-      placeholder="user@email.com"
-      type="email"
-      v-model="loginData.email"
-    />
-    <UIInput
-      label="Password"
-      placeholder="*********"
-      type="password"
-      v-model="loginData.password"
-    />
+    <UIInput label="Email" placeholder="user@email.com" type="email" v-model="loginData.email" />
+    <UIInput label="Password" placeholder="*********" type="password" v-model="loginData.password" />
     <p class="text-red-500">{{ loginError }}</p>
     <UIButton @click="handleLogin" :disabled="loginDisabled">
       Sign In

@@ -16,7 +16,7 @@ export default () => {
     const setUser = (newUser:IUser | null) => {
         const authUser = useAuthUser()
         authUser.value = newUser
-    }
+    } 
 
     const setIsAuthLoading = (value: boolean) => {
         const authLoading = useAuthLoading()

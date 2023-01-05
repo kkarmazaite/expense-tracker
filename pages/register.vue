@@ -2,24 +2,10 @@
   <div class="pt-5 space-y-6 w-full">
     <h1 class="mb-20 text-5xl">Create new user account</h1>
     <UIInput label="Name" placeholder="John" v-model="registrationData.name" />
-    <UIInput
-      label="Email"
-      placeholder="user@email.com"
-      type="email"
-      v-model="registrationData.email"
-    />
-    <UIInput
-      label="Password"
-      placeholder="*********"
-      type="password"
-      v-model="registrationData.password"
-    />
-    <UIInput
-      label="Repeat password"
-      placeholder="*********"
-      type="password"
-      v-model="registrationData.repeatPassword"
-    />
+    <UIInput label="Email" placeholder="user@email.com" type="email" v-model="registrationData.email" />
+    <UIInput label="Password" placeholder="*********" type="password" v-model="registrationData.password" />
+    <UIInput label="Repeat password" placeholder="*********" type="password"
+      v-model="registrationData.repeatPassword" />
     <p class="text-red-500">{{ registrationError }}</p>
     <UIButton @click="handleRegistration" :disabled="registrationDisabled">
       Create account
