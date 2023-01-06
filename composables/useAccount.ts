@@ -1,6 +1,8 @@
+import { IAccount } from "~~/types/IAccount"
+
 export default () => {
     const createNewAccount = async({ name, userId}:{name:string | undefined, userId:string | undefined}) => {
-        await $fetch('/api/data/account', {
+        await useFetchApi('/api/data/account', {
             method: 'POST',
             body:{
                 name,
@@ -8,7 +10,12 @@ export default () => {
             }
         })
     }
+    const getUserAccounts = async() => {
+        const data:{accounts:IAccount[]} = await useFetchApi('/api/data/account' )
+        return data
+    }
     return{
-        createNewAccount
+        createNewAccount,
+        getUserAccounts
     }
 }

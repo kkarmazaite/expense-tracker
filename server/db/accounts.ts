@@ -12,3 +12,8 @@ export const geAccountByNameAndUserId = (name: string, userId:string) => {
         where: { name, userId }
       })
 }
+export const geAccountByUserId = (userId:string) => {
+    return prisma.account.findMany({
+        where: { userId }
+      })
+}

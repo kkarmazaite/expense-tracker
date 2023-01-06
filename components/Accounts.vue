@@ -1,15 +1,23 @@
 <template>
-  <div class="bg-white rounded-md p-2">
-    <!-- Header -->
-    <div class="flex justify-between">
-      <h2 class="capitalize text-bold text-2xl">Accounts</h2>
-      <UIButton type="plain" class="w-auto px-2 text-xl" @click="openModal()">
-        <font-awesome-icon icon="fa-solid fa-plus" />
-      </UIButton>
+  <div class="bg-white rounded-md py-5">
+    <div class="w-full h-full px-5  overflow-auto">
+      <!-- Header -->
+      <div class="flex justify-between pb-5 sticky top-0 bg-white">
+        <h2 class="capitalize text-bold text-2xl">Accounts</h2>
+        <UIButton type="plain" class="w-auto px-2 text-xl" @click="openModal()">
+          <font-awesome-icon icon="fa-solid fa-plus" />
+        </UIButton>
+      </div>
+
+      <!-- Content -->
+      <div class="flex flex-col gap-5 pb-10">
+        <div v-for="userAccount in userAccounts" :key="userAccount.id">
+          <p class="font-bold"> {{ userAccount.name }} </p>
+        </div>
+      </div>
     </div>
 
-    <!-- Content -->
-    <div>Hue</div>
+
 
     <!-- Modal -->
     <UIModal v-if="showModal" title="Create new account" :modalKeyName="modalKeyName" :showModal="showModal">
@@ -28,6 +36,21 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { IAccount } from '~~/types/IAccount';
+
+const { getUserAccounts, createNewAccount } = useAccount()
+const { useAuthUser } = useAuth()
+const user = useAuthUser()
+
+const userAccounts = ref<IAccount[]>([])
+
+const fetchAccounts = async () => {
+  const { accounts } = await getUserAccounts()
+  userAccounts.value = accounts
+}
+
+fetchAccounts()
+
 const modalKeyName = "show_modal_account"
 const { useShowModal, openModal, closeModal } =
   useModal(modalKeyName)
@@ -43,10 +66,6 @@ const accountCreationDisabled = computed(() => {
 })
 
 const handleAccountCreation = async () => {
-  const { createNewAccount } = useAccount()
-  const { useAuthUser } = useAuth()
-  const user = useAuthUser()
-
   accountCreationData.loading = true
 
   try {
@@ -57,6 +76,7 @@ const handleAccountCreation = async () => {
     accountCreationError.value = ''
     accountCreationData.name = ''
     closeModal()
+    fetchAccounts()
   } catch (error: any) {
     accountCreationError.value = error.statusMessage
   } finally {
