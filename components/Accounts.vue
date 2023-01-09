@@ -18,12 +18,10 @@
       </div>
     </div>
 
-
-
     <!-- Modal -->
-    <UIModal v-if="showModal" title="Create new account" :modalKeyName="modalKeyName" :showModal="showModal">
-      <h1 class="mb-20 text-5xl"></h1>
-      <div class="mb-20">
+    <UIModal class="z-50" v-if="showModal" title="Create new account" :modalKeyName="modalKeyName"
+      :showModal="showModal">
+      <div class="mb-20 flex flex-col gap-5">
         <UIInput label="Name" placeholder="wallet" v-model="accountCreationData.name" />
       </div>
       <p class="text-red-500">{{ accountCreationError }}</p>

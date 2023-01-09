@@ -11,7 +11,7 @@
       bg-black bg-opacity-50
     " @click="closeModal()">
     <div class="bg-white rounded-md p-5 pb-10 w-[500px]" @click.stop>
-      <div class="flex justify-between items-center mb-10">
+      <div class="flex justify-between items-center mb-20">
         <h2 class="text-3xl capitalize break-words">{{ props.title }}</h2>
         <UIButton type="plain" class="text-xl" @click="closeModal()">
           <font-awesome-icon icon="fa-solid fa-xmark" />

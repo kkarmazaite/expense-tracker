@@ -44,4 +44,21 @@ model Account {
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
+
+  categories Category[]
+}
+enum TRANSACTION_TYPES {
+  income
+  expense
+}
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  type TRANSACTION_TYPES
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  accountId String @db.ObjectId
+  account   Account   @relation(fields: [accountId], references: [id])
 }

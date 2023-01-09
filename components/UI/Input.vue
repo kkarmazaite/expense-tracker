@@ -1,7 +1,8 @@
 <template>
   <div class="w-full">
     <label for="" v-if="props.label" class="block pl-3 ml-px text-sm font-medium text-gray-700">
-      {{ label }}</label>
+      {{ props.label }}
+    </label>
     <div class="mt-1">
       <input :value="props.modelValue" @input="(event) => emits('update:modelValue', event.target.value)" class="
           block
