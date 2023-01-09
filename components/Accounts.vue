@@ -11,9 +11,10 @@
 
       <!-- Content -->
       <div class="flex flex-col gap-5 pb-10">
-        <div v-for="userAccount in userAccounts" :key="userAccount.id">
-          <p class="font-bold"> {{ userAccount.name }} </p>
-        </div>
+        <button class="font-bold text-left" v-for="userAccount in userAccounts" :key="userAccount.id"
+          @click="selectAccount(userAccount)">
+          {{ userAccount.name }}
+        </button>
       </div>
     </div>
 
@@ -38,9 +39,10 @@
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
 
-const { getUserAccounts, createNewAccount } = useAccount()
-const { useAuthUser } = useAuth()
+const { getUserAccounts, createNewAccount, setSelectedAccount } = useAccount()
+const { useAuthUser, useAuthToken } = useAuth()
 const user = useAuthUser()
+console.log(useAuthToken().value)
 
 const userAccounts = ref<IAccount[]>([])
 
@@ -50,6 +52,10 @@ const fetchAccounts = async () => {
 }
 
 fetchAccounts()
+
+const selectAccount = async (account: IAccount) => {
+  await setSelectedAccount(account)
+}
 
 const modalKeyName = "show_modal_account"
 const { useShowModal, openModal, closeModal } =

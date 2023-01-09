@@ -17,3 +17,8 @@ export const geAccountByUserId = (userId:string) => {
         where: { userId }
       })
 }
+export const getAccountById = (accountId:string) => {
+    return prisma.account.findUnique({
+        where: { id: accountId }
+      })
+}

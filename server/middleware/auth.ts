@@ -6,7 +6,7 @@ import { H3Event } from "h3"
 import { IToken } from "~~/types/IToken"
 
 export default defineEventHandler( async (event: H3Event) => {
-    const endpoints : string[] = ['/api/auth/user', '/api/data/account']
+    const endpoints : string[] = ['/api/auth/user', '/api/accounts', '/api/accounts/:id']
 
     const isHandledByThisMiddleware : boolean = endpoints.some(endpoint => {
 
