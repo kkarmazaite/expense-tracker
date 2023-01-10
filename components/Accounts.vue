@@ -12,7 +12,7 @@
       <!-- Content -->
       <div class="flex flex-col gap-5 pb-10">
         <button class="font-bold text-left" v-for="userAccount in userAccounts" :key="userAccount.id"
-          @click="selectAccount(userAccount)">
+          @click="selectAccount(userAccount.id)">
           {{ userAccount.name }}
         </button>
       </div>
@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
 
-const { getUserAccounts, createNewAccount, setSelectedAccount } = useAccount()
+const { getUserAccounts, createNewAccount, getAccountById, setSelectedAccount } = useAccount()
 const { useAuthUser, useAuthToken } = useAuth()
 const user = useAuthUser()
 console.log(useAuthToken().value)
@@ -51,8 +51,8 @@ const fetchAccounts = async () => {
 
 fetchAccounts()
 
-const selectAccount = async (account: IAccount) => {
-  await setSelectedAccount(account)
+const selectAccount = async (accountId: string | undefined) => {
+  await setSelectedAccount(accountId)
 }
 
 const modalKeyName = "show_modal_account"

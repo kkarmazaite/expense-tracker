@@ -1,5 +1,5 @@
 import { sendError } from "h3"
-import { geAccountByUserId } from "~~/server/db/accounts"
+import { getAccountsByUserId } from "~~/server/db/accounts"
 import { H3Event } from "h3"
 import { IAccount } from "~~/types/IAccount"
 
@@ -11,7 +11,7 @@ if(!userId){
     return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid parameters'}))
 }
 
-const userAccounts:IAccount[] = await geAccountByUserId(userId) 
+const userAccounts:IAccount[] = await getAccountsByUserId(userId) 
 
 return {
     accounts: userAccounts

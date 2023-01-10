@@ -36,7 +36,7 @@ export default () => {
     }
 
     const login = async ({email, password}:ILogin) => {
-        const data = await $fetch('/api/auth/login', {
+        const data:{user:IUser, access_token:string} = await $fetch('/api/auth/login', {
             method: 'POST',
             body:{
                 email,
@@ -52,14 +52,14 @@ export default () => {
     }
 
     const refreshToken = async() => {
-            const data = await useFetchApi('/api/auth/refresh')
+            const data:{access_token:string} = await useFetchApi('/api/auth/refresh')
 
             setToken(data.access_token)
             return data
 
     }
     const getUser = async() => {
-        const data = await useFetchApi('/api/auth/user')
+        const data:{user:IUser} = await useFetchApi('/api/auth/user')
 
         setUser(data.user)
         return data

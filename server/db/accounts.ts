@@ -7,12 +7,12 @@ export const createAccount = async(accountData: IAccount) => {
         data: accountData
     })
 }
-export const geAccountByNameAndUserId = (name: string, userId:string) => {
+export const getAccountsByNameAndUserId = (name: string, userId:string) => {
     return prisma.account.findMany({
         where: { name, userId }
       })
 }
-export const geAccountByUserId = (userId:string) => {
+export const getAccountsByUserId = (userId:string) => {
     return prisma.account.findMany({
         where: { userId }
       })

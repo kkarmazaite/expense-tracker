@@ -8,6 +8,13 @@
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
+
+      <!-- Content -->
+      <div v-if="accountCategories" class="flex flex-col gap-5 pb-10">
+        <button class="font-bold text-left" v-for="accountCategory in accountCategories" :key="accountCategory.id">
+          {{ accountCategory.name }}
+        </button>
+      </div>
     </div>
 
     <!-- Modal -->
@@ -28,11 +35,14 @@
     </UIModal>
   </div>
 </template>
-<script lang="ts" setup>import { ICategoryAccountTypes } from '~~/types/ICategory';
+<script lang="ts" setup>
+import { ICategory, ICategoryAccountTypes } from '~~/types/ICategory';
 
 const { createNewCategory } = useCategory()
-const { useSelectedAccount } = useAccount()
+const { useSelectedAccount, setSelectedAccount } = useAccount()
 const selectedAccount = useSelectedAccount()
+
+const accountCategories = computed<ICategory[] | undefined>(() => selectedAccount.value?.accountCategories)
 
 const modalKeyName = "show_modal_categories"
 const { useShowModal, openModal, closeModal } =
@@ -56,16 +66,18 @@ const categoryCreationDisabled = computed(() => {
 const handleCategoryCreation = async () => {
   categoryCreationData.loading = true
 
+
   try {
     await createNewCategory({
       type: categoryCreationData.type,
       name: categoryCreationData.name,
-      accountId: selectedAccount?.value?.id,
+      accountId: selectedAccount?.value?.account?.id,
     })
     categoryCreationError.value = ''
     categoryCreationData.type = undefined
     categoryCreationData.name = ''
     closeModal()
+    await setSelectedAccount(selectedAccount?.value?.account?.id)
   } catch (error: any) {
     categoryCreationError.value = error.statusMessage
   } finally {
