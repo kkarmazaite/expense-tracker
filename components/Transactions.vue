@@ -9,7 +9,25 @@
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
+
+      <!-- Content -->
+      <div v-if="transactions" class="flex flex-col gap-5 pb-10">
+        <button class="flex justify-between" v-for="transaction in transactions" :key="transaction.id">
+          <div>
+            <p class="font-bold text-left" :class="{
+              'text-green-500': transaction.category.type === 'income',
+              'text-red-500': transaction.category.type === 'expense'
+            }">
+              {{ transaction.category.name }}</p>
+            <p class="text-gray-400 text-left">{{ transaction.date }}</p>
+          </div>
+          <div>
+            <p class="font-bold">{{ transaction.amount }}</p>
+          </div>
+        </button>
+      </div>
     </div>
+
     <!-- Modal -->
     <UIModal class="z-50" v-if="showModal" title="Create new transaction" :modalKeyName="modalKeyName"
       :showModal="showModal">
@@ -36,7 +54,9 @@ const { createNewTransaction } = useTransaction()
 
 const { useSelectedAccount, setSelectedAccount } = useAccount()
 const selectedAccount = useSelectedAccount()
-const selectedAccountCategories = computed(() => selectedAccount?.value?.accountCategories || [])
+const selectedAccountCategories = computed(() => selectedAccount?.value?.categories || [])
+
+const transactions = computed(() => selectedAccountCategories.value.flatMap(({ transactions }) => transactions).sort((a, b) => (a.date > b.date) ? -1 : ((a.date < b.date) ? 1 : 0)))
 
 const selectList = computed(() => selectedAccountCategories.value.map((category) => {
   return {
@@ -75,11 +95,12 @@ const handleTransactionCreation = async () => {
       description: transactionCreationData.description,
     })
     transactionCreationError.value = ''
-    transactionCreationData.date = ''
+    transactionCreationData.date = new Date().toISOString().substring(0, 10)
+    transactionCreationData.categoryId = ''
     transactionCreationData.amount = ''
     transactionCreationData.description = ''
     closeModal()
-    await setSelectedAccount(selectedAccount?.value?.account?.id)
+    await setSelectedAccount(selectedAccount?.value?.id)
   } catch (error: any) {
     transactionCreationError.value = error.statusMessage
   } finally {

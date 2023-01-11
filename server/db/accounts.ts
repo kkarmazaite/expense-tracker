@@ -19,6 +19,17 @@ export const getAccountsByUserId = (userId:string) => {
 }
 export const getAccountById = (accountId:string) => {
     return prisma.account.findUnique({
-        where: { id: accountId }
+        where: { id: accountId },
+        include: {
+            categories: {
+                include: {
+                    transactions:{
+                        include: {
+                            category: true
+                        }
+                    }
+                }
+            }
+        }
       })
 }

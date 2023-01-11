@@ -42,7 +42,7 @@ const { createNewCategory } = useCategory()
 const { useSelectedAccount, setSelectedAccount } = useAccount()
 const selectedAccount = useSelectedAccount()
 
-const accountCategories = computed<ICategory[] | undefined>(() => selectedAccount.value?.accountCategories)
+const accountCategories = computed<ICategory[] | undefined>(() => selectedAccount.value?.categories)
 
 const modalKeyName = "show_modal_categories"
 const { useShowModal, openModal, closeModal } =
@@ -71,13 +71,13 @@ const handleCategoryCreation = async () => {
     await createNewCategory({
       type: categoryCreationData.type,
       name: categoryCreationData.name,
-      accountId: selectedAccount?.value?.account?.id,
+      accountId: selectedAccount?.value?.id,
     })
     categoryCreationError.value = ''
     categoryCreationData.type = undefined
     categoryCreationData.name = ''
     closeModal()
-    await setSelectedAccount(selectedAccount?.value?.account?.id)
+    await setSelectedAccount(selectedAccount?.value?.id)
   } catch (error: any) {
     categoryCreationError.value = error.statusMessage
   } finally {
