@@ -61,4 +61,19 @@ model Category {
 
   accountId String @db.ObjectId
   account   Account   @relation(fields: [accountId], references: [id])
+
+  transactions Transaction[]
+}
+model Transaction {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  date        DateTime          @default(now()) @db.Date
+  amount Float
+  description String?
+
+    
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categoryId String   @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
 }
