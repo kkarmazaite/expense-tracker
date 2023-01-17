@@ -13,6 +13,11 @@ export default defineEventHandler(async (event: H3Event) => {
 
     const account:IAccount | null = await getAccountById(accountId)
 
+    setCookie(event, "selected_account", accountId, {
+        httpOnly: true,
+        sameSite: true
+    })
+
     return {
         account: account
     }

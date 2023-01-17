@@ -4,14 +4,15 @@
       <!-- Header -->
       <div class="flex justify-between pb-5 sticky top-0 bg-white z-10">
         <h2 class="capitalize text-bold text-2xl">Categories</h2>
-        <UIButton v-if="selectedAccount" type="plain" class="w-auto px-2 text-xl" @click="openModal()">
+        <UIButton v-if="props.accountId" type="plain" class="w-auto px-2 text-xl" @click="openModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
 
       <!-- Content -->
       <div v-if="accountCategories" class="flex flex-col gap-5 pb-10">
-        <button class="font-bold text-left" v-for="accountCategory in accountCategories" :key="accountCategory.id">
+        <button class="font-bold text-left" v-for="accountCategory in props.accountCategories"
+          :key="accountCategory.id">
           {{ accountCategory.name }}
         </button>
       </div>
@@ -38,11 +39,12 @@
 <script lang="ts" setup>
 import { ICategory, ICategoryAccountTypes } from '~~/types/ICategory';
 
-const { createNewCategory } = useCategory()
-const { useSelectedAccount, setSelectedAccount } = useAccount()
-const selectedAccount = useSelectedAccount()
+const props = defineProps<{
+  accountId: string | undefined
+  accountCategories: ICategory[]
+}>()
 
-const accountCategories = computed<ICategory[] | undefined>(() => selectedAccount.value?.categories)
+const { createNewCategory } = useCategory()
 
 const modalKeyName = "show_modal_categories"
 const { useShowModal, openModal, closeModal } =
@@ -71,13 +73,12 @@ const handleCategoryCreation = async () => {
     await createNewCategory({
       type: categoryCreationData.type,
       name: categoryCreationData.name,
-      accountId: selectedAccount?.value?.id,
+      accountId: props.accountId,
     })
     categoryCreationError.value = ''
     categoryCreationData.type = undefined
     categoryCreationData.name = ''
     closeModal()
-    await setSelectedAccount(selectedAccount?.value?.id)
   } catch (error: any) {
     categoryCreationError.value = error.statusMessage
   } finally {

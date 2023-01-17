@@ -11,8 +11,8 @@
 
       <!-- Content -->
       <div class="flex flex-col gap-5 pb-10">
-        <button class="font-bold text-left" v-for="userAccount in userAccounts" :key="userAccount.id"
-          @click="selectAccount(userAccount.id)">
+        <button class="font-bold text-left" v-for="userAccount in props.userAccounts" :key="userAccount.id"
+          @click="emits('selectAccount', userAccount.id)">
           {{ userAccount.name }}
         </button>
       </div>
@@ -37,19 +37,13 @@
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
 
-const { getUserAccounts, createNewAccount, getAccountById, setSelectedAccount } = useAccount()
-const { useAuthUser, useAuthToken } = useAuth()
-const user = useAuthUser()
-console.log(useAuthToken().value)
+const emits = defineEmits(['selectAccount'])
+const props = defineProps<{
+  userId: string | undefined
+  userAccounts: IAccount[]
+}>()
 
-const userAccounts = ref<IAccount[]>([])
-
-const fetchAccounts = async () => {
-  const { accounts } = await getUserAccounts()
-  userAccounts.value = accounts
-}
-
-fetchAccounts()
+const { createNewAccount, setSelectedAccount } = useAccount()
 
 const selectAccount = async (accountId: string | undefined) => {
   await setSelectedAccount(accountId)
@@ -75,12 +69,11 @@ const handleAccountCreation = async () => {
   try {
     await createNewAccount({
       name: accountCreationData.name,
-      userId: user?.value?.id,
+      userId: props.userId,
     })
     accountCreationError.value = ''
     accountCreationData.name = ''
     closeModal()
-    fetchAccounts()
   } catch (error: any) {
     accountCreationError.value = error.statusMessage
   } finally {

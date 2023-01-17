@@ -13,7 +13,7 @@ export default () => {
         })
     }
     const getAccountCategories = async() => {
-        const data:{accounts:ICategory[]} = await useFetchApi('/api/category' )
+        const data:{categories:ICategory[]} = await useFetchApi('/api/categories' )
         return data
     }
 
