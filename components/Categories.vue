@@ -39,6 +39,8 @@
 <script lang="ts" setup>
 import { ICategory, ICategoryAccountTypes } from '~~/types/ICategory';
 
+const emits = defineEmits(['refreshCategories'])
+
 const props = defineProps<{
   accountId: string | undefined
   accountCategories: ICategory[]
@@ -79,6 +81,7 @@ const handleCategoryCreation = async () => {
     categoryCreationData.type = undefined
     categoryCreationData.name = ''
     closeModal()
+    emits('refreshCategories')
   } catch (error: any) {
     categoryCreationError.value = error.statusMessage
   } finally {

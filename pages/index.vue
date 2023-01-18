@@ -5,13 +5,15 @@
       :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense" class="col-span-3 row-span-1" />
 
     <Accounts :user-accounts="displayData.userAccounts" :user-id="user?.id" @select-account="fetchAccountData"
-      class="col-span-1 row-span-1" />
+      @refresh-accounts="fetchUserAccounts" class="col-span-1 row-span-1" />
 
     <Transactions :account-categories="displayData.selectedAccountCategories"
-      :account-transactions="displayData.selectedAccountTransactions" class="col-span-3 row-span-1" />
+      :account-transactions="displayData.selectedAccountTransactions" class="col-span-3 row-span-1"
+      @refresh-transactions="fetchAccountTransactions" />
 
     <Categories :account-categories="displayData.selectedAccountCategories"
-      :account-id="displayData.selectedAccount?.id" class="col-span-1 row-span-1" />
+      :account-id="displayData.selectedAccount?.id" class="col-span-1 row-span-1"
+      @refresh-categories="fetchAccountCategories" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -41,29 +43,42 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalIncome: 0,
   selectedAccountTransactionsTotalExpense: 0
 })
-
-const fetchUserAccounts = async () => {
-  const { accounts } = await getUserAccounts()
-  displayData.userAccounts = accounts
+const initializeData = async () => {
+  await fetchUserAccounts()
 
   if (!displayData.selectedAccount && displayData.userAccounts.length > 0) {
     fetchAccountData(displayData.userAccounts[0].id as string)
   }
 }
 
-const fetchAccountData = async (selectedAccountId: string) => {
-  const { account } = await getAccountById(selectedAccountId)
-  displayData.selectedAccount = account
+const fetchUserAccounts = async () => {
+  const { accounts } = await getUserAccounts()
+  displayData.userAccounts = accounts
+}
 
+const fetchAccountCategories = async () => {
   const { categories } = await getAccountCategories()
   displayData.selectedAccountCategories = categories
+}
 
+const fetchAccountTransactions = async () => {
   const { transactions_all, transactions_income_total, transactions_expense_total } = await getAccountTransactions()
   displayData.selectedAccountTransactions = transactions_all
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total
   displayData.selectedAccountTransactionsTotalExpense = transactions_expense_total
+}
+
+const fetchAccountData = async (selectedAccountId: string) => {
+  const { account } = await getAccountById(selectedAccountId)
+  displayData.selectedAccount = account
+
+  await fetchAccountCategories()
+
+  await fetchAccountTransactions()
 
 }
 
-fetchUserAccounts()
+
+initializeData()
+
 </script>

@@ -37,7 +37,7 @@
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
 
-const emits = defineEmits(['selectAccount'])
+const emits = defineEmits(['selectAccount', 'refreshAccounts'])
 const props = defineProps<{
   userId: string | undefined
   userAccounts: IAccount[]
@@ -64,13 +64,15 @@ const handleAccountCreation = async () => {
   accountCreationData.loading = true
 
   try {
-    await createNewAccount({
+    const { account } = await createNewAccount({
       name: accountCreationData.name,
       userId: props.userId,
     })
     accountCreationError.value = ''
     accountCreationData.name = ''
     closeModal()
+    emits('refreshAccounts')
+    emits('selectAccount', account.id)
   } catch (error: any) {
     accountCreationError.value = error.statusMessage
   } finally {

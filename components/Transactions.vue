@@ -53,6 +53,8 @@
 import { ICategory } from '~~/types/ICategory';
 import { ITransaction } from '~~/types/ITransaction';
 
+const emits = defineEmits(['refreshTransactions'])
+
 const props = defineProps<{
   accountCategories: ICategory[]
   accountTransactions: ITransaction[]
@@ -85,9 +87,7 @@ const transactionCreationDisabled = computed(() => {
 })
 
 const handleTransactionCreation = async () => {
-  console.log(`${transactionCreationData.date}T00:00:00.000Z`)
   transactionCreationData.loading = true
-
 
   try {
     await createNewTransaction({
@@ -102,6 +102,7 @@ const handleTransactionCreation = async () => {
     transactionCreationData.amount = ''
     transactionCreationData.description = ''
     closeModal()
+    emits('refreshTransactions')
   } catch (error: any) {
     transactionCreationError.value = error.statusMessage
   } finally {

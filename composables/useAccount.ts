@@ -11,6 +11,7 @@ export default () => {
                 userId
             }
         })
+        return data
     }
     const getUserAccounts = async() => {
         const data:{accounts:IAccount[]} = await useFetchApi('/api/accounts' )
