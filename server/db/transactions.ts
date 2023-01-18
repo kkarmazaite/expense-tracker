@@ -1,19 +1,75 @@
 import {prisma} from '.'
-import { ICategory, ICategoryAccountTypes } from '~~/types/ICategory'
-import { ITransaction } from '~~/types/ITransaction'
+import { ITransactionCreation } from '~~/types/ITransaction'
 
-export const createTransaction = async(transactionData: ITransaction) => {
+export const createTransaction = async(transactionData: ITransactionCreation) => {
     return prisma.transaction.create({
         data: transactionData
     })
 }
-// export const getCategoriesByAccountId = (accountId:string) => {
-//     return prisma.category.findMany({
-//         where: { accountId }
-//       })
-// }
-// export const getCategoryById = (categoryId:string) => {
-//     return prisma.category.findUnique({
-//         where: { id: categoryId }
-//       })
-// }
+export const getTransactionsByAccountId = (accountId:string) => {
+    return prisma.transaction.findMany({
+        where:{
+            category: {
+                accountId
+          }
+        },
+        include: {
+            category: true
+        },
+        orderBy: {
+            date: 'desc',
+        }
+    })
+}
+export const getIncomeTransactionsByAccountId = (accountId:string) => {
+    return prisma.transaction.findMany({
+        where:{
+            AND:[
+                {
+                    category: {
+                        accountId
+                    }
+                },
+                {
+                    category: {
+                        type: {
+                            equals: 'income'
+                        }
+                    }
+                },
+            ]
+        },
+        include: {
+            category: true
+        },
+        orderBy: {
+            date: 'desc',
+        }
+    })
+}
+export const getExpenseTransactionsByAccountId = (accountId:string) => {
+    return prisma.transaction.findMany({
+        where:{
+            AND:[
+                {
+                    category: {
+                        accountId
+                    }
+                },
+                {
+                    category: {
+                        type: {
+                            equals: 'expense'
+                        }
+                    }
+                },
+            ]
+        },
+        include: {
+            category: true
+        },
+        orderBy: {
+            date: 'desc',
+        }
+    })
+}

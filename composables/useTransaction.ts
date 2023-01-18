@@ -1,4 +1,5 @@
-import { ICategory, ICategoryAccountTypes } from "~~/types/ICategory"
+
+import { ITransaction } from "~~/types/ITransaction"
 
 export default () => {
 
@@ -13,17 +14,19 @@ export default () => {
             }
         })
     }
-    // const getAccountCategories = async() => {
-    //     const data:{accounts:ICategory[]} = await useFetchApi('/api/category' )
-    //     return data
-    // }
-
-    // const getCategoryById = async(categoryId:string) => {
-    //     const data:{category:ICategory} = await useFetchApi(`/api/categories/${categoryId}` )
-    //     return data
-    // }
+    const getAccountTransactions = async() => {
+        const data:{
+            transactions_all:ITransaction[], 
+            transactions_income:ITransaction[], 
+            transactions_income_total:number,
+            transactions_expense:ITransaction[],
+            transactions_expense_total:number,
+        } = await useFetchApi('/api/transactions' )
+        return data
+    }
     return{
         createNewTransaction,
+        getAccountTransactions
 
     }
 }

@@ -43,11 +43,8 @@ const props = defineProps<{
   userAccounts: IAccount[]
 }>()
 
-const { createNewAccount, setSelectedAccount } = useAccount()
+const { createNewAccount } = useAccount()
 
-const selectAccount = async (accountId: string | undefined) => {
-  await setSelectedAccount(accountId)
-}
 
 const modalKeyName = "show_modal_account"
 const { useShowModal, openModal, closeModal } =

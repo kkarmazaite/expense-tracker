@@ -4,15 +4,15 @@
       <!-- Header -->
       <div class="flex justify-between pb-5 sticky top-0 bg-white z-10">
         <h2 class="capitalize text-bold text-2xl">Transactions</h2>
-        <UIButton v-if="selectedAccount && selectedAccountCategories.length > 0" type="plain"
-          class="w-auto px-2 text-xl" @click="openModal()">
+        <UIButton v-if="props.accountCategories.length > 0" type="plain" class="w-auto px-2 text-xl"
+          @click="openModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
 
       <!-- Content -->
-      <div v-if="transactions" class="flex flex-col gap-5 pb-10">
-        <button class="flex justify-between" v-for="transaction in transactions" :key="transaction.id">
+      <div v-if="props.accountTransactions.length > 0" class="flex flex-col gap-5 pb-10">
+        <button class="flex justify-between" v-for="transaction in props.accountTransactions" :key="transaction.id">
           <div>
             <p class="font-bold text-left" :class="{
               'text-green-500': transaction.category.type === 'income',
@@ -50,15 +50,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { ICategory } from '~~/types/ICategory';
+import { ITransaction } from '~~/types/ITransaction';
+
+const props = defineProps<{
+  accountCategories: ICategory[]
+  accountTransactions: ITransaction[]
+}>()
+
 const { createNewTransaction } = useTransaction()
 
-const { useSelectedAccount, setSelectedAccount } = useAccount()
-const selectedAccount = useSelectedAccount()
-const selectedAccountCategories = computed(() => selectedAccount?.value?.categories || [])
-
-const transactions = computed(() => selectedAccountCategories.value.flatMap(({ transactions }) => transactions).sort((a, b) => (a.date > b.date) ? -1 : ((a.date < b.date) ? 1 : 0)))
-
-const selectList = computed(() => selectedAccountCategories.value.map((category) => {
+const selectList = computed(() => props.accountCategories.map((category) => {
   return {
     "value": category.id as string,
     "valueDisplay": category.name
@@ -100,7 +102,6 @@ const handleTransactionCreation = async () => {
     transactionCreationData.amount = ''
     transactionCreationData.description = ''
     closeModal()
-    await setSelectedAccount(selectedAccount?.value?.id)
   } catch (error: any) {
     transactionCreationError.value = error.statusMessage
   } finally {
