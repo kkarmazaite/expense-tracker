@@ -1,5 +1,4 @@
 import { IAccount } from "~~/types/IAccount"
-import { ISelectedAccount} from "~~/types/ISelectedAccount"
 
 export default () => {
 
@@ -19,7 +18,7 @@ export default () => {
     }
 
     const getAccountById = async(accountId:string) => {
-        const data:{account:ISelectedAccount} = await useFetchApi(`/api/accounts/${accountId}` )
+        const data:{account:IAccount} = await useFetchApi(`/api/accounts/${accountId}` )
         return data
     }
     return{

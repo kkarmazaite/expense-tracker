@@ -19,10 +19,10 @@
               'text-red-500': transaction.category.type === 'expense'
             }">
               {{ transaction.category.name }}</p>
-            <p class="text-gray-400 text-left">{{ transaction.date }}</p>
+            <p class="text-gray-400 text-left">{{ transaction.date.toString().substring(0, 10) }}</p>
           </div>
           <div>
-            <p class="font-bold">{{ transaction.amount }}</p>
+            <p class="font-bold">{{ displayCurrency(transaction.amount) }}</p>
           </div>
         </button>
       </div>
@@ -52,6 +52,7 @@
 <script lang="ts" setup>
 import { ICategory } from '~~/types/ICategory';
 import { ITransaction } from '~~/types/ITransaction';
+import { displayCurrency } from '~~/helpers/displayCurrency';
 
 const emits = defineEmits(['refreshTransactions'])
 
