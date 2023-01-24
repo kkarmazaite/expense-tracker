@@ -54,6 +54,8 @@ import { ICategory } from '~~/types/ICategory';
 import { ITransaction } from '~~/types/ITransaction';
 import { displayCurrency } from '~~/helpers/displayCurrency';
 
+
+
 const emits = defineEmits(['refreshTransactions'])
 
 const props = defineProps<{
