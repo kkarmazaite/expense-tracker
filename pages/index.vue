@@ -2,7 +2,8 @@
   <div class="p-5 pb-20 h-full w-full grid grid-cols-4 grid-rows-2 gap-5">
     <Statistics :account-name="displayData.selectedAccount?.name"
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
-      :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense" class="col-span-3 row-span-1" />
+      :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense" ref="statistics"
+      class="col-span-3 row-span-1" />
 
     <Accounts :user-accounts="displayData.userAccounts" :user-id="user?.id" @select-account="fetchAccountData"
       @refresh-accounts="fetchUserAccounts" class="col-span-1 row-span-1" />
@@ -26,7 +27,7 @@ const { getAccountCategories } = useCategory()
 const { getAccountTransactions } = useTransaction()
 const { useAuthUser, useAuthToken } = useAuth()
 const user = useAuthUser()
-console.log(useAuthToken().value)
+const statistics = ref<any>(null)
 
 const displayData = reactive<{
   selectedAccount: IAccount | undefined
@@ -75,6 +76,11 @@ const fetchAccountData = async (selectedAccountId: string) => {
   await fetchAccountCategories()
 
   await fetchAccountTransactions()
+
+  if (statistics.value) {
+    statistics.value.initializeGraphs()
+  }
+
 
 }
 
