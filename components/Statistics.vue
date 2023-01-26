@@ -35,32 +35,51 @@
 </template>
 <script lang="ts" setup>
 import { displayCurrency } from '~~/helpers/displayCurrency';
+import { ITransaction } from '~~/types/ITransaction';
 
 const props = defineProps<{
   accountName: string | undefined
   accountTotalIncome: number
   accountTotalExpenses: number
+  expenseTransactions: ITransaction[]
 }>()
 const accountBalance = computed(() => (props.accountTotalIncome !== undefined && props.accountTotalExpenses !== undefined) ? props.accountTotalIncome - props.accountTotalExpenses : 0)
 const donutGraph = ref<any>(null)
 const barGraph = ref<any>(null)
 const initializeGraphs = () => {
+  let donutGraphData = [props.accountTotalIncome, props.accountTotalExpenses]
   if (donutGraph.value) {
-    donutGraph.value.initializeGraph([props.accountTotalIncome, props.accountTotalExpenses])
+    donutGraph.value.initializeGraph(donutGraphData)
   }
-  const barData = [
-    { group: "A", value: 4 },
-    { group: "B", value: 16 },
-    { group: "C", value: 8 },
-    { group: "D", value: 4 },
-    { group: "E", value: 16 },
-    { group: "F", value: 8 },
-    { group: "G", value: 4 }
-  ];
+
+  let barGraphData = lastWeekExpenses()
   if (barGraph.value) {
-    barGraph.value.initializeGraph(barData)
+    barGraph.value.initializeGraph(barGraphData)
   }
+
 }
+const lastWeekExpenses = () => {
+
+  const currentDate = new Date();
+  let date = new Date()
+  let weekExpensesArray = []
+  for (let i = 6; i >= 0; i--) {
+    date.setDate(currentDate.getDate() - i)
+    let dateDisplay = date.toISOString().substring(5, 10)
+
+    let dateExpenseTotal = props.expenseTransactions.filter(transaction =>
+      transaction.date.toString().substring(0, 10) === date.toISOString().substring(0, 10)
+    ).reduce((partialSum, transaction) => partialSum + transaction.amount, 0);
+
+    weekExpensesArray.push({
+      group: dateDisplay,
+      value: dateExpenseTotal,
+      valueDisplay: displayCurrency(dateExpenseTotal)
+    })
+  }
+  return weekExpensesArray
+}
+
 defineExpose({
   initializeGraphs
 });

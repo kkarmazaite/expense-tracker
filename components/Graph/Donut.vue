@@ -24,7 +24,7 @@ const initializeGraph = (chartData: number[]) => {
     const radius = Math.min(width, height) / 2
     const g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
-    const color = d3.scaleOrdinal(['#888888', '#22c55e', '#ef4444']);
+    const color = d3.scaleOrdinal(['#999999', '#22c55e', '#ef4444']);
 
     // Generate the pie
     const pie = d3.pie();
@@ -44,9 +44,7 @@ const initializeGraph = (chartData: number[]) => {
     //Draw arc paths
     arcs.append("path")
         .attr("d", arc)
-        .attr("fill", function (d: any, i: string) {
-            return color(i);
-        })
+        .attr("fill", (d: number, i: string) => color(i))
         ;
 
 

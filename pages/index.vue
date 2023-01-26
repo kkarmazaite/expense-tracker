@@ -2,7 +2,8 @@
   <div class="p-5 pb-20 h-full w-full grid grid-cols-4 grid-rows-2 gap-5">
     <Statistics :account-name="displayData.selectedAccount?.name"
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
-      :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense" ref="statistics"
+      :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense"
+      :expense-transactions="displayData.selectedAccountExpenseTransactions" ref="statistics"
       class="col-span-3 row-span-1" />
 
     <Accounts :user-accounts="displayData.userAccounts" :user-id="user?.id" @select-account="fetchAccountData"
@@ -10,7 +11,7 @@
 
     <Transactions :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions" class="col-span-3 row-span-1"
-      @refresh-transactions="fetchAccountTransactions" />
+      @refresh-transactions="fetchAccountTransactionData" />
 
     <Categories :account-categories="displayData.selectedAccountCategories"
       :account-id="displayData.selectedAccount?.id" class="col-span-1 row-span-1"
@@ -34,6 +35,7 @@ const displayData = reactive<{
   userAccounts: IAccount[]
   selectedAccountCategories: ICategory[]
   selectedAccountTransactions: ITransaction[]
+  selectedAccountExpenseTransactions: ITransaction[]
   selectedAccountTransactionsTotalIncome: number
   selectedAccountTransactionsTotalExpense: number
 }>({
@@ -41,6 +43,7 @@ const displayData = reactive<{
   userAccounts: [],
   selectedAccountCategories: [],
   selectedAccountTransactions: [],
+  selectedAccountExpenseTransactions: [],
   selectedAccountTransactionsTotalIncome: 0,
   selectedAccountTransactionsTotalExpense: 0
 })
@@ -62,11 +65,21 @@ const fetchAccountCategories = async () => {
   displayData.selectedAccountCategories = categories
 }
 
+const fetchAccountTransactionData = async () => {
+
+  await fetchAccountTransactions()
+
+  if (statistics.value) {
+    statistics.value.initializeGraphs()
+  }
+}
 const fetchAccountTransactions = async () => {
-  const { transactions_all, transactions_income_total, transactions_expense_total } = await getAccountTransactions()
+  const { transactions_all, transactions_income_total, transactions_expense_total, transactions_expense } = await getAccountTransactions()
   displayData.selectedAccountTransactions = transactions_all
+  displayData.selectedAccountExpenseTransactions = transactions_expense
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total
   displayData.selectedAccountTransactionsTotalExpense = transactions_expense_total
+
 }
 
 const fetchAccountData = async (selectedAccountId: string) => {
@@ -75,12 +88,7 @@ const fetchAccountData = async (selectedAccountId: string) => {
 
   await fetchAccountCategories()
 
-  await fetchAccountTransactions()
-
-  if (statistics.value) {
-    statistics.value.initializeGraphs()
-  }
-
+  await fetchAccountTransactionData()
 
 }
 
