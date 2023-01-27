@@ -1,9 +1,9 @@
 {
   "private": true,
   "scripts": {
-    "build": "yarn build",
-    "dev": "yarn dev",
-    "start": "yarn start",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "start": "nuxt start",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
