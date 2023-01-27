@@ -12,19 +12,28 @@
 
       <!-- Content -->
       <div v-if="props.accountTransactions.length > 0" class="flex flex-col gap-5 pb-10">
-        <button class="flex justify-between" v-for="transaction in props.accountTransactions" :key="transaction.id">
-          <div>
-            <p class="font-bold text-left" :class="{
-              'text-green-500': transaction.category.type === 'income',
-              'text-red-500': transaction.category.type === 'expense'
-            }">
-              {{ transaction.category.name }}</p>
-            <p class="text-gray-400 text-left">{{ transaction.date.toString().substring(0, 10) }}</p>
+        <div class="flex justify-between w-full group overflow-hidden" v-for="transaction in props.accountTransactions"
+          :key="transaction.id">
+          <div class="flex justify-between w-full">
+            <div>
+              <p class="font-bold text-left" :class="{
+                'text-green-500': transaction.category.type === 'income',
+                'text-red-500': transaction.category.type === 'expense'
+              }">
+                {{ transaction.category.name }}</p>
+              <p class="text-gray-400 text-left">{{ transaction.date.toString().substring(0, 10) }}</p>
+            </div>
+            <div>
+              <p class="font-bold">{{ displayCurrency(transaction.amount) }}</p>
+            </div>
           </div>
-          <div>
-            <p class="font-bold">{{ displayCurrency(transaction.amount) }}</p>
+          <div class="transition-all ease-in-out duration-500 w-0 opacity-0 group-hover:w-10 group-hover:opacity-100">
+            <UIButton class="ml-4" type="plain" @click="handleTransactionDeletion(transaction.id)">
+              <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
+            </UIButton>
           </div>
-        </button>
+        </div>
+
       </div>
     </div>
 
@@ -55,7 +64,6 @@ import { ITransaction } from '~~/types/ITransaction';
 import { displayCurrency } from '~~/helpers/displayCurrency';
 
 
-
 const emits = defineEmits(['refreshTransactions'])
 
 const props = defineProps<{
@@ -63,7 +71,7 @@ const props = defineProps<{
   accountTransactions: ITransaction[]
 }>()
 
-const { createNewTransaction } = useTransaction()
+const { createNewTransaction, deleteTransaction } = useTransaction()
 
 const selectList = computed(() => props.accountCategories.map((category) => {
   return {
@@ -110,6 +118,23 @@ const handleTransactionCreation = async () => {
     transactionCreationError.value = error.statusMessage
   } finally {
     transactionCreationData.loading = false
+  }
+}
+const handleTransactionDeletion = async (transactionId: string | undefined) => {
+  if (!transactionId) {
+    window.alert('An error has occured. Please try again.')
+    return
+  }
+  if (!window.confirm('Do you want to delete this transaction?')) {
+    return
+  }
+
+  try {
+    await deleteTransaction(transactionId)
+    emits('refreshTransactions')
+  } catch (error: any) {
+    window.alert(error.statusMessage)
+    return
   }
 }
 </script>

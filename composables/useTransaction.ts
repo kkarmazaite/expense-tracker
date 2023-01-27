@@ -24,9 +24,14 @@ export default () => {
         } = await useFetchApi('/api/transactions' )
         return data
     }
+    const deleteTransaction = async(transactionId:string) => {
+        await useFetchApi(`/api/transactions/${transactionId}`,{
+            method: 'DELETE', })
+    }
     return{
         createNewTransaction,
-        getAccountTransactions
+        getAccountTransactions,
+        deleteTransaction
 
     }
 }

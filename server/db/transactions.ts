@@ -72,4 +72,22 @@ export const getExpenseTransactionsByAccountId = (accountId:string) => {
             date: 'desc',
         }
     })
+    
+}
+export const getTransactionById = (transactionId:string) => {
+    return prisma.transaction.findUnique({
+        where: {
+            id: transactionId,
+        },
+        include: {
+            category: true
+        },
+      })
+}
+export const deleteTransactionById = (transactionId:string) => { 
+    return prisma.transaction.delete({
+        where: {
+            id: transactionId,
+        },
+    })
 }
