@@ -22,3 +22,8 @@ export const getCategoryById = (categoryId:string) => {
         where: { id: categoryId }
       })
 }
+export const deleteCategoryById = (categoryId:string) => { 
+    return prisma.category.delete({
+        where: { id: categoryId }
+      })
+}

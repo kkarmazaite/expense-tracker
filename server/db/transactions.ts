@@ -84,6 +84,19 @@ export const getTransactionById = (transactionId:string) => {
         },
       })
 }
+export const getTransactionsByCategoryId = (categoryId:string) => {
+    return prisma.transaction.findMany({
+        where:{
+            categoryId
+        },
+        include: {
+            category: true
+        },
+        orderBy: {
+            date: 'desc',
+        }
+    })
+}
 export const deleteTransactionById = (transactionId:string) => { 
     return prisma.transaction.delete({
         where: {

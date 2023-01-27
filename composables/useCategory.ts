@@ -21,9 +21,14 @@ export default () => {
         const data:{category:ICategory} = await useFetchApi(`/api/categories/${categoryId}` )
         return data
     }
+    const deleteCategory = async(categoryId:string) => {
+        await useFetchApi(`/api/categories/${categoryId}`,{
+            method: 'DELETE', })
+    }
     return{
         createNewCategory,
         getAccountCategories,
-        getCategoryById
+        getCategoryById,
+        deleteCategory
     }
 }

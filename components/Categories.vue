@@ -11,15 +11,25 @@
 
       <!-- Content -->
       <div v-if="accountCategories" class="flex flex-col gap-5 pb-10">
-        <button class="font-bold text-left" v-for="accountCategory in props.accountCategories"
-          :key="accountCategory.id">
-          {{ accountCategory.name }}
-        </button>
+        <div class="flex justify-between w-full group overflow-hidden"
+          v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
+          <div class="font-bold text-left">
+            <span class="font-bold text-left" :class="{
+              'text-green-500': accountCategory.type === 'income',
+              'text-red-500': accountCategory.type === 'expense'
+            }"> {{ accountCategory.name }}</span>
+          </div>
+          <div class="transition-all ease-in-out duration-500 w-0 opacity-0 group-hover:w-10 group-hover:opacity-100">
+            <UIButton class="ml-4" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
+              <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
+            </UIButton>
+          </div>
+        </div>
       </div>
     </div>
 
     <!-- Modal -->
-    <UIModal class="z-50" v-if="showModal" title="Create new category" :modalKeyName="modalKeyName"
+    <UIModal class=" z-50" v-if="showModal" title="Create new category" :modalKeyName="modalKeyName"
       :showModal="showModal">
       <div class="mb-20 flex flex-col gap-5">
         <UISelect label="Type" :selectOptionList="selectList" :value="categoryCreationData.type"
@@ -46,7 +56,7 @@ const props = defineProps<{
   accountCategories: ICategory[]
 }>()
 
-const { createNewCategory } = useCategory()
+const { createNewCategory, deleteCategory } = useCategory()
 
 const modalKeyName = "show_modal_categories"
 const { useShowModal, openModal, closeModal } =
@@ -86,6 +96,23 @@ const handleCategoryCreation = async () => {
     categoryCreationError.value = error.statusMessage
   } finally {
     categoryCreationData.loading = false
+  }
+}
+const handleCategoryDeletion = async (categoryId: string | undefined) => {
+  if (!categoryId) {
+    window.alert('An error has occured. Please try again.')
+    return
+  }
+  if (!window.confirm('Do you want to delete this category?')) {
+    return
+  }
+
+  try {
+    await deleteCategory(categoryId)
+    emits('refreshCategories')
+  } catch (error: any) {
+    window.alert(error.statusMessage)
+    return
   }
 }
 </script>
