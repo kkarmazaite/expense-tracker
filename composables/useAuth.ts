@@ -24,7 +24,8 @@ export default () => {
     }
 
     const createNewUser = async({ email, password, repeatPassword, name}:IUser) => {
-        await $fetch('/api/auth/register', {
+        
+        const data:{user:IUser} = await $fetch('/api/auth/register', {
             method: 'POST',
             body:{
                 email,
@@ -33,6 +34,9 @@ export default () => {
                 name
             }
         })
+
+       return data
+
     }
 
     const login = async ({email, password}:ILogin) => {
@@ -45,8 +49,6 @@ export default () => {
         })
         setToken(data.access_token)
         setUser(data.user)
-
-        useRouter().push('/')
 
         return data
     }

@@ -38,10 +38,11 @@ const registrationError = ref('')
 
 const handleRegistration = async () => {
   const { createNewUser, login } = useAuth()
+  const { createNewAccount } = useAccount()
 
   registrationData.loading = true
   try {
-    await createNewUser({
+    const { user } = await createNewUser({
       name: registrationData.name,
       email: registrationData.email,
       password: registrationData.password,
@@ -52,6 +53,14 @@ const handleRegistration = async () => {
       email: registrationData.email,
       password: registrationData.password,
     })
+
+    await createNewAccount({
+      name: "Wallet",
+      userId: user.id,
+    })
+
+    useRouter().push('/')
+
   } catch (error: any) {
     registrationError.value = error.statusMessage
   } finally {

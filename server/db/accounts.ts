@@ -22,3 +22,8 @@ export const getAccountById = (accountId:string) => {
         where: { id: accountId },
       })
 }
+export const deleteAccountById= (accountId:string) => { 
+    return prisma.account.delete({
+        where: { id: accountId },
+      })
+}

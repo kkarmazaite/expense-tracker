@@ -21,9 +21,14 @@ export default () => {
         const data:{account:IAccount} = await useFetchApi(`/api/accounts/${accountId}` )
         return data
     }
+    const deleteAccount = async(accountId:string) => {
+        await useFetchApi(`/api/accounts/${accountId}`,{
+            method: 'DELETE', })
+    }
     return{
         createNewAccount,
         getUserAccounts,
-        getAccountById
+        getAccountById,
+        deleteAccount
     }
 }

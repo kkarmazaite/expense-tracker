@@ -36,6 +36,8 @@ const handleLogin = async () => {
       email: loginData.email,
       password: loginData.password,
     })
+
+    useRouter().push('/')
   } catch (error: any) {
     loginError.value = error.statusMessage
   } finally {

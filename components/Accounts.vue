@@ -11,10 +11,18 @@
 
       <!-- Content -->
       <div class="flex flex-col gap-5 pb-10">
-        <button class="font-bold text-left" v-for="userAccount in props.userAccounts" :key="userAccount.id"
-          @click="emits('selectAccount', userAccount.id)">
-          {{ userAccount.name }}
-        </button>
+        <div v-for="userAccount in props.userAccounts" :key="userAccount.id"
+          class="flex justify-between w-full group overflow-hidden">
+          <div class="cursor-pointer w-full font-bold text-left" @click="emits('selectAccount', userAccount.id)">
+            {{ userAccount.name }}
+          </div>
+          <div class="transition-all ease-in-out duration-500 w-0 opacity-0 group-hover:w-10 group-hover:opacity-100">
+            <UIButton class="ml-4" type="plain" @click="handleAccountDeletion(userAccount.id)">
+              <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
+            </UIButton>
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -43,7 +51,7 @@ const props = defineProps<{
   userAccounts: IAccount[]
 }>()
 
-const { createNewAccount } = useAccount()
+const { createNewAccount, deleteAccount } = useAccount()
 
 
 const modalKeyName = "show_modal_account"
@@ -78,6 +86,29 @@ const handleAccountCreation = async () => {
   } finally {
     accountCreationData.loading = false
   }
+}
+const handleAccountDeletion = async (accountId: string | undefined) => {
+  if (!accountId) {
+    window.alert('An error has occured. Please try again.')
+    return
+  }
+  if (props.userAccounts.length === 1) {
+    window.alert('Cannot delete the last account.')
+    return
+  }
+  if (!window.confirm('Do you want to delete this account?')) {
+    return
+  }
+
+  try {
+    await deleteAccount(accountId)
+    emits('refreshAccounts')
+    emits('selectAccount', props.userAccounts[0].id)
+  } catch (error: any) {
+    window.alert(error.statusMessage)
+    return
+  }
+
 }
 </script>
 

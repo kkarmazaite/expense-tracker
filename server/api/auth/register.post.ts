@@ -27,6 +27,6 @@ const userData = { email, password, name, profileImage: 'https://picsum.photos/2
 const user = await createUser(userData)
 
 return {
-    body: userTransformer(user)
+    user: userTransformer(user)
 }
 })
