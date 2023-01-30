@@ -55,5 +55,8 @@
     "url-pattern": "^1.0.3",
     "vue3-simple-alert": "^1.0.4",
     "nuxt": "3.0.0"
+  },
+  "engines": {
+    "node": ">=16"
   }
 }
