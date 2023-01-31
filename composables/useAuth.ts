@@ -82,8 +82,9 @@ export default () => {
     }catch(error){
 
     }
-    authLoading.value = false
     redirect()
+    authLoading.value = false
+    
   }
 
   const logout = async() => {
