@@ -26,8 +26,8 @@ import { ITransaction } from '~~/types/ITransaction';
 const { getUserAccounts, getAccountById } = useAccount()
 const { getAccountCategories } = useCategory()
 const { getAccountTransactions } = useTransaction()
-const { useAuthUser } = useAuth()
-const user = useAuthUser()
+const { authUser } = useAuth()
+const user = authUser
 const statistics = ref<any>(null)
 
 const displayData = reactive<{

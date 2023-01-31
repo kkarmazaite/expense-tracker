@@ -9,6 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-const { useAuthUser, logout } = useAuth()
-const user = useAuthUser()
+const { authUser, logout } = useAuth()
+const user = authUser
 </script>

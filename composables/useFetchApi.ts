@@ -1,11 +1,11 @@
 export default (url: string, options:any = {}):any => {
-  const { useAuthToken } = useAuth()
+  const { authToken } = useAuth()
 
   return $fetch(url, {
     ...options,
     headers: {
       ...options?.headers, 
-      Authorization: `Bearer ${useAuthToken().value}`,
+      Authorization: `Bearer ${authToken.value}`,
     },
   })
 }

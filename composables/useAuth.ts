@@ -4,24 +4,10 @@ import { ILogin } from "~~/types/ILogin"
 import { IUser } from "~~/types/IUser"
 
 export default () => {
-  const useAuthToken = () => useState<string | null>('auth_token')
-  const useAuthUser = () => useState<IUser | null>('auth_user')
-  const useAuthLoading = () => useState<boolean>('auth_loading', () => true)
+  const authToken = useState<string | null>('auth_token')
+  const authUser = useState<IUser | null>('auth_user')
+  const authLoading = useState<boolean>('auth_loading', () => true)
 
-  const setToken = (newToken: string | null) => {
-    const authToken = useAuthToken()
-    authToken.value = newToken
-  }
-
-  const setUser = (newUser:IUser | null) => {
-    const authUser = useAuthUser()
-    authUser.value = newUser
-  } 
-
-  const setIsAuthLoading = (value: boolean) => {
-    const authLoading = useAuthLoading()
-    authLoading.value = value
-  }
 
   const createNewUser = async({
     email, password, repeatPassword, name, 
@@ -49,8 +35,8 @@ export default () => {
         password,
       },
     })
-    setToken(data.access_token)
-    setUser(data.user)
+    authToken.value = data.access_token
+    authUser.value = data.user
 
     return data
   }
@@ -58,22 +44,20 @@ export default () => {
   const refreshToken = async() => {
     const data:{access_token:string} = await useFetchApi('/api/auth/refresh')
 
-    setToken(data.access_token)
+    authToken.value = data.access_token
     return data
 
   }
   const getUser = async() => {
     const data:{user:IUser} = await useFetchApi('/api/auth/user')
 
-    setUser(data.user)
+    authUser.value = data.user
     return data
 
 
   }
 
   const reRefreshAccessToken = () => {
-    const authToken = useAuthToken()
-
     if(!authToken.value){
       return
     }
@@ -89,7 +73,7 @@ export default () => {
   }
 
   const initAuth = async() => {
-    setIsAuthLoading(true)
+    authLoading.value = true
         
     try{
       await refreshToken()
@@ -98,7 +82,7 @@ export default () => {
     }catch(error){
 
     }
-    setIsAuthLoading(false)
+    authLoading.value = false
     redirect()
   }
 
@@ -107,14 +91,14 @@ export default () => {
       method: 'POST',
     })
 
-    setToken(null)
-    setUser(null)
+    authToken.value = null
+    authUser.value = null
 
     useRouter().push("/login")
   }
 
   const redirect = () => {
-    if (useAuthUser().value) {
+    if (authUser.value) {
       useRouter().push("/");
     } else {
       useRouter().push("/login");
@@ -124,9 +108,9 @@ export default () => {
   return{
     login,
     createNewUser,
-    useAuthToken,
-    useAuthUser,
-    useAuthLoading,
+    authToken,
+    authUser,
+    authLoading,
     initAuth,
     logout,
   }

@@ -10,8 +10,8 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   setup() {
-    const { initAuth, useAuthLoading } = useAuth()
-    const isAuthLoading = useAuthLoading()
+    const { initAuth, authLoading } = useAuth()
+    const isAuthLoading = authLoading
     onBeforeMount(() => {
       initAuth()
     })
