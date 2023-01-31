@@ -1,9 +1,9 @@
 <template>
   <div class="bg-white rounded-md py-5">
-    <div v-if="props.accountName" class="w-full h-full px-5  overflow-auto">
+    <div v-if="props.account" class="w-full h-full px-5  overflow-auto">
       <!-- Header -->
       <div class="pb-5 sticky top-0 bg-white">
-        <h2 class="capitalize text-bold text-2xl pb-5">{{ props.accountName }}</h2>
+        <h2 class="capitalize text-bold text-2xl pb-5">{{ props.account.name }}</h2>
         <div>
           <div class="flex gap-20 items-center">
             <GraphDonut class="h-28 w-28" ref="donutGraph" />
@@ -35,10 +35,11 @@
 </template>
 <script lang="ts" setup>
 import { displayCurrency } from '~~/helpers/displayCurrency';
+import { IAccount } from '~~/types/IAccount';
 import { ITransaction } from '~~/types/ITransaction';
 
 const props = defineProps<{
-  accountName: string | undefined
+  account: IAccount | null
   accountTotalIncome: number
   accountTotalExpenses: number
   expenseTransactions: ITransaction[]

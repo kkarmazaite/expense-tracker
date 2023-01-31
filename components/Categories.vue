@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="flex justify-between pb-5 sticky top-0 bg-white z-10">
         <h2 class="capitalize text-bold text-2xl">Categories</h2>
-        <UIButton v-if="props.accountId" type="plain" class="w-auto px-2 text-xl" @click="openModal()">
+        <UIButton v-if="props.account" type="plain" class="w-auto px-2 text-xl" @click="openModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
@@ -47,12 +47,13 @@
   </div>
 </template>
 <script lang="ts" setup>
+import { IAccount } from '~~/types/IAccount';
 import { ICategory, ICategoryAccountTypes } from '~~/types/ICategory';
 
 const emits = defineEmits(['refreshCategories'])
 
 const props = defineProps<{
-  accountId: string | undefined
+  account: IAccount | null
   accountCategories: ICategory[]
 }>()
 
@@ -66,11 +67,11 @@ const showModal = useShowModal
 const selectList = [
   {
     "value": "expense",
-    "valueDisplay": "Expense", 
+    "valueDisplay": "Expense",
   },
   {
     "value": "income",
-    "valueDisplay": "Income", 
+    "valueDisplay": "Income",
   },
 ]
 const categoryCreationData = reactive({
@@ -91,7 +92,7 @@ const handleCategoryCreation = async () => {
     await createNewCategory({
       type: categoryCreationData.type,
       name: categoryCreationData.name,
-      accountId: props.accountId,
+      accountId: props.account?.id,
     })
     categoryCreationError.value = ''
     categoryCreationData.type = undefined

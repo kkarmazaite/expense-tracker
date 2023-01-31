@@ -1,6 +1,6 @@
 <template>
   <div class="p-5 pb-20 h-full w-full grid grid-cols-4 grid-rows-2 gap-5">
-    <Statistics :account-name="displayData.selectedAccount?.name"
+    <Statistics :account="displayData.selectedAccount"
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
       :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense"
       :expense-transactions="displayData.selectedAccountExpenseTransactions" ref="statistics"
@@ -13,9 +13,8 @@
       :account-transactions="displayData.selectedAccountTransactions" class="col-span-3 row-span-1"
       @refresh-transactions="fetchAccountTransactionData" />
 
-    <Categories :account-categories="displayData.selectedAccountCategories"
-      :account-id="displayData.selectedAccount?.id" class="col-span-1 row-span-1"
-      @refresh-categories="fetchAccountCategories" />
+    <Categories :account-categories="displayData.selectedAccountCategories" :account="displayData.selectedAccount"
+      class="col-span-1 row-span-1" @refresh-categories="fetchAccountCategories" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -31,7 +30,7 @@ const user = authUser
 const statistics = ref<any>(null)
 
 const displayData = reactive<{
-  selectedAccount: IAccount | undefined
+  selectedAccount: IAccount | null
   userAccounts: IAccount[]
   selectedAccountCategories: ICategory[]
   selectedAccountTransactions: ITransaction[]
@@ -39,7 +38,7 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalIncome: number
   selectedAccountTransactionsTotalExpense: number
 }>({
-  selectedAccount: undefined,
+  selectedAccount: null,
   userAccounts: [],
   selectedAccountCategories: [],
   selectedAccountTransactions: [],
