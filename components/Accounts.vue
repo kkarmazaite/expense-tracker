@@ -45,7 +45,10 @@
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
 
-const emits = defineEmits(['selectAccount', 'refreshAccounts'])
+const emits = defineEmits([
+  'selectAccount',
+  'refreshAccounts',
+])
 const props = defineProps<{
   userId: string | undefined
   userAccounts: IAccount[]

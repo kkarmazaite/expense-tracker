@@ -29,7 +29,7 @@ interface Props {
     selectOptionList: ISelect[]
 }
 const props = withDefaults(defineProps<Props>(), {
-    label: '',
-    value: ''
+  label: '',
+  value: '',
 })
 </script>

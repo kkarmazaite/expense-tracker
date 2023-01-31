@@ -1,29 +1,32 @@
-import {prisma} from '.'
+import { prisma } from '.'
 import { IAccount } from '~~/types/IAccount'
 
 export const createAccount = async(accountData: IAccount) => {
 
-    return prisma.account.create({
-        data: accountData
-    })
+  return prisma.account.create({
+    data: accountData,
+  })
 }
 export const getAccountsByNameAndUserId = (name: string, userId:string) => {
-    return prisma.account.findMany({
-        where: { name, userId }
-      })
+  return prisma.account.findMany({
+    where: {
+      name,
+      userId, 
+    },
+  })
 }
 export const getAccountsByUserId = (userId:string) => {
-    return prisma.account.findMany({
-        where: { userId }
-      })
+  return prisma.account.findMany({
+    where: { userId },
+  })
 }
 export const getAccountById = (accountId:string) => {
-    return prisma.account.findUnique({
-        where: { id: accountId },
-      })
+  return prisma.account.findUnique({
+    where: { id: accountId },
+  })
 }
 export const deleteAccountById= (accountId:string) => { 
-    return prisma.account.delete({
-        where: { id: accountId },
-      })
+  return prisma.account.delete({
+    where: { id: accountId },
+  })
 }

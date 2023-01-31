@@ -5,15 +5,18 @@ import { IAccount } from "~~/types/IAccount"
 
 export default defineEventHandler(async (event: H3Event) => {
 
-const userId = await event.context.auth.user.id
+  const userId = await event.context.auth.user.id
 
-if(!userId){
-    return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid parameters'}))
-}
+  if(!userId){
+    return sendError(event, createError({
+      statusCode: 400,
+      statusMessage: 'Invalid parameters', 
+    }))
+  }
 
-const userAccounts:IAccount[] = await getAccountsByUserId(userId) 
+  const userAccounts:IAccount[] = await getAccountsByUserId(userId) 
 
-return {
-    accounts: userAccounts
-}
+  return {
+    accounts: userAccounts,
+  }
 })

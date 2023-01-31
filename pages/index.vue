@@ -26,7 +26,7 @@ import { ITransaction } from '~~/types/ITransaction';
 const { getUserAccounts, getAccountById } = useAccount()
 const { getAccountCategories } = useCategory()
 const { getAccountTransactions } = useTransaction()
-const { useAuthUser, useAuthToken } = useAuth()
+const { useAuthUser } = useAuth()
 const user = useAuthUser()
 const statistics = ref<any>(null)
 
@@ -45,7 +45,7 @@ const displayData = reactive<{
   selectedAccountTransactions: [],
   selectedAccountExpenseTransactions: [],
   selectedAccountTransactionsTotalIncome: 0,
-  selectedAccountTransactionsTotalExpense: 0
+  selectedAccountTransactionsTotalExpense: 0,
 })
 const initializeData = async () => {
   await fetchUserAccounts()
@@ -74,7 +74,9 @@ const fetchAccountTransactionData = async () => {
   }
 }
 const fetchAccountTransactions = async () => {
-  const { transactions_all, transactions_income_total, transactions_expense_total, transactions_expense } = await getAccountTransactions()
+  const {
+    transactions_all, transactions_income_total, transactions_expense_total, transactions_expense,
+  } = await getAccountTransactions()
   displayData.selectedAccountTransactions = transactions_all
   displayData.selectedAccountExpenseTransactions = transactions_expense
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total

@@ -25,7 +25,7 @@
 const props = defineProps({
   modalKeyName: {
     type: String,
-    required: true
+    required: true,
   },
   title: {
     type: String,

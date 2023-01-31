@@ -5,19 +5,29 @@ import { createTransaction } from "~~/server/db/transactions"
 
 export default defineEventHandler(async (event: H3Event) => {
 
-const body = await readBody(event)
+  const body = await readBody(event)
 
-const {date, amount, description, categoryId}:ITransaction = body
+  const {
+    date, amount, description, categoryId, 
+  }:ITransaction = body
 
-if(!date || !amount|| !categoryId){
-    return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid parameters'}))
-}
+  if(!date || !amount|| !categoryId){
+    return sendError(event, createError({
+      statusCode: 400,
+      statusMessage: 'Invalid parameters', 
+    }))
+  }
 
-const transactionData = { date, amount, description, categoryId}
+  const transactionData = {
+    date,
+    amount,
+    description,
+    categoryId, 
+  }
 
-const transaction = await createTransaction(transactionData)
+  const transaction = await createTransaction(transactionData)
 
-return {
-    body: transaction
-}
+  return {
+    body: transaction,
+  }
 })

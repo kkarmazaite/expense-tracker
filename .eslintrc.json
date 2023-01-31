@@ -1,0 +1,43 @@
+{
+  "extends": [
+    "plugin:vue/base",
+    "@vue/eslint-config-typescript"
+  ],
+  "rules": {
+    "@typescript-eslint/interface-name-prefix": "off",
+    "@typescript-eslint/explicit-function-return-type": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+
+    // Indent
+    "no-tabs": "error",
+    "indent": ["error", 2],
+
+    // Variables
+    "@typescript-eslint/no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_",
+      "ignoreRestSiblings": false,
+      "varsIgnorePattern": "^_",
+      "destructuredArrayIgnorePattern": "^_"
+    }],
+    "no-var": "error",
+    
+    // Function
+    "function-paren-newline": ["error", "multiline-arguments"],
+    "arrow-spacing": ["error", { "before": true, "after": true }],
+    "space-in-parens": ["error", "never"],
+
+    // Object
+    "object-property-newline": [1],
+    "object-curly-spacing": ["error", "always"],
+    "object-curly-newline": [1, { "minProperties": 4, "consistent": true, "multiline": true }],
+
+    // Arrays
+    "array-bracket-newline": [1, { "minItems": 4, "multiline": true }],
+    "array-bracket-spacing": [0],
+    "array-element-newline": [1],
+
+    // Comma
+    "comma-spacing": ["error", { "before": false, "after": true }],
+    "comma-dangle": ["error", "always-multiline"]
+  }
+}

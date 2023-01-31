@@ -64,8 +64,14 @@ const { useShowModal, openModal, closeModal } =
 const showModal = useShowModal
 
 const selectList = [
-  { "value": "expense", "valueDisplay": "Expense" },
-  { "value": "income", "valueDisplay": "Income" }
+  {
+    "value": "expense",
+    "valueDisplay": "Expense", 
+  },
+  {
+    "value": "income",
+    "valueDisplay": "Income", 
+  },
 ]
 const categoryCreationData = reactive({
   name: '',

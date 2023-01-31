@@ -6,39 +6,48 @@ import { userTransformer } from "~~/server/transformers/user"
 import { createRefreshToken } from "~~/server/db/refreshTokens"
 import { ILogin } from "~~/types/ILogin"
 
-export default defineEventHandler(async (event: H3Event) =>{
-    const body = await readBody(event)
+export default defineEventHandler(async (event: H3Event) => {
+  const body = await readBody(event)
 
-    const {email, password}:ILogin = body
+  const { email, password }:ILogin = body
 
-    if(!email || !password){
-        return sendError(event, createError({statusCode: 400, statusMessage: 'Invalid parameters'}))
-    }
-    const user = await getUserByEmail(email)
+  if(!email || !password){
+    return sendError(event, createError({
+      statusCode: 400,
+      statusMessage: 'Invalid parameters', 
+    }))
+  }
+  const user = await getUserByEmail(email)
 
-    if(!user){
-        return sendError(event, createError({statusCode: 400, statusMessage: 'Email or password is invalid'}))
-    }
+  if(!user){
+    return sendError(event, createError({
+      statusCode: 400,
+      statusMessage: 'Email or password is invalid', 
+    }))
+  }
 
-    const doesThePasswordsMatch : boolean = await bcrypt.compare(password, user.password)
+  const doesThePasswordsMatch : boolean = await bcrypt.compare(password, user.password)
 
-    if(!doesThePasswordsMatch){
-        return sendError(event, createError({statusCode: 400, statusMessage: 'Email or password is invalid'}))
-    }
+  if(!doesThePasswordsMatch){
+    return sendError(event, createError({
+      statusCode: 400,
+      statusMessage: 'Email or password is invalid', 
+    }))
+  }
     
-    const {accessToken, refreshToken} = generateTokens(user)
+  const { accessToken, refreshToken } = generateTokens(user)
 
-    //Save token in db
-    await createRefreshToken({
-        token: refreshToken,
-        userId: user.id
-    })
+  //Save token in db
+  await createRefreshToken({
+    token: refreshToken,
+    userId: user.id,
+  })
 
-    //Add http only cookie
-    sendRefreshToken(event, refreshToken)
+  //Add http only cookie
+  sendRefreshToken(event, refreshToken)
 
-    return{
-        user: userTransformer(user),
-        access_token: accessToken
-    }
+  return{
+    user: userTransformer(user),
+    access_token: accessToken,
+  }
 })

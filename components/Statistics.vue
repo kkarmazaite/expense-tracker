@@ -47,7 +47,10 @@ const accountBalance = computed(() => (props.accountTotalIncome !== undefined &&
 const donutGraph = ref<any>(null)
 const barGraph = ref<any>(null)
 const initializeGraphs = () => {
-  let donutGraphData = [props.accountTotalIncome, props.accountTotalExpenses]
+  let donutGraphData = [
+    props.accountTotalIncome,
+    props.accountTotalExpenses,
+  ]
   if (donutGraph.value) {
     donutGraph.value.initializeGraph(donutGraphData)
   }
@@ -68,19 +71,18 @@ const lastWeekExpenses = () => {
     let dateDisplay = date.toISOString().substring(5, 10)
 
     let dateExpenseTotal = props.expenseTransactions.filter(transaction =>
-      transaction.date.toString().substring(0, 10) === date.toISOString().substring(0, 10)
-    ).reduce((partialSum, transaction) => partialSum + transaction.amount, 0);
+      transaction.date.toString().substring(0, 10) === date.toISOString().substring(0, 10)).reduce((partialSum, transaction) => partialSum + transaction.amount, 0);
 
     weekExpensesArray.push({
       group: dateDisplay,
       value: dateExpenseTotal,
-      valueDisplay: displayCurrency(dateExpenseTotal)
+      valueDisplay: displayCurrency(dateExpenseTotal),
     })
   }
   return weekExpensesArray
 }
 
 defineExpose({
-  initializeGraphs
+  initializeGraphs,
 });
 </script>

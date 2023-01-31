@@ -76,7 +76,7 @@ const { createNewTransaction, deleteTransaction } = useTransaction()
 const selectList = computed(() => props.accountCategories.map((category) => {
   return {
     "value": category.id as string,
-    "valueDisplay": category.name
+    "valueDisplay": category.name,
   }
 }) || [])
 
