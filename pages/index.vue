@@ -47,6 +47,7 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalIncome: 0,
   selectedAccountTransactionsTotalExpense: 0,
 })
+
 const initializeData = async () => {
   await fetchUserAccounts()
 
@@ -66,13 +67,11 @@ const fetchAccountCategories = async () => {
 }
 
 const fetchAccountTransactionData = async () => {
-
   await fetchAccountTransactions()
 
-  if (statistics.value) {
-    statistics.value.initializeGraphs()
-  }
+  initializeGraphs()
 }
+
 const fetchAccountTransactions = async () => {
   const {
     transactions_all, transactions_income_total, transactions_expense_total, transactions_expense,
@@ -82,6 +81,12 @@ const fetchAccountTransactions = async () => {
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total
   displayData.selectedAccountTransactionsTotalExpense = transactions_expense_total
 
+}
+
+const initializeGraphs = () => {
+  if (statistics.value) {
+    statistics.value.initializeGraphs()
+  }
 }
 
 const fetchAccountData = async (selectedAccountId: string) => {
@@ -94,7 +99,13 @@ const fetchAccountData = async (selectedAccountId: string) => {
 
 }
 
-
 initializeData()
+
+onMounted(() => {
+  window.addEventListener("resize", initializeGraphs);
+})
+onUnmounted(() => {
+  window.removeEventListener("resize", initializeGraphs);
+})
 
 </script>
