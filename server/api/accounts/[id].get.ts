@@ -1,9 +1,7 @@
 import { sendError } from "h3"
 import { getAccountById } from "~~/server/db/accounts"
-import { H3Event } from "h3"
-import { IAccount } from "~~/types/IAccount"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
   const accountId = await event.context.params.id
 
   if(!accountId){
@@ -13,7 +11,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }))
   }
 
-  const account:IAccount | null = await getAccountById(accountId)
+  const account = await getAccountById(accountId)
 
   setCookie(event, "selected_account", accountId, {
     httpOnly: true,

@@ -1,13 +1,10 @@
 import { sendError } from "h3"
 import { createAccount, getAccountsByNameAndUserId } from "~~/server/db/accounts"
-import { H3Event } from "h3"
 import { IAccount } from "~~/types/IAccount"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
 
-  const body = await readBody(event)
-
-  const { name, userId }:IAccount = body
+  const { name, userId }:IAccount = await readBody(event)
 
   if(!name || !userId){
     return sendError(event, createError({

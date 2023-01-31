@@ -1,16 +1,13 @@
 import { sendError } from "h3"
 import { createUser, getUserByEmail } from "~~/server/db/users"
 import { userTransformer } from "~~/server/transformers/user"
-import { H3Event } from "h3"
 import { IUser } from "~~/types/IUser"
 
-export default defineEventHandler(async (event: H3Event) => {
-
-  const body = await readBody(event)
+export default defineEventHandler(async (event) => {
 
   const {
     email, password, repeatPassword, name, 
-  }:IUser = body
+  }:IUser = await readBody(event)
 
   if(!email || !password || !repeatPassword || !name){
     return sendError(event, createError({

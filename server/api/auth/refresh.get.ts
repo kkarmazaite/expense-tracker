@@ -2,10 +2,8 @@ import { sendError } from "h3"
 import { getRefreshTokenByToken } from "~~/server/db/refreshTokens"
 import { getUserById } from "~~/server/db/users"
 import { decodeRefreshToken, generateTokens } from "~~/server/utils/jwt"
-import { H3Event } from "h3"
-import { IUser } from "~~/types/IUser"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
   const refreshToken = getCookie(event, 'refresh_token')
 
   if(!refreshToken){
@@ -34,7 +32,7 @@ export default defineEventHandler(async (event: H3Event) => {
   }
 
   try{
-    const user :IUser | null = await getUserById(token.userId)
+    const user  = await getUserById(token.userId)
 
     if(!user){
       return sendError(event, createError({

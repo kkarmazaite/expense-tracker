@@ -1,15 +1,13 @@
 import { sendError } from "h3"
-import { H3Event } from "h3"
 import { ITransaction } from "~~/types/ITransaction"
 import { createTransaction } from "~~/server/db/transactions"
 
-export default defineEventHandler(async (event: H3Event) => {
-
-  const body = await readBody(event)
+export default defineEventHandler(async (event) => {
 
   const {
     date, amount, description, categoryId, 
-  }:ITransaction = body
+  }:ITransaction = await readBody(event)
+
 
   if(!date || !amount|| !categoryId){
     return sendError(event, createError({

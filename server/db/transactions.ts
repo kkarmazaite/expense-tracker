@@ -1,12 +1,12 @@
 import { prisma } from '.'
-import { ITransactionCreation } from '~~/types/ITransaction'
+import { ITransaction, ITransactionCreation } from '~~/types/ITransaction'
 
-export const createTransaction = async(transactionData: ITransactionCreation) => {
+export const createTransaction = async(transactionData: ITransactionCreation): Promise<ITransactionCreation | null> => {
   return prisma.transaction.create({
     data: transactionData,
   })
 }
-export const getTransactionsByAccountId = (accountId:string) => {
+export const getTransactionsByAccountId = (accountId:string): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       category: {
@@ -21,7 +21,7 @@ export const getTransactionsByAccountId = (accountId:string) => {
     },
   })
 }
-export const getIncomeTransactionsByAccountId = (accountId:string) => {
+export const getIncomeTransactionsByAccountId = (accountId:string): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       AND:[
@@ -47,7 +47,7 @@ export const getIncomeTransactionsByAccountId = (accountId:string) => {
     },
   })
 }
-export const getExpenseTransactionsByAccountId = (accountId:string) => {
+export const getExpenseTransactionsByAccountId = (accountId:string): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       AND:[
@@ -74,7 +74,7 @@ export const getExpenseTransactionsByAccountId = (accountId:string) => {
   })
     
 }
-export const getTransactionById = (transactionId:string) => {
+export const getTransactionById = (transactionId:string):Promise<ITransaction | null> => {
   return prisma.transaction.findUnique({
     where: {
       id: transactionId,
@@ -84,7 +84,7 @@ export const getTransactionById = (transactionId:string) => {
     },
   })
 }
-export const getTransactionsByCategoryId = (categoryId:string) => {
+export const getTransactionsByCategoryId = (categoryId:string): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       categoryId,
@@ -97,7 +97,7 @@ export const getTransactionsByCategoryId = (categoryId:string) => {
     },
   })
 }
-export const deleteTransactionById = (transactionId:string) => { 
+export const deleteTransactionById = (transactionId:string):Promise<ITransactionCreation | null> => { 
   return prisma.transaction.delete({
     where: {
       id: transactionId,

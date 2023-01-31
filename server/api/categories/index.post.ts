@@ -1,13 +1,10 @@
 import { sendError } from "h3"
-import { H3Event } from "h3"
 import { ICategory } from "~~/types/ICategory"
 import { createCategory, getCategoriesByNameTypeAndAccountId } from "~~/server/db/categories"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
 
-  const body = await readBody(event)
-
-  const { name, type, accountId }:ICategory = body
+  const { name, type, accountId }:ICategory = await readBody(event)
 
   if(!name || !type || !accountId){
     return sendError(event, createError({

@@ -1,9 +1,7 @@
 import { sendError } from "h3"
-import { H3Event } from "h3"
-import { ITransaction } from "~~/types/ITransaction"
 import { getTransactionsByAccountId,  getIncomeTransactionsByAccountId, getExpenseTransactionsByAccountId } from "~~/server/db/transactions"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
   const selectedAccountId = getCookie(event, 'selected_account')
   if(!selectedAccountId){
     return sendError(event, createError({
@@ -11,13 +9,13 @@ export default defineEventHandler(async (event: H3Event) => {
       statusMessage: 'Invalid parameters', 
     }))
   }
-  const accountTransactions:ITransaction[] = await getTransactionsByAccountId(selectedAccountId) 
+  const accountTransactions = await getTransactionsByAccountId(selectedAccountId) 
 
-  const accountIncomeTransactions:ITransaction[] = await  getIncomeTransactionsByAccountId(selectedAccountId)
-  const accountIncomeTransactionsTotal:number = accountIncomeTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
+  const accountIncomeTransactions = await  getIncomeTransactionsByAccountId(selectedAccountId)
+  const accountIncomeTransactionsTotal = accountIncomeTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
 
-  const accountExpenseTransactions:ITransaction[] = await  getExpenseTransactionsByAccountId(selectedAccountId)
-  const accountExpenseTransactionsTotal:number = accountExpenseTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
+  const accountExpenseTransactions = await  getExpenseTransactionsByAccountId(selectedAccountId)
+  const accountExpenseTransactionsTotal = accountExpenseTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
     
   return{
     "transactions_all": accountTransactions,

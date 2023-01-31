@@ -1,9 +1,7 @@
 import { sendError } from "h3"
 import { getAccountsByUserId } from "~~/server/db/accounts"
-import { H3Event } from "h3"
-import { IAccount } from "~~/types/IAccount"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
 
   const userId = await event.context.auth.user.id
 
@@ -14,7 +12,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }))
   }
 
-  const userAccounts:IAccount[] = await getAccountsByUserId(userId) 
+  const userAccounts = await getAccountsByUserId(userId) 
 
   return {
     accounts: userAccounts,

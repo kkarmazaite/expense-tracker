@@ -2,10 +2,8 @@ import UrlPattern from "url-pattern"
 import { decodeAccessToken } from "../utils/jwt"
 import { sendError } from "h3"
 import { getUserById } from "../db/users"
-import { H3Event } from "h3"
-import { IToken } from "~~/types/IToken"
 
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
   const endpoints : string[] = [
     '/api/auth/user',
     '/api/accounts',
@@ -14,7 +12,7 @@ export default defineEventHandler(async (event: H3Event) => {
     '/api/transactions',
   ]
 
-  const isHandledByThisMiddleware : boolean = endpoints.some(endpoint => {
+  const isHandledByThisMiddleware = endpoints.some(endpoint => {
 
     const pattern = new UrlPattern(endpoint)
 
@@ -26,7 +24,7 @@ export default defineEventHandler(async (event: H3Event) => {
     return
   }
 
-  const token : string | undefined = event.node.req.headers['authorization']?.split(' ')[1]
+  const token  = event.node.req.headers['authorization']?.split(' ')[1]
 
   if(!token){
     return sendError(event, createError({
@@ -35,7 +33,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }))
   }
 
-  const decoded: IToken | null = decodeAccessToken(token)
+  const decoded = decodeAccessToken(token)
 
   if(!decoded){
     return sendError(event, createError({
@@ -46,7 +44,7 @@ export default defineEventHandler(async (event: H3Event) => {
 
 
   try{
-    const userId : string = decoded.userId
+    const userId  = decoded.userId
     const user = await getUserById(userId)
 
     event.context.auth = { user }

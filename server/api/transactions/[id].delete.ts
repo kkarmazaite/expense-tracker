@@ -1,8 +1,6 @@
 import { sendError } from "h3"
-import { H3Event } from "h3"
-import { ITransaction } from "~~/types/ITransaction"
 import { deleteTransactionById, getTransactionById } from "~~/server/db/transactions"
-export default defineEventHandler(async (event: H3Event) => {
+export default defineEventHandler(async (event) => {
   const transactionId = await event.context.params.id
 
   if(!transactionId){
@@ -12,7 +10,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }))
   }
 
-  const transaction:ITransaction | null = await getTransactionById(transactionId)
+  const transaction = await getTransactionById(transactionId)
 
   if(!transaction){
     return sendError(event, createError({

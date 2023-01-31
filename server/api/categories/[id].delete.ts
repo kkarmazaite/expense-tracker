@@ -1,11 +1,9 @@
 import { sendError } from "h3"
-import { H3Event } from "h3"
-import { ITransaction } from "~~/types/ITransaction"
 import { getTransactionsByCategoryId } from "~~/server/db/transactions"
-import { ICategory } from "~~/types/ICategory"
 import { deleteCategoryById, getCategoryById } from "~~/server/db/categories"
-export default defineEventHandler(async (event: H3Event) => {
-  const categoryId = await event.context.params.id
+export default defineEventHandler(async (event) => {
+
+  const categoryId = event.context.params.id as string | undefined
 
   if(!categoryId){
     return sendError(event, createError({
@@ -14,7 +12,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }))
   }
 
-  const categoryTransactions:ITransaction[] | null = await getTransactionsByCategoryId(categoryId)
+  const categoryTransactions = await getTransactionsByCategoryId(categoryId)
 
   if(categoryTransactions.length>0){
     return sendError(event, createError({
@@ -23,7 +21,7 @@ export default defineEventHandler(async (event: H3Event) => {
     }))
   }
 
-  const category:ICategory | null = await getCategoryById(categoryId)
+  const category = await getCategoryById(categoryId)
 
   if(!category){
     return sendError(event, createError({

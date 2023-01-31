@@ -2,7 +2,7 @@ import { prisma } from '.'
 import bcrypt from 'bcrypt'
 import { IUser } from '~~/types/IUser'
 
-export const createUser = async(userData: IUser) => {
+export const createUser = async(userData: IUser):Promise<IUser> => {
   const password = userData.password as string
   const encryptedPassword = await bcrypt.hash(password, 10)
 
@@ -15,7 +15,7 @@ export const createUser = async(userData: IUser) => {
   })
 }
 
-export const getUserByEmail = (email: string) => {
+export const getUserByEmail = (email: string):Promise<IUser | null> => {
   return prisma.user.findUnique({
     where:{
       email,
@@ -23,7 +23,7 @@ export const getUserByEmail = (email: string) => {
   })
 }
 
-export const getUserById = (userId: string) => {
+export const getUserById = (userId: string):Promise<IUser | null> => {
   return prisma.user.findUnique({
     where:{
       id: userId,

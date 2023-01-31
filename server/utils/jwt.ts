@@ -41,8 +41,8 @@ export const decodeAccessToken = (token:string) : IToken | null => {
 }
 
 export const generateTokens = (user:IUser) => {
-  const accessToken : string = generateAccessToken(user)
-  const refreshToken : string = generateRefreshToken(user)
+  const accessToken = generateAccessToken(user)
+  const refreshToken = generateRefreshToken(user)
 
   return{
     accessToken: accessToken,
