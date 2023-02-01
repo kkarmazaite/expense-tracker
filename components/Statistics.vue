@@ -65,10 +65,10 @@ const initializeGraphs = () => {
 const lastWeekExpenses = () => {
 
   const currentDate = new Date();
-  let date = new Date()
   let weekExpensesArray = []
   for (let i = 6; i >= 0; i--) {
-    date.setDate(currentDate.getDate() - i)
+    let date = new Date(currentDate.getTime() - (i * 24 * 60 * 60 * 1000))
+    console.log(date)
     let dateDisplay = date.toISOString().substring(5, 10)
 
     let dateExpenseTotal = props.expenseTransactions.filter(transaction =>
