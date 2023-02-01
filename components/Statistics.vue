@@ -68,7 +68,6 @@ const lastWeekExpenses = () => {
   let weekExpensesArray = []
   for (let i = 6; i >= 0; i--) {
     let date = new Date(currentDate.getTime() - (i * 24 * 60 * 60 * 1000))
-    console.log(date)
     let dateDisplay = date.toISOString().substring(5, 10)
 
     let dateExpenseTotal = props.expenseTransactions.filter(transaction =>
