@@ -1,5 +1,5 @@
 <template>
-    <div id="donutGraph"> </div>
+  <div id="donutGraph"> </div>
 </template>
 <script lang="ts" setup>
 import * as d3 from "d3";
@@ -25,6 +25,7 @@ const initializeGraph = (chartData: number[]) => {
     .attr("height", height)
 
   const radius = Math.min(width, height) / 2
+  const innerRadius = radius / 3
   const g = svg.append("g").attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
 
   const color = d3.scaleOrdinal([
@@ -39,7 +40,7 @@ const initializeGraph = (chartData: number[]) => {
   // Generate the arcs
   const arc = d3.arc()
     .outerRadius(radius)
-    .innerRadius(radius - 20)
+    .innerRadius(radius - innerRadius)
 
   //Generate groups
   const arcs = g.selectAll("arc")
@@ -52,7 +53,6 @@ const initializeGraph = (chartData: number[]) => {
   arcs.append("path")
     .attr("d", arc)
     .attr("fill", (d: number, i: string) => color(i))
-  ;
 
 
 }

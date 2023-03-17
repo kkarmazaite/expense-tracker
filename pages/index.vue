@@ -1,20 +1,20 @@
 <template>
-  <div class="p-5 pb-20 h-full w-full grid grid-cols-4 grid-rows-2 gap-5">
+  <div class="p-5 pb-20 h-full w-full grid grid-cols-1 md:grid-cols-4 auto-rows-auto md:grid-rows-2 gap-5">
     <Statistics :account="displayData.selectedAccount"
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
       :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense"
       :expense-transactions="displayData.selectedAccountExpenseTransactions" ref="statistics"
-      class="col-span-3 row-span-1" />
+      class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1" />
 
     <Accounts :user-accounts="displayData.userAccounts" :user-id="user?.id" @select-account="fetchAccountData"
-      @refresh-accounts="fetchUserAccounts" class="col-span-1 row-span-1" />
+      @refresh-accounts="fetchUserAccounts" class="order-3 md:order-2 col-span-1 row-span-1" />
 
     <Transactions :account-categories="displayData.selectedAccountCategories"
-      :account-transactions="displayData.selectedAccountTransactions" class="col-span-3 row-span-1"
-      @refresh-transactions="fetchAccountTransactionData" />
+      :account-transactions="displayData.selectedAccountTransactions"
+      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" @refresh-transactions="fetchAccountTransactionData" />
 
     <Categories :account-categories="displayData.selectedAccountCategories" :account="displayData.selectedAccount"
-      class="col-span-1 row-span-1" @refresh-categories="fetchAccountCategories" />
+      class="order-4 md:order-4 col-span-1 row-span-1" @refresh-categories="fetchAccountCategories" />
   </div>
 </template>
 <script lang="ts" setup>
