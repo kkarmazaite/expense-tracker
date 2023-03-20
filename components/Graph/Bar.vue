@@ -14,9 +14,9 @@ const initializeGraph = (chartData: IBarGraph[]) => {
   // set the dimensions and margins of the graph
   const margin = {
     top: 30,
-    right: 30,
+    right: 5,
     bottom: 20,
-    left: 40, 
+    left: 30, 
   }
   const width: number = container.node().getBoundingClientRect().width - margin.left - margin.right
   const height: number = container.node().getBoundingClientRect().height - margin.top - margin.bottom

@@ -5,9 +5,9 @@
       <div class="pb-5 sticky top-0 bg-white">
         <h2 class="capitalize text-bold text-2xl pb-5">{{ props.account.name }}</h2>
         <div>
-          <div class="flex gap-20 items-center">
+          <div class="flex gap-5 md:gap-20 items-center justify-between">
             <GraphDonut class="h-28 w-28" ref="donutGraph" />
-            <div class="font-bold flex flex-col gap-5 w-52">
+            <div class="font-bold text-sm md:text-base flex flex-col gap-5 w-52">
               <div class="flex justify-between text-green-500">
                 <span>Income:</span>
                 <span>{{ displayCurrency(props.accountTotalIncome) }}</span>

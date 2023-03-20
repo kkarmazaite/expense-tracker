@@ -2,16 +2,16 @@
   <div class="bg-white rounded-md py-5">
     <div class="w-full h-full px-5 overflow-auto">
       <!-- Header -->
-      <div class="flex justify-between pb-5 sticky top-0 bg-white z-10">
+      <div class="flex justify-between pb-12 md:pb-5 sticky top-0 bg-white z-10">
         <h2 class="capitalize text-bold text-2xl">Categories</h2>
-        <UIButton v-if="props.account" type="plain" class="w-auto px-2 text-xl" @click="openModal()">
+        <UIButton v-if="props.account" type="plain" class="w-auto px-2 text-3xl md:text-xl" @click="openModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
 
       <!-- Content -->
-      <div v-if="accountCategories" class="flex flex-col gap-5 pb-10">
-        <div class="flex justify-between w-full group overflow-hidden"
+      <div v-if="accountCategories" class="flex flex-col gap-10 md:gap-5 pb-10">
+        <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
           <div class="font-bold text-left">
             <span class="font-bold text-left" :class="{
@@ -19,8 +19,8 @@
               'text-red-500': accountCategory.type === 'expense'
             }"> {{ accountCategory.name }}</span>
           </div>
-          <div class="transition-all ease-in-out duration-500 w-0 opacity-0 group-hover:w-10 group-hover:opacity-100">
-            <UIButton class="ml-4" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
+          <div class="transition-all ease-in-out duration-500 w-15 md:w-0 opacity-100 md:opacity-0 group-hover:w-5 group-hover:opacity-100">
+            <UIButton class="ml-4 text-xl md:text-base" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
               <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
             </UIButton>
           </div>
@@ -31,7 +31,7 @@
     <!-- Modal -->
     <UIModal class=" z-50" v-if="showModal" title="Create new category" :modalKeyName="modalKeyName"
       :showModal="showModal">
-      <div class="mb-20 flex flex-col gap-5">
+      <div class="mb-20 flex flex-col  gap-10 md:gap-5">
         <UISelect label="Type" :selectOptionList="selectList" :value="categoryCreationData.type"
           v-model="categoryCreationData.type" />
         <UIInput label="Name" placeholder="groceries" v-model="categoryCreationData.name" />

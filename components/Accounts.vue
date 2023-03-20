@@ -2,22 +2,22 @@
   <div class="bg-white rounded-md py-5">
     <div class="w-full h-full px-5  overflow-auto">
       <!-- Header -->
-      <div class="flex justify-between pb-5 sticky top-0 bg-white">
+      <div class="flex justify-between pb-12 md:pb-5 sticky top-0 bg-white">
         <h2 class="capitalize text-bold text-2xl">Accounts</h2>
-        <UIButton type="plain" class="w-auto px-2 text-xl" @click="openModal()">
+        <UIButton type="plain" class="w-auto px-2 text-3xl md:text-xl" @click="openModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
 
       <!-- Content -->
-      <div class="flex flex-col gap-5 pb-10">
+      <div class="flex flex-col gap-10 md:gap-5 pb-10">
         <div v-for="userAccount in props.userAccounts" :key="userAccount.id"
           class="flex justify-between w-full group overflow-hidden">
-          <div class="cursor-pointer w-full font-bold text-left" @click="emits('selectAccount', userAccount.id)">
+          <div class="cursor-pointer w-full font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
             {{ userAccount.name }}
           </div>
-          <div class="transition-all ease-in-out duration-500 w-0 opacity-0 group-hover:w-10 group-hover:opacity-100">
-            <UIButton class="ml-4" type="plain" @click="handleAccountDeletion(userAccount.id)">
+          <div class="transition-all ease-in-out duration-500 w-15 md:w-0 opacity-100 md:opacity-0 group-hover:w-15 group-hover:opacity-100">
+            <UIButton class="ml-4 text-xl md:text-base" type="plain" @click="handleAccountDeletion(userAccount.id)">
               <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
             </UIButton>
           </div>
@@ -29,7 +29,7 @@
     <!-- Modal -->
     <UIModal class="z-50" v-if="showModal" title="Create new account" :modalKeyName="modalKeyName"
       :showModal="showModal">
-      <div class="mb-20 flex flex-col gap-5">
+      <div class="mb-20 flex flex-col  gap-10 md:gap-5">
         <UIInput label="Name" placeholder="wallet" v-model="accountCreationData.name" />
       </div>
       <p class="text-red-500">{{ accountCreationError }}</p>
