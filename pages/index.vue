@@ -11,7 +11,7 @@
 
     <Transactions :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions"
-      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" @refresh-transactions="fetchAccountTransactionData" />
+      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" @refresh-transactions="refreshData" />
 
     <Categories :account-categories="displayData.selectedAccountCategories" :account="displayData.selectedAccount"
       class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1" @refresh-categories="fetchAccountCategories" />
@@ -19,6 +19,7 @@
 </template>
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
+import { IAccountExtented } from '~~/types/IAccountExtended';
 import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { ITransaction } from '~~/types/ITransaction';
 
@@ -31,7 +32,7 @@ const statistics = ref<any>(null)
 
 const displayData = reactive<{
   selectedAccount: IAccount | null
-  userAccounts: IAccount[]
+  userAccounts: IAccountExtented[]
   selectedAccountCategories: ICategoryExtented[]
   selectedAccountTransactions: ITransaction[]
   selectedAccountExpenseTransactions: ITransaction[]
@@ -96,6 +97,12 @@ const fetchAccountData = async (selectedAccountId: string) => {
 
   await fetchAccountTransactionData()
 
+}
+
+const refreshData = async () => {
+  await fetchUserAccounts()
+
+  await fetchAccountData(displayData?.selectedAccount?.id as string)
 }
 
 initializeData()

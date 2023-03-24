@@ -18,6 +18,13 @@ export const getAccountsByNameAndUserId = (name: string, userId:string): Promise
 export const getAccountsByUserId = (userId:string): Promise<IAccount[]> => {
   return prisma.account.findMany({
     where: { userId },
+    include:{
+      categories:{
+        include:{
+          transactions:true,
+        },
+      },
+    },
   })
 }
 export const getAccountById = (accountId:string): Promise<IAccount | null> => {

@@ -13,8 +13,11 @@
       <div class="flex flex-col gap-10 md:gap-5 pb-10">
         <div v-for="userAccount in props.userAccounts" :key="userAccount.id"
           class="flex justify-between w-full group overflow-hidden">
-          <div class="cursor-pointer w-full font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
-            {{ userAccount.name }}
+          <div class="flex justify-between cursor-pointer w-full mt-1 md:mt-0 font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
+            <p>{{ userAccount.name }}</p>
+            <p v-if="userAccount.categories" class="font-bold">
+              {{ displayCurrency(getCategorySum(userAccount.categories)) }}
+            </p>
           </div>
           <div class="transition-all ease-in-out duration-500 w-16 md:w-0 opacity-100 md:opacity-0 group-hover:w-16 group-hover:opacity-100">
             <UIButton class="ml-4 text-xl md:text-base" type="plain" @click="handleAccountDeletion(userAccount.id)">
@@ -43,7 +46,10 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { IAccount } from '~~/types/IAccount';
+import { IAccountExtented } from '~~/types/IAccountExtended';
+import { displayCurrency } from '~~/helpers/displayCurrency';
+import { getTransactionSum } from '~~/helpers/getTransactionSum';
+import { ICategoryExtented } from '~~/types/ICategoryExtended';
 
 const emits = defineEmits([
   'selectAccount',
@@ -51,7 +57,7 @@ const emits = defineEmits([
 ])
 const props = defineProps<{
   userId: string | undefined
-  userAccounts: IAccount[]
+  userAccounts: IAccountExtented[]
 }>()
 
 const { createNewAccount, deleteAccount } = useAccount()
@@ -70,6 +76,11 @@ const accountCreationError = ref('')
 const accountCreationDisabled = computed(() => {
   return !accountCreationData.name || accountCreationData.loading
 })
+
+const getCategorySum = (categories:ICategoryExtented[]) => {
+  return categories.reduce((sum, category:ICategoryExtented) => sum + (getTransactionSum(category.transactions) * (category.type === 'expense' ? -1 : 1)), 0)
+}
+
 
 const handleAccountCreation = async () => {
   accountCreationData.loading = true

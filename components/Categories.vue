@@ -13,7 +13,7 @@
       <div v-if="accountCategories" class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
-          <div class="flex justify-between w-full">
+          <div class="flex justify-between w-full mt-1 md:mt-0">
             <p class="font-bold text-left" :class="{
               'text-green-500': accountCategory.type === 'income',
               'text-red-500': accountCategory.type === 'expense'
@@ -55,8 +55,9 @@
 import { IAccount } from '~~/types/IAccount';
 import { ICategoryAccountTypes } from '~~/types/ICategory';
 import { ICategoryExtented } from '~~/types/ICategoryExtended';
-import { ITransaction } from '~~/types/ITransaction';
 import { displayCurrency } from '~~/helpers/displayCurrency';
+import { getTransactionSum } from '~~/helpers/getTransactionSum';
+
 
 const emits = defineEmits(['refreshCategories'])
 
@@ -91,10 +92,6 @@ const categoryCreationError = ref('')
 const categoryCreationDisabled = computed(() => {
   return !categoryCreationData.name || !categoryCreationData.type || categoryCreationData.loading
 })
-
-const getTransactionSum = (transactions:ITransaction[]) => {
-  return transactions.reduce((sum, transaction:ITransaction) => sum + transaction.amount, 0)
-}
 
 const handleCategoryCreation = async () => {
   categoryCreationData.loading = true

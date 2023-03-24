@@ -14,7 +14,7 @@
       <div v-if="props.accountTransactions.length > 0" class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden" v-for="transaction in props.accountTransactions"
           :key="transaction.id">
-          <div class="flex justify-between w-full text-sm md:text-base">
+          <div class="flex justify-between w-full mt-1 md:mt-0 text-sm md:text-base">
             <div>
               <p class="font-bold text-left" :class="{
                 'text-green-500': transaction.category.type === 'income',
