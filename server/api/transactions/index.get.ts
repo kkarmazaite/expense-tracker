@@ -3,18 +3,25 @@ import { getTransactionsByAccountId,  getIncomeTransactionsByAccountId, getExpen
 
 export default defineEventHandler(async (event) => {
   const selectedAccountId = getCookie(event, 'selected_account')
+  const dateFrom = getCookie(event, 'date_from')
+  const dateTo = getCookie(event, 'date_to')
+
+  const startDate = new Date(dateFrom as string);
+  const endDate = new Date(dateTo as string);
+
+
   if(!selectedAccountId){
     return sendError(event, createError({
       statusCode: 400,
       statusMessage: 'Invalid parameters', 
     }))
   }
-  const accountTransactions = await getTransactionsByAccountId(selectedAccountId) 
+  const accountTransactions = await getTransactionsByAccountId(selectedAccountId, startDate, endDate) 
 
-  const accountIncomeTransactions = await  getIncomeTransactionsByAccountId(selectedAccountId)
+  const accountIncomeTransactions = await  getIncomeTransactionsByAccountId(selectedAccountId, startDate, endDate)
   const accountIncomeTransactionsTotal = accountIncomeTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
 
-  const accountExpenseTransactions = await  getExpenseTransactionsByAccountId(selectedAccountId)
+  const accountExpenseTransactions = await  getExpenseTransactionsByAccountId(selectedAccountId, startDate, endDate)
   const accountExpenseTransactionsTotal = accountExpenseTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
     
   return{

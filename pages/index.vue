@@ -23,6 +23,7 @@ import { IAccountExtented } from '~~/types/IAccountExtended';
 import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { ITransaction } from '~~/types/ITransaction';
 
+const { selectDateRange } = useDate()
 const { getUserAccounts, getAccountById } = useAccount()
 const { getAccountCategories } = useCategory()
 const { getAccountTransactions } = useTransaction()
@@ -49,6 +50,7 @@ const displayData = reactive<{
 })
 
 const initializeData = async () => {
+  await selectDateRange('2023-03-01', '2023-03-31')
   await fetchUserAccounts()
 
   if (!displayData.selectedAccount && displayData.userAccounts.length > 0) {

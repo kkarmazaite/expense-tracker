@@ -1,17 +1,23 @@
 import { prisma } from '.'
 import { ITransaction, ITransactionCreation } from '~~/types/ITransaction'
 
+
 export const createTransaction = async(transactionData: ITransactionCreation): Promise<ITransactionCreation | null> => {
   return prisma.transaction.create({
     data: transactionData,
   })
 }
-export const getTransactionsByAccountId = (accountId:string): Promise<ITransaction[]> => {
+export const getTransactionsByAccountId = (accountId:string, dateFrom: Date, dateTo: Date): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       category: {
         accountId,
       },
+      date: {
+        gte: dateFrom,
+        lte: dateTo,
+      },
+
     },
     include: {
       category: true,
@@ -21,13 +27,17 @@ export const getTransactionsByAccountId = (accountId:string): Promise<ITransacti
     },
   })
 }
-export const getIncomeTransactionsByAccountId = (accountId:string): Promise<ITransaction[]> => {
+export const getIncomeTransactionsByAccountId = (accountId:string, dateFrom: Date, dateTo: Date): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       AND:[
         {
           category: {
             accountId,
+          },
+          date: {
+            gte: dateFrom,
+            lte: dateTo,
           },
         },
         {
@@ -47,13 +57,17 @@ export const getIncomeTransactionsByAccountId = (accountId:string): Promise<ITra
     },
   })
 }
-export const getExpenseTransactionsByAccountId = (accountId:string): Promise<ITransaction[]> => {
+export const getExpenseTransactionsByAccountId = (accountId:string, dateFrom: Date, dateTo: Date): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
     where:{
       AND:[
         {
           category: {
             accountId,
+          },
+          date: {
+            gte: dateFrom,
+            lte: dateTo,
           },
         },
         {
