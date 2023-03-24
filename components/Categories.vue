@@ -13,13 +13,18 @@
       <div v-if="accountCategories" class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
-          <div class="font-bold text-left">
-            <span class="font-bold text-left" :class="{
+          <div class="flex justify-between w-full">
+            <p class="font-bold text-left" :class="{
               'text-green-500': accountCategory.type === 'income',
               'text-red-500': accountCategory.type === 'expense'
-            }"> {{ accountCategory.name }}</span>
+            }"> 
+              {{ accountCategory.name }} 
+            </p>
+            <p v-if="accountCategory.transactions" class="font-bold">
+              {{ displayCurrency(getTransactionSum(accountCategory.transactions)) }}
+            </p>
           </div>
-          <div class="transition-all ease-in-out duration-500 w-15 md:w-0 opacity-100 md:opacity-0 group-hover:w-5 group-hover:opacity-100">
+          <div class="transition-all ease-in-out duration-500 w-16 md:w-0 opacity-100 md:opacity-0 group-hover:w-16 group-hover:opacity-100">
             <UIButton class="ml-4 text-xl md:text-base" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
               <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
             </UIButton>
@@ -48,13 +53,16 @@
 </template>
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
-import { ICategory, ICategoryAccountTypes } from '~~/types/ICategory';
+import { ICategoryAccountTypes } from '~~/types/ICategory';
+import { ICategoryExtented } from '~~/types/ICategoryExtended';
+import { ITransaction } from '~~/types/ITransaction';
+import { displayCurrency } from '~~/helpers/displayCurrency';
 
 const emits = defineEmits(['refreshCategories'])
 
 const props = defineProps<{
   account: IAccount | null
-  accountCategories: ICategory[]
+  accountCategories: ICategoryExtented[]
 }>()
 
 const { createNewCategory, deleteCategory } = useCategory()
@@ -84,9 +92,12 @@ const categoryCreationDisabled = computed(() => {
   return !categoryCreationData.name || !categoryCreationData.type || categoryCreationData.loading
 })
 
+const getTransactionSum = (transactions:ITransaction[]) => {
+  return transactions.reduce((sum, transaction:ITransaction) => sum + transaction.amount, 0)
+}
+
 const handleCategoryCreation = async () => {
   categoryCreationData.loading = true
-
 
   try {
     await createNewCategory({

@@ -27,7 +27,7 @@
               <p class="font-bold">{{ displayCurrency(transaction.amount) }}</p>
             </div>
           </div>
-          <div class="transition-all ease-in-out duration-500 w-15 md:w-0 opacity-100 md:opacity-0 group-hover:w-15 group-hover:opacity-100">
+          <div class="transition-all ease-in-out duration-500 w-16 md:w-0 opacity-100 md:opacity-0 group-hover:w-16 group-hover:opacity-100">
             <UIButton class="ml-4 text-xl md:text-base" type="plain" @click="handleTransactionDeletion(transaction.id)">
               <font-awesome-icon class="text-red-500" icon="fa fa-trash" />
             </UIButton>

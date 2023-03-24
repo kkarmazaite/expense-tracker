@@ -19,7 +19,7 @@
 </template>
 <script lang="ts" setup>
 import { IAccount } from '~~/types/IAccount';
-import { ICategory } from '~~/types/ICategory';
+import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { ITransaction } from '~~/types/ITransaction';
 
 const { getUserAccounts, getAccountById } = useAccount()
@@ -32,7 +32,7 @@ const statistics = ref<any>(null)
 const displayData = reactive<{
   selectedAccount: IAccount | null
   userAccounts: IAccount[]
-  selectedAccountCategories: ICategory[]
+  selectedAccountCategories: ICategoryExtented[]
   selectedAccountTransactions: ITransaction[]
   selectedAccountExpenseTransactions: ITransaction[]
   selectedAccountTransactionsTotalIncome: number

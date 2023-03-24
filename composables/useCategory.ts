@@ -1,4 +1,5 @@
 import { ICategory, ICategoryAccountTypes } from "~~/types/ICategory"
+import { ICategoryExtented } from "~~/types/ICategoryExtended"
 
 export default () => {
 
@@ -13,7 +14,7 @@ export default () => {
     })
   }
   const getAccountCategories = async() => {
-    const data:{categories:ICategory[]} = await useFetchApi('/api/categories')
+    const data:{categories:ICategoryExtented[]} = await useFetchApi('/api/categories')
     return data
   }
 
