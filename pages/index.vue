@@ -4,6 +4,9 @@
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
       :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense"
       :expense-transactions="displayData.selectedAccountExpenseTransactions" ref="statistics"
+      :selected-date-from="displayData.selectedDateFrom"
+      :selected-date-to="displayData.selectedDateTo"
+      @select-date="selectDate"
       class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1 min-h-[500px]" />
 
     <Accounts :user-accounts="displayData.userAccounts" :user-id="user?.id" @select-account="fetchAccountData"
@@ -22,6 +25,8 @@ import { IAccount } from '~~/types/IAccount';
 import { IAccountExtented } from '~~/types/IAccountExtended';
 import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { ITransaction } from '~~/types/ITransaction';
+import { dateToIsoString } from '~~/helpers/dateToIsoString';
+import { monthFirstAndLastDay } from '~~/helpers/monthFirstAndLastDay';
 
 const { selectDateRange } = useDate()
 const { getUserAccounts, getAccountById } = useAccount()
@@ -33,6 +38,8 @@ const statistics = ref<any>(null)
 
 const displayData = reactive<{
   selectedAccount: IAccount | null
+  selectedDateFrom: Date 
+  selectedDateTo: Date
   userAccounts: IAccountExtented[]
   selectedAccountCategories: ICategoryExtented[]
   selectedAccountTransactions: ITransaction[]
@@ -41,6 +48,8 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalExpense: number
 }>({
   selectedAccount: null,
+  selectedDateFrom: new Date(),
+  selectedDateTo: new Date(),
   userAccounts: [],
   selectedAccountCategories: [],
   selectedAccountTransactions: [],
@@ -50,12 +59,26 @@ const displayData = reactive<{
 })
 
 const initializeData = async () => {
-  await selectDateRange('2023-03-01', '2023-03-31')
+  const currentdate = new Date()
+  const { firstDay:dateFrom, lastDay:dateTo }= monthFirstAndLastDay(currentdate)
+
+  displayData.selectedDateFrom = dateFrom
+  displayData.selectedDateTo = dateTo
+  
+  await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
+  
   await fetchUserAccounts()
 
   if (!displayData.selectedAccount && displayData.userAccounts.length > 0) {
     fetchAccountData(displayData.userAccounts[0].id as string)
   }
+}
+const selectDate = async (dateFrom:Date, dateTo:Date) => {
+  displayData.selectedDateFrom = dateFrom
+  displayData.selectedDateTo = dateTo
+
+  await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
+  await fetchAccountData(displayData?.selectedAccount?.id as string)
 }
 
 const fetchUserAccounts = async () => {

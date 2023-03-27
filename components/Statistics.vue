@@ -2,8 +2,18 @@
   <div class="bg-white rounded-md py-5">
     <div v-if="props.account" class="w-full h-full px-5  overflow-auto">
       <!-- Header -->
-      <div class="pb-5 sticky top-0 bg-white">
+      <div class="pb-5 sticky top-0 bg-white flex flex-col md:flex-row justify-between">
         <h2 class="capitalize text-bold text-2xl pb-5">{{ props.account.name }}</h2>
+        <div class="flex justify-between items-center w-full md:w-60 my-2 md:my-0">
+          <UIButton class="text-xl md:text-base" type="plain" @click="changeMonth('prev')">
+            <font-awesome-icon icon="fa-solid fa-chevron-left" />
+          </UIButton>
+          <span>{{ dateDisplay }}</span> 
+          <UIButton class="text-xl md:text-base" type="plain" @click="changeMonth('next')">
+            <font-awesome-icon icon="fa-solid fa-chevron-right" />
+          </UIButton>
+        </div>
+      </div>
         <div>
           <div class="flex gap-5 md:gap-20 items-center justify-between">
             <GraphDonut class="h-28 w-28" ref="donutGraph" />
@@ -29,7 +39,7 @@
           <h3 class="font-bold mt-10">Expenses - Last 7 days</h3>
           <GraphBar ref="barGraph" class="h-48 w-full" />
         </div>
-      </div>
+      
     </div>
   </div>
 </template>
@@ -37,16 +47,25 @@
 import { displayCurrency } from '~~/helpers/displayCurrency';
 import { IAccount } from '~~/types/IAccount';
 import { ITransaction } from '~~/types/ITransaction';
+import { monthFirstAndLastDay } from '~~/helpers/monthFirstAndLastDay';
 
 const props = defineProps<{
   account: IAccount | null
   accountTotalIncome: number
   accountTotalExpenses: number
   expenseTransactions: ITransaction[]
+  selectedDateFrom: Date
+  selectedDateTo: Date
 }>()
-const accountBalance = computed(() => (props.accountTotalIncome !== undefined && props.accountTotalExpenses !== undefined) ? props.accountTotalIncome - props.accountTotalExpenses : 0)
+
+const emits = defineEmits(['selectDate'])
+
 const donutGraph = ref<any>(null)
 const barGraph = ref<any>(null)
+
+const accountBalance = computed(() => (props.accountTotalIncome !== undefined && props.accountTotalExpenses !== undefined) ? props.accountTotalIncome - props.accountTotalExpenses : 0)
+const dateDisplay = computed(() => `${props.selectedDateFrom.getFullYear()} ${props.selectedDateFrom.toLocaleString('default', { month: 'long' })}`)
+
 const initializeGraphs = () => {
   let donutGraphData = [
     props.accountTotalIncome,
@@ -80,6 +99,17 @@ const lastWeekExpenses = () => {
     })
   }
   return weekExpensesArray
+}
+
+const changeMonth = (action:string) => {
+  const monthDifference = action === 'prev' ? -1 : 1
+
+  let newDate = new Date(props.selectedDateFrom)
+  newDate.setMonth(newDate.getMonth()+monthDifference)
+
+  const { firstDay:dateFrom, lastDay:dateTo }= monthFirstAndLastDay(newDate)
+
+  emits('selectDate', dateFrom, dateTo)
 }
 
 defineExpose({
