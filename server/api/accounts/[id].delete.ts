@@ -1,5 +1,5 @@
 import { sendError } from "h3"
-import { getCategoriesByAccountId } from "~~/server/db/categories"
+import { getAllCategoriesByAccountId } from "~~/server/db/categories"
 import { deleteAccountById, getAccountById } from "~~/server/db/accounts"
 export default defineEventHandler(async (event) => {
   const accountId = await event.context.params.id
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
     }))
   }
 
-  const accountCategories = await getCategoriesByAccountId(accountId)
+  const accountCategories = await getAllCategoriesByAccountId(accountId)
 
   if(accountCategories.length>0){
     return sendError(event, createError({

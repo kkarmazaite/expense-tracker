@@ -16,6 +16,13 @@ export const getCategoriesByNameTypeAndAccountId = (name: string, type: ICategor
     },
   })
 }
+export const getAllCategoriesByAccountId = (accountId:string): Promise<ICategory[]> => {
+  return prisma.category.findMany({
+    where: { 
+      accountId,
+    },
+  })
+}
 export const getCategoriesByAccountId = (accountId:string, dateFrom: Date, dateTo: Date): Promise<ICategory[]> => {
   return prisma.category.findMany({
     where: { 

@@ -32,6 +32,14 @@ export const getAccountById = (accountId:string): Promise<IAccount | null> => {
     where: { id: accountId },
   })
 }
+export const updateAccount = (accountId:string, newName:string): Promise<IAccount | null> => {
+  return prisma.account.update({
+    where: { id: accountId },
+    data: {
+      name: newName,
+    },
+  })
+}
 export const deleteAccountById= (accountId:string): Promise<IAccount> => { 
   return prisma.account.delete({
     where: { id: accountId },
