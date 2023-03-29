@@ -2,9 +2,9 @@ import { sendError } from "h3"
 import { updateAccount, getAccountById, getAccountsByNameAndUserId } from "~~/server/db/accounts"
 export default defineEventHandler(async (event) => {
   const accountId = await event.context.params.id
-  const { userId, name }:{userId:string, name:string} = await readBody(event)
+  const { name }:{ name:string} = await readBody(event)
 
-  if(!accountId || !userId || !name){
+  if(!accountId || !name){
     return sendError(event, createError({
       statusCode: 400,
       statusMessage: 'Invalid parameters', 
@@ -20,7 +20,7 @@ export default defineEventHandler(async (event) => {
     }))
   }
 
-  const sameNameAccounts = await getAccountsByNameAndUserId(name, userId)
+  const sameNameAccounts = await getAccountsByNameAndUserId(name, account.userId)
   if(sameNameAccounts.length>0){
     return sendError(event, createError({
       statusCode: 400,

@@ -46,6 +46,14 @@ export const getCategoryById = (categoryId:string): Promise<ICategory | null> =>
     where: { id: categoryId },
   })
 }
+export const updateCategory = (categoryId:string, newName:string): Promise<ICategory | null> => {
+  return prisma.category.update({
+    where: { id: categoryId },
+    data: {
+      name: newName,
+    },
+  })
+}
 export const deleteCategoryById = (categoryId:string): Promise<ICategory | null> => { 
   return prisma.category.delete({
     where: { id: categoryId },

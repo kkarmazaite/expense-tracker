@@ -17,7 +17,7 @@
       class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" @refresh-transactions="refreshData" />
 
     <Categories :account-categories="displayData.selectedAccountCategories" :account="displayData.selectedAccount"
-      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1" @refresh-categories="fetchAccountCategories" />
+      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1" @refresh-categories="fetchAccountCategories" @refresh-categories-with-transactions="refreshCategoriesAndTransactions" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -122,6 +122,12 @@ const fetchAccountData = async (selectedAccountId: string) => {
 
   await fetchAccountTransactionData()
 
+}
+
+const refreshCategoriesAndTransactions = async () => {
+  await fetchAccountCategories()
+
+  await fetchAccountTransactionData()
 }
 
 const refreshData = async () => {

@@ -151,7 +151,6 @@ const handleAccountUpdate = async () => {
   try {
     await updateAccount({
       accountId: accountUpdateData.id,
-      userId: props.userId as string,
       name: accountUpdateData.name,
     })
 

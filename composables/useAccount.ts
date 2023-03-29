@@ -25,11 +25,10 @@ export default () => {
   const deleteAccount = async(accountId:string) => {
     await useFetchApi(`/api/accounts/${accountId}`, { method: 'DELETE' })
   }
-  const updateAccount = async({ accountId, userId, name }:{accountId:string,  userId:string, name:string}) => {
+  const updateAccount = async({ accountId, name }:{accountId:string, name:string}) => {
     await useFetchApi(`/api/accounts/${accountId}`, { 
       method: 'PATCH',
       body:{
-        userId,
         name,
       },
     })
