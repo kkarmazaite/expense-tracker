@@ -111,6 +111,12 @@ export const getTransactionsByCategoryId = (categoryId:string): Promise<ITransac
     },
   })
 }
+export const updateTransaction = (transactionId: string, newTransactionData: ITransactionCreation): Promise<ITransactionCreation | null> => {
+  return prisma.transaction.update({
+    where: { id: transactionId },
+    data: newTransactionData,
+  })
+}
 export const deleteTransactionById = (transactionId:string):Promise<ITransactionCreation | null> => { 
   return prisma.transaction.delete({
     where: {

@@ -26,13 +26,34 @@ export default () => {
         } = await useFetchApi('/api/transactions')
     return data
   }
+
   const deleteTransaction = async(transactionId:string) => {
     await useFetchApi(`/api/transactions/${transactionId}`, { method: 'DELETE' })
+  }
+
+  const updateTransaction = async(
+    {
+      transactionId, date, amount, description, categoryId, 
+    } 
+    :{
+      transactionId:string, date:string | undefined, amount: number | undefined, description:string | undefined, categoryId:string | undefined
+    },
+  ) => {
+    await useFetchApi(`/api/transactions/${transactionId}`, { 
+      method: 'PATCH',
+      body:{
+        date,
+        amount,
+        description,
+        categoryId,
+      },
+    })
   }
   return{
     createNewTransaction,
     getAccountTransactions,
     deleteTransaction,
+    updateTransaction,
 
   }
 }
