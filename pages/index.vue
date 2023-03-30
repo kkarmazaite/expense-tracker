@@ -1,23 +1,34 @@
 <template>
   <div class="p-5 h-full w-full grid grid-cols-1 md:grid-cols-5 auto-rows-auto gap-5">
-    <Statistics :account="displayData.selectedAccount"
+    <Statistics 
+      class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1 min-h-[500px]"
+      :account="displayData.selectedAccount"
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
       :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense"
       :expense-transactions="displayData.selectedAccountExpenseTransactions" ref="statistics"
       :selected-date-from="displayData.selectedDateFrom"
       :selected-date-to="displayData.selectedDateTo"
-      @select-date="selectDate"
-      class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1 min-h-[500px]" />
+      @select-date="selectDate"/>
+      
 
-    <Accounts :user-accounts="displayData.userAccounts" :user-id="user?.id" @select-account="fetchAccountData"
-      @refresh-accounts="fetchUserAccounts" class="order-3 md:order-2 col-span-1 md:col-span-2 row-span-1" />
+    <Accounts  
+      class="order-3 md:order-2 col-span-1 md:col-span-2 row-span-1"
+      :user-accounts="displayData.userAccounts" 
+      :user-id="user?.id" @select-account="selectAccount"
+      @refresh-accounts="refreshData(['accounts'])" />
 
-    <Transactions :account-categories="displayData.selectedAccountCategories"
+    <Transactions 
+      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" 
+      :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions"
-      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" @refresh-transactions="refreshData" />
+      @refresh-transactions="refreshData(['accounts', 'categories', 'transactions', 'statistics'])" />
 
-    <Categories :account-categories="displayData.selectedAccountCategories" :account="displayData.selectedAccount"
-      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1" @refresh-categories="fetchAccountCategories" @refresh-categories-with-transactions="refreshCategoriesAndTransactions" />
+    <Categories 
+      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1" 
+      :account-categories="displayData.selectedAccountCategories" 
+      :account="displayData.selectedAccount"
+      @refresh-categories="refreshData(['categories'])" 
+      @refresh-categories-with-transactions="refreshData(['categories', 'transactions'])" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -27,6 +38,8 @@ import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { ITransaction } from '~~/types/ITransaction';
 import { dateToIsoString } from '~~/helpers/dateToIsoString';
 import { monthFirstAndLastDay } from '~~/helpers/monthFirstAndLastDay';
+
+type components = "accounts" | "categories" | "transactions" | "statistics";
 
 const { selectDateRange } = useDate()
 const { getUserAccounts, getAccountById } = useAccount()
@@ -58,29 +71,6 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalExpense: 0,
 })
 
-const initializeData = async () => {
-  const currentdate = new Date()
-  const { firstDay:dateFrom, lastDay:dateTo }= monthFirstAndLastDay(currentdate)
-
-  displayData.selectedDateFrom = dateFrom
-  displayData.selectedDateTo = dateTo
-  
-  await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
-  
-  await fetchUserAccounts()
-
-  if (!displayData.selectedAccount && displayData.userAccounts.length > 0) {
-    fetchAccountData(displayData.userAccounts[0].id as string)
-  }
-}
-const selectDate = async (dateFrom:Date, dateTo:Date) => {
-  displayData.selectedDateFrom = dateFrom
-  displayData.selectedDateTo = dateTo
-
-  await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
-  await fetchAccountData(displayData?.selectedAccount?.id as string)
-}
-
 const fetchUserAccounts = async () => {
   const { accounts } = await getUserAccounts()
   displayData.userAccounts = accounts
@@ -91,12 +81,6 @@ const fetchAccountCategories = async () => {
   displayData.selectedAccountCategories = categories
 }
 
-const fetchAccountTransactionData = async () => {
-  await fetchAccountTransactions()
-
-  initializeGraphs()
-}
-
 const fetchAccountTransactions = async () => {
   const {
     transactions_all, transactions_income_total, transactions_expense_total, transactions_expense,
@@ -105,7 +89,6 @@ const fetchAccountTransactions = async () => {
   displayData.selectedAccountExpenseTransactions = transactions_expense
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total
   displayData.selectedAccountTransactionsTotalExpense = transactions_expense_total
-
 }
 
 const initializeGraphs = () => {
@@ -114,26 +97,58 @@ const initializeGraphs = () => {
   }
 }
 
-const fetchAccountData = async (selectedAccountId: string) => {
+const refreshData = async (components:components[]) => {
+  if(components.includes('accounts')){
+    await fetchUserAccounts()
+  }
+  if(components.includes('categories')){
+    await fetchAccountCategories()
+  }
+  if(components.includes('transactions')){
+    await fetchAccountTransactions()
+  }
+  if(components.includes('statistics')){
+    await initializeGraphs()
+  }
+}
+
+const initializeData = async () => {
+  const currentdate = new Date()
+  const { firstDay:dateFrom, lastDay:dateTo }= monthFirstAndLastDay(currentdate)
+
+  displayData.selectedDateFrom = dateFrom
+  displayData.selectedDateTo = dateTo
+  
+  await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
+  
+  await refreshData(['accounts'])
+
+  if (!displayData.selectedAccount && displayData.userAccounts.length > 0) {
+    await selectAccount(displayData.userAccounts[0].id as string)
+  }
+}
+
+const selectAccount = async (selectedAccountId: string) => {
   const { account } = await getAccountById(selectedAccountId)
   displayData.selectedAccount = account
 
-  await fetchAccountCategories()
-
-  await fetchAccountTransactionData()
-
+  refreshData([
+    'categories',
+    'transactions',
+    'statistics',
+  ])
 }
 
-const refreshCategoriesAndTransactions = async () => {
-  await fetchAccountCategories()
+const selectDate = async (dateFrom:Date, dateTo:Date) => {
+  displayData.selectedDateFrom = dateFrom
+  displayData.selectedDateTo = dateTo
 
-  await fetchAccountTransactionData()
-}
-
-const refreshData = async () => {
-  await fetchUserAccounts()
-
-  await fetchAccountData(displayData?.selectedAccount?.id as string)
+  await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
+  await refreshData([
+    'categories',
+    'transactions',
+    'statistics',
+  ])
 }
 
 initializeData()
