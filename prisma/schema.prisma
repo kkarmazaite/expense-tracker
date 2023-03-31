@@ -22,7 +22,7 @@ model User {
   updatedAt DateTime @updatedAt
 
   refreshToken RefreshToken[]
-  accounts Account[]
+  accounts     Account[]
 }
 
 model RefreshToken {
@@ -35,8 +35,9 @@ model RefreshToken {
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id])
 }
+
 model Account {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
   name String
 
   createdAt DateTime @default(now())
@@ -47,30 +48,59 @@ model Account {
 
   categories Category[]
 }
+
 enum TRANSACTION_TYPES {
   income
   expense
 }
+
+model Icon {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories Category[]
+}
+
+model Color {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  name    String
+  hexCode String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  categories Category[]
+}
+
 model Category {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id   String            @id @default(auto()) @map("_id") @db.ObjectId
   type TRANSACTION_TYPES
   name String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  accountId String @db.ObjectId
-  account   Account   @relation(fields: [accountId], references: [id])
+  accountId String  @db.ObjectId
+  account   Account @relation(fields: [accountId], references: [id])
+
+  iconId String? @db.ObjectId
+  icon   Icon?   @relation(fields: [iconId], references: [id])
+
+  colorId String? @db.ObjectId
+  color   Color?  @relation(fields: [colorId], references: [id])
 
   transactions Transaction[]
 }
+
 model Transaction {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  date        DateTime          @default(now()) @db.Date
-  amount Float
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  date        DateTime @default(now()) @db.Date
+  amount      Float
   description String?
 
-    
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

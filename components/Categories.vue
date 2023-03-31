@@ -13,16 +13,19 @@
       <div v-if="accountCategories" class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
-          <div class="flex justify-between w-full mt-1 md:mt-0">
-            <p class="font-bold text-left" :class="{
-              'text-green-500': accountCategory.type === 'income',
-              'text-red-500': accountCategory.type === 'expense'
-            }"> 
-              {{ accountCategory.name }} 
-            </p>
-            <p v-if="accountCategory.transactions" class="font-bold">
-              {{ displayCurrency(getTransactionSum(accountCategory.transactions)) }}
-            </p>
+          <div class="flex gap-4 w-full mt-1 md:mt-0">
+            <UICategoryIcon icon-name="book" />
+            <div  class="flex justify-between w-full">
+              <p class="font-bold text-left" :class="{
+                'text-green-500': accountCategory.type === 'income',
+                'text-red-500': accountCategory.type === 'expense'
+              }"> 
+                {{ accountCategory.name }} 
+              </p>
+              <p v-if="accountCategory.transactions" class="font-bold">
+                {{ displayCurrency(getTransactionSum(accountCategory.transactions)) }}
+              </p>
+            </div>
           </div>
           <div class="flex justify-between gap-1 pl-4 transition-all ease-in-out duration-500 w-24 md:w-0 opacity-100 md:opacity-0 group-hover:w-24 group-hover:opacity-100">
             <UIButton class="text-xl md:text-base" type="plain" @click="openUpdateModal(accountCategory)">
@@ -43,6 +46,7 @@
         <UISelect label="Type" :selectOptionList="selectList" :value="categoryCreationData.type"
           v-model="categoryCreationData.type" />
         <UIInput label="Name" placeholder="groceries" v-model="categoryCreationData.name" />
+        <UICategoryIconSelection :icon-list="iconList" />
       </div>
       <p class="text-red-500">{{ categoryCreationData.error }}</p>
       <div class="flex justify-between gap-5">
@@ -75,6 +79,7 @@ import { ICategoryAccountTypes } from '~~/types/ICategory';
 import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { displayCurrency } from '~~/helpers/displayCurrency';
 import { getTransactionSum } from '~~/helpers/getTransactionSum';
+import { IIcon } from '~~/types/IIcon';
 
 
 const emits = defineEmits([
@@ -104,6 +109,7 @@ const selectList = [
     "valueDisplay": "Income",
   },
 ]
+const { getAllIcons } = useIcon()
 const categoryCreationData = reactive({
   name: '',
   type: undefined as ICategoryAccountTypes | undefined,
@@ -117,6 +123,7 @@ const categoryUpdateData = reactive({
   error: '',
 })
 const modalType = ref('')
+const iconList = ref<IIcon[]>([])
 const categoryCreationDisabled = computed(() => {
   return !categoryCreationData.name || !categoryCreationData.type || categoryCreationData.loading
 })
@@ -124,7 +131,10 @@ const categoryUpdateDisabled = computed(() => {
   return !categoryUpdateData.name || categoryUpdateData.loading
 })
 
-const openCreationModal = () => {
+const openCreationModal = async () => {
+  const { icons } = await getAllIcons()
+  iconList.value = icons
+  
   modalType.value = 'creation'
   openModal()
 }
