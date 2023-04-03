@@ -3,9 +3,9 @@ import { updateCategory, getCategoriesByNameTypeAndAccountId, getCategoryById } 
 export default defineEventHandler(async (event) => {
 
   const categoryId = event.context.params.id as string | undefined
-  const { name }:{ name:string} = await readBody(event)
+  const { name, iconId }:{ name:string, iconId: string | undefined} = await readBody(event)
 
-  if(!categoryId){
+  if(!categoryId || !name){
     return sendError(event, createError({
       statusCode: 400,
       statusMessage: 'Invalid parameters', 
@@ -21,15 +21,18 @@ export default defineEventHandler(async (event) => {
     }))
   }
 
-  const sameNameAndTypeCategories = await getCategoriesByNameTypeAndAccountId(name, category.type, category.accountId)
-  if(sameNameAndTypeCategories.length>0){
-    return sendError(event, createError({
-      statusCode: 400,
-      statusMessage: 'Category with this name and type already exists', 
-    }))
+  if(category.name !== name){
+    const sameNameAndTypeCategories = await getCategoriesByNameTypeAndAccountId(name, category.type, category.accountId)
+    if(sameNameAndTypeCategories.length>0){
+      return sendError(event, createError({
+        statusCode: 400,
+        statusMessage: 'Category with this name and type already exists', 
+      }))
+    }
   }
 
-  await updateCategory(categoryId, name)
+
+  await updateCategory(categoryId, name, iconId)
 
   return {
     message: 'Category updated',
