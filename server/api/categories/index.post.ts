@@ -5,7 +5,7 @@ import { createCategory, getCategoriesByNameTypeAndAccountId } from "~~/server/d
 export default defineEventHandler(async (event) => {
 
   const {
-    name, type, accountId, iconId, 
+    name, type, accountId, iconId, colorId, 
   }:ICategory = await readBody(event)
 
   if(!name || !type || !accountId){
@@ -28,6 +28,7 @@ export default defineEventHandler(async (event) => {
     type,
     accountId, 
     iconId,
+    colorId, 
   }
 
   const category = await createCategory(categoryData)

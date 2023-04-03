@@ -14,7 +14,10 @@
         <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
           <div class="flex items-center gap-4 w-full mt-1 md:mt-0">
-            <UICategoryIcon :icon-name="accountCategory.icon?.name ? accountCategory.icon?.name: ''" />
+            <UICategoryIcon 
+              :hex-code="accountCategory.color?.hexCode ? accountCategory.color?.hexCode: ''" 
+              :icon-name="accountCategory.icon?.name ? accountCategory.icon?.name: ''" 
+              />
             <div  class="flex justify-between w-full">
               <p class="font-bold text-left" :class="{
                 'text-green-500': accountCategory.type === 'income',
@@ -49,13 +52,23 @@
 
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Selected icon</p>
-          <UICategoryIcon class="mb-4" :icon-name="categoryCreationData.iconName" />
-          <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select an icon</p>
-          <div class="flex gap-2 flex-wrap h-20 w-full">
-              <UICategoryIcon class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="icon.id" :icon-name="icon.name" @click="selectIcon({type:'creation', iconId: icon.id as string, iconName: icon.name})"/>
-          </div>
+          <UICategoryIcon :hex-code="categoryCreationData.colorHexCode" :icon-name="categoryCreationData.iconName" />
         </div>
 
+        <div>
+          <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select an icon</p>
+        <div class="flex gap-2 flex-wrap w-full">
+            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="icon.id" :icon-name="icon.name" @click="selectIcon({type:'creation', iconId: icon.id as string, iconName: icon.name})"/>
+        </div>
+        </div>
+        
+        <div>
+          <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select a color</p>
+          <div class="flex gap-2 flex-wrap w-full">
+              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="color.id" icon-name="" @click="selectColor({type:'creation', colorId: color.id as string, colorHexCode: color.hexCode})"/>
+          </div>
+        </div>
+          
       </div>
       <p class="text-red-500">{{ categoryCreationData.error }}</p>
       <div class="flex justify-between gap-5">
@@ -74,10 +87,20 @@
 
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Selected icon</p>
-          <UICategoryIcon class="mb-4" :icon-name="categoryUpdateData.iconName" />
+          <UICategoryIcon :hex-code="categoryUpdateData.colorHexCode" :icon-name="categoryUpdateData.iconName" />
+        </div>
+
+        <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select an icon</p>
-          <div class="flex gap-2 flex-wrap h-20 w-full">
-              <UICategoryIcon class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="icon.id" :icon-name="icon.name" @click="selectIcon({type:'update', iconId: icon.id as string, iconName: icon.name})"/>
+        <div class="flex gap-2 flex-wrap w-full">
+            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="icon.id" :icon-name="icon.name" @click="selectIcon({type:'update', iconId: icon.id as string, iconName: icon.name})"/>
+        </div>
+        </div>
+        
+        <div>
+          <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select a color</p>
+          <div class="flex gap-2 flex-wrap w-full">
+              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="color.id" icon-name="" @click="selectColor({type:'update', colorId: color.id as string, colorHexCode: color.hexCode})"/>
           </div>
         </div>
 
@@ -99,6 +122,7 @@ import { ICategoryExtented } from '~~/types/ICategoryExtended';
 import { displayCurrency } from '~~/helpers/displayCurrency';
 import { getTransactionSum } from '~~/helpers/getTransactionSum';
 import { IIcon } from '~~/types/IIcon';
+import { IColor } from '~~/types/IColor';
 
 
 const emits = defineEmits([
@@ -129,10 +153,14 @@ const selectList = [
   },
 ]
 const { getAllIcons } = useIcon()
+const { getAllColors } = useColor()
+
 const categoryCreationData = reactive({
   name: '',
   iconId: '',
   iconName: '',
+  colorId: '',
+  colorHexCode: '',
   type: undefined as ICategoryAccountTypes | undefined,
   loading: false,
   error: '',
@@ -142,11 +170,14 @@ const categoryUpdateData = reactive({
   name: '',
   iconId: '',
   iconName: '',
+  colorId: '',
+  colorHexCode: '',
   loading: false,
   error: '',
 })
 const modalType = ref('')
 const iconList = ref<IIcon[]>([])
+const colorList = ref<IColor[]>([])
 const categoryCreationDisabled = computed(() => {
   return !categoryCreationData.name || !categoryCreationData.type || categoryCreationData.loading
 })
@@ -155,26 +186,46 @@ const categoryUpdateDisabled = computed(() => {
 })
 
 const openCreationModal = async () => {
-  if(iconList.value.length === 0){
-    const { icons } = await getAllIcons()
-    iconList.value = icons
-  }
+  getColarAndIconLists()
   
   modalType.value = 'creation'
   openModal()
 }
-const openUpdateModal = async (category: ICategoryExtented) => {
-  if(iconList.value.length === 0){
-    const { icons } = await getAllIcons()
-    iconList.value = icons
-  }
+const openUpdateModal = (category: ICategoryExtented) => {
+  getColarAndIconLists()
 
   modalType.value = 'update'
   categoryUpdateData.id = category.id as string
   categoryUpdateData.name = category.name
   categoryUpdateData.iconId = category.iconId ? category.iconId : ''
   categoryUpdateData.iconName =  category.iconId ? category.icon?.name as string : ''
+  categoryUpdateData.colorId = category.colorId ? category.colorId : ''
+  categoryUpdateData.colorHexCode =  category.colorId ? category.color?.hexCode as string : ''
   openModal()
+}
+
+const getColarAndIconLists = async () => {
+  if(iconList.value.length === 0){
+    const { icons } = await getAllIcons()
+    iconList.value = [
+      ...icons,
+      {
+        id:'',
+        name:'', 
+      },
+    ]
+  }
+  if(colorList.value.length === 0){
+    const { colors } = await getAllColors()
+    colorList.value = [
+      ...colors,
+      {
+        id:'',
+        name: '',
+        hexCode:'',
+      },
+    ]
+  }
 }
 
 const selectIcon = ({ type, iconId, iconName }: { type: string, iconId: string, iconName: string}) => {
@@ -184,6 +235,16 @@ const selectIcon = ({ type, iconId, iconName }: { type: string, iconId: string, 
   } else if(type === 'update'){
     categoryUpdateData.iconId = iconId
     categoryUpdateData.iconName = iconName
+  }
+}
+
+const selectColor = ({ type, colorId, colorHexCode }: { type: string, colorId: string, colorHexCode: string}) => {
+  if(type === 'creation'){
+    categoryCreationData.colorId = colorId
+    categoryCreationData.colorHexCode  = colorHexCode 
+  } else if(type === 'update'){
+    categoryUpdateData.colorId = colorId
+    categoryUpdateData.colorHexCode = colorHexCode 
   }
   
 }
@@ -196,6 +257,7 @@ const handleCategoryCreation = async () => {
       type: categoryCreationData.type,
       name: categoryCreationData.name,
       iconId: categoryCreationData.iconId,
+      colorId: categoryCreationData.colorId,
       accountId: props.account?.id,
     })
 
@@ -207,6 +269,8 @@ const handleCategoryCreation = async () => {
     categoryCreationData.name = ''
     categoryCreationData.iconId = ''
     categoryCreationData.iconName = ''
+    categoryCreationData.colorId = ''
+    categoryCreationData.colorHexCode = ''
 
   } catch (error: any) {
     categoryCreationData.error = error.statusMessage
@@ -224,6 +288,7 @@ const handleCategoryUpdate = async () => {
       categoryId: categoryUpdateData.id,
       name: categoryUpdateData.name,
       iconId: categoryUpdateData.iconId,
+      colorId: categoryUpdateData.colorId,
     })
 
     closeModal()
@@ -234,6 +299,8 @@ const handleCategoryUpdate = async () => {
     categoryUpdateData.error = ''
     categoryUpdateData.iconId = ''
     categoryUpdateData.iconName = ''
+    categoryUpdateData.colorId = ''
+    categoryUpdateData.colorHexCode = ''
 
   } catch (error: any) {
     categoryUpdateData.error = error.statusMessage

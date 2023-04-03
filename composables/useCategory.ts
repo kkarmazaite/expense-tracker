@@ -4,8 +4,8 @@ import { ICategoryExtented } from "~~/types/ICategoryExtended"
 export default () => {
 
   const createNewCategory = async({
-    name, type, accountId, iconId, 
-  }:{name:string | undefined, type: ICategoryAccountTypes | undefined, accountId:string | undefined, iconId:string | undefined}) => {
+    name, type, accountId, iconId, colorId,
+  }:{name:string | undefined, type: ICategoryAccountTypes | undefined, accountId:string | undefined, iconId:string | undefined, colorId:string | undefined}) => {
     await useFetchApi('/api/categories', {
       method: 'POST',
       body:{
@@ -13,6 +13,7 @@ export default () => {
         type,
         accountId,
         iconId,
+        colorId,
       },
     })
   }
@@ -28,12 +29,15 @@ export default () => {
   const deleteCategory = async(categoryId:string) => {
     await useFetchApi(`/api/categories/${categoryId}`, { method: 'DELETE' })
   }
-  const updateCategory = async({ categoryId, name, iconId }:{categoryId:string, name:string, iconId:string | undefined}) => {
+  const updateCategory = async({
+    categoryId, name, iconId, colorId, 
+  }:{categoryId:string, name:string, iconId:string | undefined, colorId:string | undefined}) => {
     await useFetchApi(`/api/categories/${categoryId}`, { 
       method: 'PATCH',
       body:{
         name,
         iconId,
+        colorId,
       },
     })
   }

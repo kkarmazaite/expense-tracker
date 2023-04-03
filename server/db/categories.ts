@@ -38,6 +38,7 @@ export const getCategoriesByAccountId = (accountId:string, dateFrom: Date, dateT
         },
       },
       icon:true,
+      color:true,
     },
     
   })
@@ -47,12 +48,13 @@ export const getCategoryById = (categoryId:string): Promise<ICategory | null> =>
     where: { id: categoryId },
   })
 }
-export const updateCategory = (categoryId:string, newName:string, newIconId: string | undefined): Promise<ICategory | null> => {
+export const updateCategory = (categoryId:string, newName:string, newIconId: string | undefined,  newColorId: string | undefined): Promise<ICategory | null> => {
   return prisma.category.update({
     where: { id: categoryId },
     data: {
       name: newName,
       iconId: newIconId,
+      colorId: newColorId,
     },
   })
 }
