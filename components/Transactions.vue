@@ -13,16 +13,23 @@
       <!-- Content -->
       <div v-if="props.accountTransactions.length > 0" class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden" v-for="transaction in props.accountTransactions"
-          :key="transaction.id" :title="transaction.description as string">
+          :key="transaction.id" :title="(transaction.description as string)">
           <div class="flex justify-between w-full mt-1 md:mt-0 text-sm md:text-base">
-            <div>
-              <p class="font-bold text-left" :class="{
-                'text-green-500': transaction.category.type === 'income',
-                'text-red-500': transaction.category.type === 'expense'
-              }">
-                {{ transaction.category.name }}</p>
-              <p class="text-gray-400 text-left">{{ transaction.date.toString().substring(0, 10) }}</p>
+            <div class="flex gap-4">
+              <UICategoryIcon 
+                :hex-code="transaction.category.color?.hexCode ? transaction.category.color?.hexCode: ''" 
+                :icon-name="transaction.category.icon?.name ? transaction.category.icon?.name: ''" 
+                />
+              <div>
+                <p class="font-bold text-left" :class="{
+                  'text-green-500': transaction.category.type === 'income',
+                  'text-red-500': transaction.category.type === 'expense'
+                }">
+                  {{ transaction.category.name }}</p>
+                <p class="text-gray-400 text-left">{{ transaction.date.toString().substring(0, 10) }}</p>
+              </div>
             </div>
+
             <div>
               <p class="font-bold">{{ displayCurrency(transaction.amount) }}</p>
             </div>

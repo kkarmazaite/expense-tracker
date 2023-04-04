@@ -1,4 +1,7 @@
+
 import { ICategory } from "./ICategory"
+import { IColor } from "./IColor"
+import { IIcon } from "./IIcon"
 
 export interface ITransactionCreation {
     id?: string
@@ -10,7 +13,7 @@ export interface ITransactionCreation {
 export interface ITransaction {
     id?: string
     categoryId: string
-    category: ICategory
+    category: ICategory  & { icon: IIcon | null; color: IColor | null}
     date: Date
     amount: number
     description?: string | null

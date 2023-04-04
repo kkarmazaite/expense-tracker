@@ -10,7 +10,7 @@
       items-center
       bg-black bg-opacity-50
     " @click="closeModal()">
-    <div class="bg-white rounded-md p-5 pb-10 w-[450px] md:w-[500px]" @click.stop>
+    <div class="bg-white rounded-md p-5 pb-10 w-[450px] md:w-[500px] max-h-[90vh] overflow-auto" @click.stop>
       <div class="flex justify-between items-center mb-20">
         <h2 class="text-3xl capitalize break-words">{{ props.title }}</h2>
         <UIButton type="plain" class="text-3xl md:text-2xl" @click="closeModal()">

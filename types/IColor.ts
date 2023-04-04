@@ -1,5 +1,5 @@
 export interface IColor {
-    id?: string
+    id?: string | null
     name: string
     hexCode: string
   }

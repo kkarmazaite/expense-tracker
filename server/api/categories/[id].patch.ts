@@ -3,7 +3,7 @@ import { updateCategory, getCategoriesByNameTypeAndAccountId, getCategoryById } 
 export default defineEventHandler(async (event) => {
 
   const categoryId = event.context.params.id as string | undefined
-  const { name, iconId, colorId }:{ name:string, iconId: string | undefined, colorId: string | undefined} = await readBody(event)
+  const { name, iconId, colorId }:{ name:string, iconId: string | null, colorId: string | null} = await readBody(event)
 
   if(!categoryId || !name){
     return sendError(event, createError({

@@ -20,7 +20,12 @@ export const getTransactionsByAccountId = (accountId:string, dateFrom: Date, dat
 
     },
     include: {
-      category: true,
+      category: {
+        include: {
+          icon:true,
+          color:true,
+        },
+      },
     },
     orderBy: {
       date: 'desc',
@@ -50,7 +55,12 @@ export const getIncomeTransactionsByAccountId = (accountId:string, dateFrom: Dat
       ],
     },
     include: {
-      category: true,
+      category: {
+        include: {
+          icon:true,
+          color:true,
+        },
+      },
     },
     orderBy: {
       date: 'desc',
@@ -80,7 +90,12 @@ export const getExpenseTransactionsByAccountId = (accountId:string, dateFrom: Da
       ],
     },
     include: {
-      category: true,
+      category: {
+        include: {
+          icon:true,
+          color:true,
+        },
+      },
     },
     orderBy: {
       date: 'desc',
@@ -94,7 +109,12 @@ export const getTransactionById = (transactionId:string):Promise<ITransaction | 
       id: transactionId,
     },
     include: {
-      category: true,
+      category: {
+        include: {
+          icon:true,
+          color:true,
+        },
+      },
     },
   })
 }
@@ -104,7 +124,12 @@ export const getTransactionsByCategoryId = (categoryId:string): Promise<ITransac
       categoryId,
     },
     include: {
-      category: true,
+      category: {
+        include: {
+          icon:true,
+          color:true,
+        },
+      },
     },
     orderBy: {
       date: 'desc',

@@ -5,7 +5,7 @@ export default () => {
 
   const createNewCategory = async({
     name, type, accountId, iconId, colorId,
-  }:{name:string | undefined, type: ICategoryAccountTypes | undefined, accountId:string | undefined, iconId:string | undefined, colorId:string | undefined}) => {
+  }:{name:string | undefined, type: ICategoryAccountTypes | undefined, accountId:string | undefined, iconId:string | null, colorId:string | null}) => {
     await useFetchApi('/api/categories', {
       method: 'POST',
       body:{
@@ -31,7 +31,7 @@ export default () => {
   }
   const updateCategory = async({
     categoryId, name, iconId, colorId, 
-  }:{categoryId:string, name:string, iconId:string | undefined, colorId:string | undefined}) => {
+  }:{categoryId:string, name:string, iconId:string | null, colorId:string | null}) => {
     await useFetchApi(`/api/categories/${categoryId}`, { 
       method: 'PATCH',
       body:{

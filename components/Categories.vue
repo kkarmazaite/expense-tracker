@@ -58,14 +58,14 @@
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select an icon</p>
         <div class="flex gap-2 flex-wrap w-full">
-            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="icon.id" :icon-name="icon.name" @click="selectIcon({type:'creation', iconId: icon.id as string, iconName: icon.name})"/>
+            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="(icon.id as string)" :icon-name="icon.name" @click="selectIcon({type:'creation', iconId: icon.id as string, iconName: icon.name})"/>
         </div>
         </div>
         
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select a color</p>
           <div class="flex gap-2 flex-wrap w-full">
-              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="color.id" icon-name="" @click="selectColor({type:'creation', colorId: color.id as string, colorHexCode: color.hexCode})"/>
+              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="(color.id as string)" icon-name="" @click="selectColor({type:'creation', colorId: color.id as string, colorHexCode: color.hexCode})"/>
           </div>
         </div>
           
@@ -93,14 +93,14 @@
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select an icon</p>
         <div class="flex gap-2 flex-wrap w-full">
-            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="icon.id" :icon-name="icon.name" @click="selectIcon({type:'update', iconId: icon.id as string, iconName: icon.name})"/>
+            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="(icon.id as string)" :icon-name="icon.name" @click="selectIcon({type:'update', iconId: icon.id as string, iconName: icon.name})"/>
         </div>
         </div>
         
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select a color</p>
           <div class="flex gap-2 flex-wrap w-full">
-              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="color.id" icon-name="" @click="selectColor({type:'update', colorId: color.id as string, colorHexCode: color.hexCode})"/>
+              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="(color.id as string)" icon-name="" @click="selectColor({type:'update', colorId: color.id as string, colorHexCode: color.hexCode})"/>
           </div>
         </div>
 
@@ -157,9 +157,9 @@ const { getAllColors } = useColor()
 
 const categoryCreationData = reactive({
   name: '',
-  iconId: '',
+  iconId: null as string | null,
   iconName: '',
-  colorId: '',
+  colorId: null as string | null,
   colorHexCode: '',
   type: undefined as ICategoryAccountTypes | undefined,
   loading: false,
@@ -168,9 +168,9 @@ const categoryCreationData = reactive({
 const categoryUpdateData = reactive({
   id:'',
   name: '',
-  iconId: '',
+  iconId: null as string | null,
   iconName: '',
-  colorId: '',
+  colorId: null as string | null,
   colorHexCode: '',
   loading: false,
   error: '',
@@ -210,7 +210,7 @@ const getColarAndIconLists = async () => {
     iconList.value = [
       ...icons,
       {
-        id:'',
+        id: null,
         name:'', 
       },
     ]
@@ -220,7 +220,7 @@ const getColarAndIconLists = async () => {
     colorList.value = [
       ...colors,
       {
-        id:'',
+        id:null,
         name: '',
         hexCode:'',
       },
@@ -228,7 +228,7 @@ const getColarAndIconLists = async () => {
   }
 }
 
-const selectIcon = ({ type, iconId, iconName }: { type: string, iconId: string, iconName: string}) => {
+const selectIcon = ({ type, iconId, iconName }: { type: string, iconId: string | null, iconName: string}) => {
   if(type === 'creation'){
     categoryCreationData.iconId = iconId
     categoryCreationData.iconName = iconName
@@ -238,7 +238,7 @@ const selectIcon = ({ type, iconId, iconName }: { type: string, iconId: string, 
   }
 }
 
-const selectColor = ({ type, colorId, colorHexCode }: { type: string, colorId: string, colorHexCode: string}) => {
+const selectColor = ({ type, colorId, colorHexCode }: { type: string, colorId: string | null, colorHexCode: string}) => {
   if(type === 'creation'){
     categoryCreationData.colorId = colorId
     categoryCreationData.colorHexCode  = colorHexCode 
@@ -267,9 +267,9 @@ const handleCategoryCreation = async () => {
     categoryCreationData.error = ''
     categoryCreationData.type = undefined
     categoryCreationData.name = ''
-    categoryCreationData.iconId = ''
+    categoryCreationData.iconId = null
     categoryCreationData.iconName = ''
-    categoryCreationData.colorId = ''
+    categoryCreationData.colorId = null
     categoryCreationData.colorHexCode = ''
 
   } catch (error: any) {
@@ -297,9 +297,9 @@ const handleCategoryUpdate = async () => {
     categoryUpdateData.id = ''
     categoryUpdateData.name = ''
     categoryUpdateData.error = ''
-    categoryUpdateData.iconId = ''
+    categoryUpdateData.iconId = null
     categoryUpdateData.iconName = ''
-    categoryUpdateData.colorId = ''
+    categoryUpdateData.colorId = null
     categoryUpdateData.colorHexCode = ''
 
   } catch (error: any) {

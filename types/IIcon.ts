@@ -1,4 +1,4 @@
 export interface IIcon {
-    id?: string
+    id?: string | null
     name: string
   }
