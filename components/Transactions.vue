@@ -14,8 +14,8 @@
       <div v-if="props.accountTransactions.length > 0" class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden" v-for="transaction in props.accountTransactions"
           :key="transaction.id" :title="(transaction.description as string)">
-          <div class="flex justify-between w-full mt-1 md:mt-0 text-sm md:text-base">
-            <div class="flex gap-4">
+          <div class="flex justify-between w-full gap-4 mt-1 md:mt-0 text-sm md:text-base">
+            <div class="flex gap-4 break-all">
               <UICategoryIcon 
                 :hex-code="transaction.category.color?.hexCode ? transaction.category.color?.hexCode: ''" 
                 :icon-name="transaction.category.icon?.name ? transaction.category.icon?.name: ''" 

@@ -3,7 +3,7 @@
     <div v-if="props.account" class="w-full h-full px-5  overflow-auto">
       <!-- Header -->
       <div class="pb-5 sticky top-0 bg-white flex flex-col md:flex-row justify-between">
-        <h2 class="capitalize text-bold text-2xl pb-5">{{ props.account.name }}</h2>
+        <h2 class="capitalize text-bold text-2xl pb-5 break-all">{{ props.account.name }}</h2>
         <div class="flex justify-between items-center w-full md:w-60 my-2 md:my-0">
           <UIButton class="text-xl md:text-base" type="plain" @click="changeMonth('prev')">
             <font-awesome-icon icon="fa-solid fa-chevron-left" />

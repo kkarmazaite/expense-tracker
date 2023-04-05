@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout>
-    <h1 v-if="isAuthLoading">Loading</h1>
+    <LoadingPage v-if="isAuthLoading" />
     <NuxtPage v-else />
   </NuxtLayout>
 </template>

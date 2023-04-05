@@ -10,16 +10,25 @@
       </div>
 
       <!-- Content -->
-      <div class="flex flex-col gap-10 md:gap-5 pb-10">
+      <div v-if="props.loading">
+        <div class="flex flex-col gap-10 md:gap-5 pb-10">
+          <div v-for="idx in 8" :key="idx"
+          class="flex justify-between w-full animate-pulse">
+            <div class="w-52 h-6 bg-gray-100 rounded-md"></div>
+            <div class="w-24 h-6 bg-gray-100 rounded-md"></div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
         <div v-for="userAccount in props.userAccounts" :key="userAccount.id"
           class="flex justify-between w-full group overflow-hidden">
-          <div class="flex justify-between cursor-pointer w-full mt-1 md:mt-0 font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
-            <p>{{ userAccount.name }}</p>
+          <div class="flex justify-between gap-4 cursor-pointer w-full mt-1 md:mt-0 font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
+            <p class="break-all">{{ userAccount.name }}</p>
             <p v-if="userAccount.categories" class="font-bold">
               {{ displayCurrency(getCategorySum(userAccount.categories)) }}
             </p>
           </div>
-          <div class="flex justify-between gap-1 pl-4 transition-all ease-in-out duration-500 w-24 md:w-0 opacity-100 md:opacity-0 group-hover:w-24 group-hover:opacity-100">
+          <div class="flex justify-between items-start gap-1 pl-4 transition-all ease-in-out duration-500 w-24 md:w-0 opacity-100 md:opacity-0 group-hover:w-24 group-hover:opacity-100">
             <UIButton class="text-xl md:text-base" type="plain" @click="openUpdateModal(userAccount)">
               <font-awesome-icon icon="fa fa-pencil" />
             </UIButton>
@@ -77,6 +86,7 @@ const emits = defineEmits([
 const props = defineProps<{
   userId: string | undefined
   userAccounts: IAccountExtented[]
+  loading: boolean
 }>()
 
 const { createNewAccount, updateAccount, deleteAccount } = useAccount()

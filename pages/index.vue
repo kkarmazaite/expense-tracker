@@ -1,7 +1,7 @@
 <template>
   <div class="p-5 h-full w-full grid grid-cols-1 md:grid-cols-5 auto-rows-auto gap-5">
     <Statistics 
-      class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1 min-h-[500px]"
+      class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1 min-h-[500px] max-h-[550px]"
       :account="displayData.selectedAccount"
       :account-total-income="displayData.selectedAccountTransactionsTotalIncome"
       :account-total-expenses="displayData.selectedAccountTransactionsTotalExpense"
@@ -12,19 +12,20 @@
       
 
     <Accounts  
-      class="order-3 md:order-2 col-span-1 md:col-span-2 row-span-1"
+      class="order-3 md:order-2 col-span-1 md:col-span-2 row-span-1 min-h-[400px] max-h-[550px]"
       :user-accounts="displayData.userAccounts" 
       :user-id="user?.id" @select-account="selectAccount"
+      :loading="displayData.accountsLoading"
       @refresh-accounts="refreshData(['accounts'])" />
 
     <Transactions 
-      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1" 
+      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1 min-h-[400px] max-h-[550px]" 
       :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions"
       @refresh-transactions="refreshData(['accounts', 'categories', 'transactions', 'statistics'])" />
 
     <Categories 
-      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1" 
+      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1 min-h-[400px] max-h-[550px]" 
       :account-categories="displayData.selectedAccountCategories" 
       :account="displayData.selectedAccount"
       @refresh-categories="refreshData(['categories'])" 
@@ -59,6 +60,7 @@ const displayData = reactive<{
   selectedAccountExpenseTransactions: ITransaction[]
   selectedAccountTransactionsTotalIncome: number
   selectedAccountTransactionsTotalExpense: number
+  accountsLoading: boolean
 }>({
   selectedAccount: null,
   selectedDateFrom: new Date(),
@@ -69,11 +71,16 @@ const displayData = reactive<{
   selectedAccountExpenseTransactions: [],
   selectedAccountTransactionsTotalIncome: 0,
   selectedAccountTransactionsTotalExpense: 0,
+  accountsLoading: true,
 })
 
 const fetchUserAccounts = async () => {
+  displayData.accountsLoading = true
+
   const { accounts } = await getUserAccounts()
   displayData.userAccounts = accounts
+
+  displayData.accountsLoading = false
 }
 
 const fetchAccountCategories = async () => {

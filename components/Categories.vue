@@ -18,8 +18,8 @@
               :hex-code="accountCategory.color?.hexCode ? accountCategory.color?.hexCode: ''" 
               :icon-name="accountCategory.icon?.name ? accountCategory.icon?.name: ''" 
               />
-            <div  class="flex justify-between w-full">
-              <p class="font-bold text-left" :class="{
+            <div  class="flex justify-between items-center w-full gap-4">
+              <p class="font-bold text-left break-all" :class="{
                 'text-green-500': accountCategory.type === 'income',
                 'text-red-500': accountCategory.type === 'expense'
               }"> 
