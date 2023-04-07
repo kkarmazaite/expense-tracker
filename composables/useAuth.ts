@@ -28,6 +28,8 @@ export default () => {
   }
 
   const login = async ({ email, password }:ILogin) => {
+    authLoading.value = true
+
     const data:{user:IUser, access_token:string} = await $fetch('/api/auth/login', {
       method: 'POST',
       body:{
@@ -37,6 +39,8 @@ export default () => {
     })
     authToken.value = data.access_token
     authUser.value = data.user
+
+    authLoading.value = false
 
     return data
   }
@@ -88,6 +92,8 @@ export default () => {
   }
 
   const logout = async() => {
+    authLoading.value = true
+
     await useFetchApi('/api/auth/logout', {
       method: 'POST',
     })
@@ -96,6 +102,8 @@ export default () => {
     authUser.value = null
 
     useRouter().push("/login")
+
+    authLoading.value = false
   }
 
   const redirect = () => {

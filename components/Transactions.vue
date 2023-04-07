@@ -11,7 +11,21 @@
       </div>
 
       <!-- Content -->
-      <div v-if="props.accountTransactions.length > 0" class="flex flex-col gap-10 md:gap-5 pb-10">
+      <div v-if="props.loading">
+        <div class="flex flex-col gap-10 md:gap-5 pb-10">
+          <div v-for="idx in 4" :key="idx" class="flex justify-between w-full gap-4 animate-pulse"> 
+            <div class="w-[48px] h-[48px] bg-gray-100 rounded-full"></div>
+            <div class="flex justify-between items-center w-full gap-4">
+              <div>
+                <div class="w-52 h-6 bg-gray-100 rounded-md"></div>
+                <div class="w-28 h-4 bg-gray-100 rounded-md mt-2"></div>
+              </div>
+              <div class="w-24 h-6 bg-gray-100 rounded-md"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden" v-for="transaction in props.accountTransactions"
           :key="transaction.id" :title="(transaction.description as string)">
           <div class="flex justify-between w-full gap-4 mt-1 md:mt-0 text-sm md:text-base">
@@ -99,6 +113,7 @@ const emits = defineEmits(['refreshTransactions'])
 const props = defineProps<{
   accountCategories: ICategory[]
   accountTransactions: ITransaction[]
+  loading: boolean
 }>()
 
 const { createNewTransaction, deleteTransaction, updateTransaction } = useTransaction()

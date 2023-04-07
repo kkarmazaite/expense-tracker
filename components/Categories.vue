@@ -10,7 +10,18 @@
       </div>
 
       <!-- Content -->
-      <div v-if="accountCategories" class="flex flex-col gap-10 md:gap-5 pb-10">
+      <div v-if="props.loading">
+        <div class="flex flex-col gap-10 md:gap-5 pb-10">
+          <div v-for="idx in 4" :key="idx" class="flex justify-between w-full gap-4 animate-pulse"> 
+            <div class="w-[48px] h-[48px] bg-gray-100 rounded-full"></div>
+            <div class="flex justify-between items-center w-full gap-4">
+              <div class="w-52 h-6 bg-gray-100 rounded-md"></div>
+              <div class="w-24 h-6 bg-gray-100 rounded-md"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
           <div class="flex items-center gap-4 w-full mt-1 md:mt-0">
@@ -133,6 +144,7 @@ const emits = defineEmits([
 const props = defineProps<{
   account: IAccount | null
   accountCategories: ICategoryExtented[]
+  loading: boolean
 }>()
 
 const { createNewCategory, deleteCategory, updateCategory } = useCategory()

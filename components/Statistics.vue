@@ -3,7 +3,8 @@
     <div v-if="props.account" class="w-full h-full px-5  overflow-auto">
       <!-- Header -->
       <div class="pb-5 sticky top-0 bg-white flex flex-col md:flex-row justify-between">
-        <h2 class="capitalize text-bold text-2xl pb-5 break-all">{{ props.account.name }}</h2>
+        <div v-if="props.loading" class="w-52 h-8 mb-5 bg-gray-100 rounded-md animate-pulse"></div>
+        <h2 v-else class="capitalize text-bold text-2xl pb-5 break-all">{{ props.account.name }}</h2>
         <div class="flex justify-between items-center w-full md:w-60 my-2 md:my-0">
           <UIButton class="text-xl md:text-base" type="plain" @click="changeMonth('prev')">
             <font-awesome-icon icon="fa-solid fa-chevron-left" />
@@ -16,8 +17,16 @@
       </div>
         <div>
           <div class="flex gap-5 md:gap-20 items-center justify-between">
-            <GraphDonut class="h-28 w-28" ref="donutGraph" />
-            <div class="font-bold text-sm md:text-base flex flex-col gap-5 w-52">
+            <div class="h-28 relative">
+              <div v-if="props.loading" class="w-[112px] h-[112px] bg-gray-100 rounded-full animate-pulse absolute"></div>
+              <GraphDonut class="h-28 w-28" ref="donutGraph" />
+            </div>
+            <div v-if="props.loading" class="font-bold text-sm md:text-base flex flex-col gap-5 w-52 animate-pulse">
+              <div class="w-52 h-6 bg-gray-100 rounded-md"></div>
+              <div class="w-52 h-6 bg-gray-100 rounded-md"></div>
+              <div class="w-52 h-6 bg-gray-100 rounded-md"></div>
+            </div>
+            <div v-else class="font-bold text-sm md:text-base flex flex-col gap-5 w-52 ">
               <div class="flex justify-between text-green-500">
                 <span>Income:</span>
                 <span>{{ displayCurrency(props.accountTotalIncome) }}</span>
@@ -37,7 +46,11 @@
             </div>
           </div>
           <h3 class="font-bold mt-10">Expenses - Last 7 days</h3>
-          <GraphBar ref="barGraph" class="h-48 w-full" />
+          <div class="h-48 relative">
+            <div v-if="props.loading" class="w-full h-48 bg-gray-100 animate-pulse absolute"></div>
+            <GraphBar ref="barGraph" class="h-48 w-full" />
+          </div>
+          
         </div>
       
     </div>
@@ -56,6 +69,7 @@ const props = defineProps<{
   expenseTransactions: ITransaction[]
   selectedDateFrom: Date
   selectedDateTo: Date
+  loading: boolean
 }>()
 
 const emits = defineEmits(['selectDate'])

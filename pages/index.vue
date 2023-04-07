@@ -8,6 +8,7 @@
       :expense-transactions="displayData.selectedAccountExpenseTransactions" ref="statistics"
       :selected-date-from="displayData.selectedDateFrom"
       :selected-date-to="displayData.selectedDateTo"
+      :loading="displayData.statisticsLoading"
       @select-date="selectDate"/>
       
 
@@ -22,12 +23,14 @@
       class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1 min-h-[400px] max-h-[550px]" 
       :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions"
+      :loading="displayData.transactionsLoading"
       @refresh-transactions="refreshData(['accounts', 'categories', 'transactions', 'statistics'])" />
 
     <Categories 
       class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1 min-h-[400px] max-h-[550px]" 
       :account-categories="displayData.selectedAccountCategories" 
       :account="displayData.selectedAccount"
+      :loading="displayData.categoriesLoading"
       @refresh-categories="refreshData(['categories'])" 
       @refresh-categories-with-transactions="refreshData(['categories', 'transactions'])" />
   </div>
@@ -61,6 +64,9 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalIncome: number
   selectedAccountTransactionsTotalExpense: number
   accountsLoading: boolean
+  categoriesLoading: boolean
+  transactionsLoading: boolean
+  statisticsLoading: boolean
 }>({
   selectedAccount: null,
   selectedDateFrom: new Date(),
@@ -72,6 +78,9 @@ const displayData = reactive<{
   selectedAccountTransactionsTotalIncome: 0,
   selectedAccountTransactionsTotalExpense: 0,
   accountsLoading: true,
+  categoriesLoading: true,
+  transactionsLoading: true,
+  statisticsLoading: true,
 })
 
 const fetchUserAccounts = async () => {
@@ -84,11 +93,17 @@ const fetchUserAccounts = async () => {
 }
 
 const fetchAccountCategories = async () => {
+  displayData.categoriesLoading = true
+
   const { categories } = await getAccountCategories()
   displayData.selectedAccountCategories = categories
+
+  displayData.categoriesLoading = false
 }
 
 const fetchAccountTransactions = async () => {
+  displayData.transactionsLoading = true
+
   const {
     transactions_all, transactions_income_total, transactions_expense_total, transactions_expense,
   } = await getAccountTransactions()
@@ -96,12 +111,18 @@ const fetchAccountTransactions = async () => {
   displayData.selectedAccountExpenseTransactions = transactions_expense
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total
   displayData.selectedAccountTransactionsTotalExpense = transactions_expense_total
+
+  displayData.transactionsLoading = false
 }
 
 const initializeGraphs = () => {
+  displayData.statisticsLoading = true
+
   if (statistics.value) {
     statistics.value.initializeGraphs()
   }
+
+  displayData.statisticsLoading = false
 }
 
 const refreshData = async (components:components[]) => {
