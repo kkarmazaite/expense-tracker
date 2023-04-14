@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white rounded-md py-5">
-    <div class="w-full h-full px-5 overflow-auto">
+    <div @scroll="handleScroll" class="max-h-[500px] w-full h-full px-5 overflow-auto">
       <!-- Header -->
       <div class="flex justify-between pb-12 md:pb-5 sticky top-0 bg-white z-10">
         <h2 class="capitalize text-bold text-2xl">Transactions</h2>
@@ -57,6 +57,7 @@
             </UIButton>
           </div>
         </div>
+        <UISpinner class="w-full mt-5" v-if="props.additionalTransactionsLoading" />
 
       </div>
     </div>
@@ -107,13 +108,16 @@ import { ICategory } from '~~/types/ICategory';
 import { ITransaction } from '~~/types/ITransaction';
 import { displayCurrency } from '~~/helpers/displayCurrency';
 
-
-const emits = defineEmits(['refreshTransactions'])
+const emits = defineEmits([
+  'refreshTransactions',
+  'loadMoreTransactions',
+])
 
 const props = defineProps<{
   accountCategories: ICategory[]
   accountTransactions: ITransaction[]
   loading: boolean
+  additionalTransactionsLoading: boolean
 }>()
 
 const { createNewTransaction, deleteTransaction, updateTransaction } = useTransaction()
@@ -124,6 +128,16 @@ const selectList = computed(() => props.accountCategories.map((category) => {
     "valueDisplay": category.name,
   }
 }) || [])
+
+const handleScroll = (el:any) => {
+  if((el.srcElement.offsetHeight + el.srcElement.scrollTop) >= el.srcElement.scrollHeight) {
+    loadMoreTransactions()
+  }
+}
+
+const loadMoreTransactions = () => {
+  emits('loadMoreTransactions')
+}
 
 const modalKeyName = "show_modal_transactions"
 const { useShowModal, openModal, closeModal } =

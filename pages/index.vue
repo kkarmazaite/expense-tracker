@@ -20,14 +20,16 @@
       @refresh-accounts="refreshData(['accounts'])" />
 
     <Transactions 
-      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1 min-h-[400px] max-h-[550px]" 
+      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1 max-h-[500px]" 
       :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions"
       :loading="displayData.transactionsLoading"
-      @refresh-transactions="refreshData(['accounts', 'categories', 'transactions', 'statistics'])" />
+      :additional-transactions-loading="displayData.additionalTransactionsLoading"
+      @refresh-transactions="refreshData(['accounts', 'categories', 'transactions', 'statistics'])"
+      @load-more-transactions="loadMoreTransactions" />
 
     <Categories 
-      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1 min-h-[400px] max-h-[550px]" 
+      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1 max-h-[500px]" 
       :account-categories="displayData.selectedAccountCategories" 
       :account="displayData.selectedAccount"
       :loading="displayData.categoriesLoading"
@@ -67,6 +69,10 @@ const displayData = reactive<{
   categoriesLoading: boolean
   transactionsLoading: boolean
   statisticsLoading: boolean
+  transactionsDisplayed: number
+  transactionDisplayCount: number
+  maximumTransactionCount: number
+  additionalTransactionsLoading: boolean
 }>({
   selectedAccount: null,
   selectedDateFrom: new Date(),
@@ -81,6 +87,10 @@ const displayData = reactive<{
   categoriesLoading: true,
   transactionsLoading: true,
   statisticsLoading: true,
+  transactionsDisplayed: 0,
+  transactionDisplayCount: 6,
+  maximumTransactionCount: 0,
+  additionalTransactionsLoading: false,
 })
 
 const fetchUserAccounts = async () => {
@@ -104,16 +114,20 @@ const fetchAccountCategories = async () => {
 const fetchAccountTransactions = async () => {
   displayData.transactionsLoading = true
 
+  displayData.transactionsDisplayed = 0
+
   const {
-    transactions_all, transactions_income_total, transactions_expense_total, transactions_expense,
+    transactions_all, transactions_income_total, transactions_expense_total, transactions_expense, transactions_income,
   } = await getAccountTransactions({
-    start: 0,
-    count: 6, 
+    start: displayData.transactionsDisplayed,
+    count: displayData.transactionDisplayCount, 
   })
   displayData.selectedAccountTransactions = transactions_all
   displayData.selectedAccountExpenseTransactions = transactions_expense
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total
   displayData.selectedAccountTransactionsTotalExpense = transactions_expense_total
+
+  displayData.maximumTransactionCount = transactions_expense.length + transactions_income.length
 
   displayData.transactionsLoading = false
 }
@@ -180,6 +194,25 @@ const selectDate = async (dateFrom:Date, dateTo:Date) => {
     'transactions',
     'statistics',
   ])
+}
+
+const loadMoreTransactions = async () => {
+  console.log(displayData.maximumTransactionCount, displayData.transactionsDisplayed)
+  if(displayData.maximumTransactionCount <= displayData.transactionsDisplayed){
+    return
+  }
+  displayData.additionalTransactionsLoading = true
+
+  displayData.transactionsDisplayed += displayData.transactionDisplayCount
+
+  const { transactions_all } = await getAccountTransactions({
+    start: displayData.transactionsDisplayed,
+    count: displayData.transactionDisplayCount, 
+  })
+
+  displayData.selectedAccountTransactions.push(...transactions_all)
+
+  displayData.additionalTransactionsLoading = false
 }
 
 initializeData()
