@@ -1,7 +1,7 @@
 import { sendError } from "h3"
 import { updateAccount, getAccountById, getAccountsByNameAndUserId } from "~~/server/db/accounts"
 export default defineEventHandler(async (event) => {
-  const accountId = await event.context.params.id
+  const accountId = await event.context.params?.id
   const { name }:{ name:string} = await readBody(event)
 
   if(!accountId || !name){

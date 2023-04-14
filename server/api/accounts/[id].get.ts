@@ -2,7 +2,7 @@ import { sendError } from "h3"
 import { getAccountById } from "~~/server/db/accounts"
 
 export default defineEventHandler(async (event) => {
-  const accountId = await event.context.params.id
+  const accountId = await event.context.params?.id
 
   if(!accountId){
     return sendError(event, createError({

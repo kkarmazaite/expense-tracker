@@ -2,7 +2,7 @@ import { sendError } from "h3"
 import { updateCategory, getCategoriesByNameTypeAndAccountId, getCategoryById } from "~~/server/db/categories"
 export default defineEventHandler(async (event) => {
 
-  const categoryId = event.context.params.id as string | undefined
+  const categoryId = event.context.params?.id as string | undefined
   const { name, iconId, colorId }:{ name:string, iconId: string | null, colorId: string | null} = await readBody(event)
 
   if(!categoryId || !name){

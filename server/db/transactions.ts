@@ -7,8 +7,10 @@ export const createTransaction = async(transactionData: ITransactionCreation): P
     data: transactionData,
   })
 }
-export const getTransactionsByAccountId = (accountId:string, dateFrom: Date, dateTo: Date): Promise<ITransaction[]> => {
+export const getTransactionsByAccountId = (accountId:string, dateFrom: Date, dateTo: Date, recordStart: number, recordCount: number): Promise<ITransaction[]> => {
   return prisma.transaction.findMany({
+    skip: recordStart,
+    take: recordCount,
     where:{
       category: {
         accountId,

@@ -16,14 +16,20 @@ export default () => {
       },
     })
   }
-  const getAccountTransactions = async() => {
+  const getAccountTransactions = async({ start, count }: {start:number, count:number}) => {
     const data:{
             transactions_all:ITransaction[], 
             transactions_income:ITransaction[], 
             transactions_income_total:number,
             transactions_expense:ITransaction[],
             transactions_expense_total:number,
-        } = await useFetchApi('/api/transactions')
+        } = await useFetchApi('/api/transactions', {
+          method: 'GET',
+          query: { 
+            start,
+            count,
+          },
+        })
     return data
   }
 

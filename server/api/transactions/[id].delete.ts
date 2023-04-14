@@ -1,7 +1,7 @@
 import { sendError } from "h3"
 import { deleteTransactionById, getTransactionById } from "~~/server/db/transactions"
 export default defineEventHandler(async (event) => {
-  const transactionId = await event.context.params.id
+  const transactionId = await event.context.params?.id
 
   if(!transactionId){
     return sendError(event, createError({

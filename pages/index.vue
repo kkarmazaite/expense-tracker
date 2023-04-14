@@ -106,7 +106,10 @@ const fetchAccountTransactions = async () => {
 
   const {
     transactions_all, transactions_income_total, transactions_expense_total, transactions_expense,
-  } = await getAccountTransactions()
+  } = await getAccountTransactions({
+    start: 0,
+    count: 6, 
+  })
   displayData.selectedAccountTransactions = transactions_all
   displayData.selectedAccountExpenseTransactions = transactions_expense
   displayData.selectedAccountTransactionsTotalIncome = transactions_income_total

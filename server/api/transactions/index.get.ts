@@ -6,6 +6,11 @@ export default defineEventHandler(async (event) => {
   const dateFrom = getCookie(event, 'date_from')
   const dateTo = getCookie(event, 'date_to')
 
+  const { start, count } = getQuery(event)
+
+  const recordStart = parseInt(start as string, 10)
+  const recordCount = parseInt(count as string, 10)
+
   const startDate = new Date(dateFrom as string);
   const endDate = new Date(dateTo as string);
 
@@ -16,7 +21,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Invalid parameters', 
     }))
   }
-  const accountTransactions = await getTransactionsByAccountId(selectedAccountId, startDate, endDate) 
+  const accountTransactions = await getTransactionsByAccountId(selectedAccountId, startDate, endDate, recordStart, recordCount) 
 
   const accountIncomeTransactions = await  getIncomeTransactionsByAccountId(selectedAccountId, startDate, endDate)
   const accountIncomeTransactionsTotal = accountIncomeTransactions.reduce((partialSum, transaction) => partialSum + transaction.amount, 0)
