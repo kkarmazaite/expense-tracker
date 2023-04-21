@@ -197,7 +197,6 @@ const selectDate = async (dateFrom:Date, dateTo:Date) => {
 }
 
 const loadMoreTransactions = async () => {
-  console.log(displayData.maximumTransactionCount, displayData.transactionsDisplayed)
   if(displayData.maximumTransactionCount <= displayData.transactionsDisplayed){
     return
   }
