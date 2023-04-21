@@ -6,11 +6,11 @@
         <div v-if="props.loading" class="w-52 h-8 mb-5 bg-gray-100 rounded-md animate-pulse"></div>
         <h2 v-else class="capitalize text-bold text-2xl pb-5 break-all">{{ props.account.name }}</h2>
         <div class="flex justify-between items-center w-full md:w-60 my-2 md:my-0">
-          <UIButton class="text-xl md:text-base" type="plain" @click="changeMonth('prev')">
+          <UIButton class="w-4 text-xl md:text-base" type="plain" @click="changeMonth('prev')">
             <font-awesome-icon icon="fa-solid fa-chevron-left" />
           </UIButton>
           <span>{{ dateDisplay }}</span> 
-          <UIButton class="text-xl md:text-base" type="plain" @click="changeMonth('next')">
+          <UIButton class="w-4 text-xl md:text-base" type="plain" @click="changeMonth('next')">
             <font-awesome-icon icon="fa-solid fa-chevron-right" />
           </UIButton>
         </div>

@@ -20,7 +20,7 @@
       @refresh-accounts="refreshData(['accounts'])" />
 
     <Transactions 
-      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1 max-h-[500px]" 
+      class="order-2 md:order-3 col-span-1 md:col-span-3 row-span-1 min-h-[500px] max-h-[500px]" 
       :account-categories="displayData.selectedAccountCategories"
       :account-transactions="displayData.selectedAccountTransactions"
       :loading="displayData.transactionsLoading"
@@ -29,7 +29,7 @@
       @load-more-transactions="loadMoreTransactions" />
 
     <Categories 
-      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1 max-h-[500px]" 
+      class="order-4 md:order-4 col-span-1 md:col-span-2 row-span-1 min-h-[500px] max-h-[500px]" 
       :account-categories="displayData.selectedAccountCategories" 
       :account="displayData.selectedAccount"
       :loading="displayData.categoriesLoading"
