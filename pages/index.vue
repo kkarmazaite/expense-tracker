@@ -104,7 +104,7 @@ const fetchUserAccounts = async () => {
 
 const fetchAccountCategories = async () => {
   displayData.categoriesLoading = true
-
+  
   const { categories } = await getAccountCategories()
   displayData.selectedAccountCategories = categories
 
@@ -187,6 +187,7 @@ const selectAccount = async (selectedAccountId: string) => {
 const selectDate = async (dateFrom:Date, dateTo:Date) => {
   displayData.selectedDateFrom = dateFrom
   displayData.selectedDateTo = dateTo
+  displayData.statisticsLoading = true
 
   await selectDateRange(dateToIsoString(dateFrom), dateToIsoString(dateTo))
   await refreshData([

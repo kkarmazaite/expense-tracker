@@ -42,10 +42,10 @@
             </div>
           </div>
           <div class="flex justify-between gap-1 pl-4 transition-all ease-in-out duration-500 w-24 md:w-0 opacity-100 md:opacity-0 group-hover:w-24 group-hover:opacity-100">
-            <UIButton class="w-4 text-xl md:text-base" type="plain" @click="openUpdateModal(accountCategory)">
+            <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="openUpdateModal(accountCategory)">
               <font-awesome-icon icon="fa fa-pencil" />
             </UIButton>
-            <UIButton class="w-4 text-xl md:text-base" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
+            <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
               <font-awesome-icon icon="fa fa-trash" />
             </UIButton>
           </div>
