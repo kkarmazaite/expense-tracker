@@ -48,7 +48,7 @@
               <p class="font-bold">{{ displayCurrency(transaction.amount) }}</p>
             </div>
           </div>
-          <div class="flex  justify-start items-start gap-1 pl-2 transition-all ease-in-out duration-500 w-24 md:w-0 opacity-100 md:opacity-0 group-hover:w-24 group-hover:opacity-100">
+          <div class="flex  justify-start items-start gap-1 pl-2 pr-5 transition-all ease-in-out duration-500 w-24 md:w-0 opacity-100 md:opacity-0 group-hover:w-24 group-hover:opacity-100">
             <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="openUpdateModal(transaction)">
               <font-awesome-icon icon="fa fa-pencil" />
             </UIButton>
