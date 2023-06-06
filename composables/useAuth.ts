@@ -28,7 +28,6 @@ export default () => {
   }
 
   const login = async ({ email, password }:ILogin) => {
-    authLoading.value = true
 
     const data:{user:IUser, access_token:string} = await $fetch('/api/auth/login', {
       method: 'POST',
@@ -39,8 +38,6 @@ export default () => {
     })
     authToken.value = data.access_token
     authUser.value = data.user
-
-    authLoading.value = false
 
     return data
   }

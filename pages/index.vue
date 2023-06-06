@@ -1,5 +1,5 @@
 <template>
-  <div class="p-5 h-full w-full grid grid-cols-1 md:grid-cols-5 auto-rows-auto gap-5">
+  <div data-cy="main-page" class="p-5 h-full w-full grid grid-cols-1 md:grid-cols-5 auto-rows-auto gap-5">
     <Statistics 
       class="order-1 md:order-1 col-span-1 md:col-span-3 row-span-1 min-h-[500px] max-h-[550px]"
       :account="displayData.selectedAccount"

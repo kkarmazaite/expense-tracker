@@ -1,10 +1,10 @@
 <template>
-  <div class="pt-5 space-y-6 w-full">
+  <div data-cy="login-page" class="pt-5 space-y-6 w-full">
     <h1 class="mb-20 text-5xl">Sign In</h1>
-    <UIInput label="Email" placeholder="user@email.com" type="email" v-model="loginData.email" />
-    <UIInput label="Password" placeholder="*********" type="password" v-model="loginData.password" />
+    <UIInput data-cy="login-input-email" label="Email" placeholder="user@email.com" type="email" v-model="loginData.email" />
+    <UIInput data-cy="login-input-password" label="Password" placeholder="*********" type="password" v-model="loginData.password" />
     <p class="text-red-500">{{ loginError }}</p>
-    <UIButton @click="handleLogin" :disabled="loginDisabled">
+    <UIButton data-cy="login-button"  @click="handleLogin" :disabled="loginDisabled">
       Sign In
     </UIButton>
     <UIButton @click="useRouter().push('/register')" type="text">
@@ -31,6 +31,7 @@ const handleLogin = async () => {
   const { login } = useAuth()
 
   loginData.loading = true
+  
   try {
     await login({
       email: loginData.email,
@@ -38,10 +39,10 @@ const handleLogin = async () => {
     })
 
     useRouter().push('/')
+
   } catch (error: any) {
     loginError.value = error.statusMessage
-  } finally {
     loginData.loading = false
-  }
+  } 
 }
 </script>
