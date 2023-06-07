@@ -3,15 +3,16 @@ on:
   push:
     branches: [ master ]
 jobs:
-  cypress-run:
-      runs-on: ubuntu-22.04
-      steps:
-          name: Checkout
-          uses: actions/checkout@v3
-        # Install NPM dependencies, cache them correctly
-        # and run all Cypress tests
-          name: Cypress run
-          uses: cypress-io/github-action@v5
-          with:
-            start: 'yarn dev'
-            wait-on: 'http://localhost:3000'
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v3
+        with:
+          browser: chrome
+          build: yarn build
+          start: yarn start
+          wait-on: "http://localhost:3000"
