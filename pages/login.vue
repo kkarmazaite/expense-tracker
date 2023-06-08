@@ -38,7 +38,7 @@ const handleLogin = async () => {
       password: loginData.password,
     })
 
-    useRouter().push('/')
+    useRouter().push("/dashboard");
 
   } catch (error: any) {
     loginError.value = error.statusMessage

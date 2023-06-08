@@ -43,19 +43,21 @@ export default () => {
   }
 
   const refreshToken = async() => {
-    const data:{access_token:string} = await useFetchApi('/api/auth/refresh')
-
-    authToken.value = data.access_token
-    return data
-
+    try{
+      const data:{access_token:string} = await useFetchApi('/api/auth/refresh')
+      authToken.value = data.access_token
+    }catch(e){
+      authToken.value = null
+    }
   }
+
   const getUser = async() => {
-    const data:{user:IUser} = await useFetchApi('/api/auth/user')
-
-    authUser.value = data.user
-    return data
-
-
+    try{
+      const data:{user:IUser} = await useFetchApi('/api/auth/user')
+      authUser.value = data.user
+    }catch(e){
+      authUser.value = null
+    }
   }
 
   const reRefreshAccessToken = () => {
@@ -105,7 +107,7 @@ export default () => {
 
   const redirect = () => {
     if (authUser.value) {
-      useRouter().push("/");
+      useRouter().push("/dashboard");
     } else {
       useRouter().push("/login");
     }
