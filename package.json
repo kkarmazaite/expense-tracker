@@ -60,7 +60,7 @@
     "d3-transition": "^3.0.1",
     "jsonwebtoken": "^9.0.0",
     "jwt-decode": "^3.1.2",
-    "nuxt": "3.0.0",
+    "nuxt": "3.5.3",
     "prisma": "^4.7.0",
     "start-server-and-test": "^2.0.0",
     "ts-node": "^10.9.1",
