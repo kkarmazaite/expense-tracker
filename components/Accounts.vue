@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="flex justify-between pb-12 md:pb-5 sticky top-0 bg-white">
         <h2 class="capitalize text-bold text-2xl">Accounts</h2>
-        <UIButton type="plain" class="w-auto px-2 text-3xl md:text-xl" @click="openCreationModal()">
+        <UIButton data-cy="account-creation-button" type="plain" class="w-auto px-2 text-3xl md:text-xl" @click="openCreationModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
@@ -22,17 +22,17 @@
       <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
         <div v-for="userAccount in props.userAccounts" :key="userAccount.id"
           class="flex justify-between w-full group overflow-hidden">
-          <div class="flex justify-between gap-4 cursor-pointer w-full mt-1 md:mt-0 font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
-            <p class="break-all">{{ userAccount.name }}</p>
+          <div data-cy="account" class="flex justify-between gap-4 cursor-pointer w-full mt-1 md:mt-0 font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
+            <p data-cy="account-name" class="break-all">{{ userAccount.name }}</p>
             <p v-if="userAccount.categories" class="font-bold">
               {{ displayCurrency(getCategorySum(userAccount.categories)) }}
             </p>
           </div>
-          <div class="flex justify-start items-start gap-1 pl-2 pr-5 transition-all ease-in-out duration-500 w-28 md:w-0 opacity-100 md:opacity-0 group-hover:w-28 group-hover:opacity-100">
+          <div data-cy="account-buttons" class="flex justify-start items-start gap-1 pl-2 pr-5 transition-all ease-in-out duration-500 w-28 md:w-0 opacity-100 md:opacity-0 group-hover:w-28 group-hover:opacity-100">
             <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="openUpdateModal(userAccount)">
               <font-awesome-icon icon="fa fa-pencil" />
             </UIButton>
-            <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="handleAccountDeletion(userAccount.id)">
+            <UIButton data-cy="account-delete-button" class="w-1 px-2 text-lg md:text-base" type="plain" @click="handleAccountDeletion(userAccount.id)">
               <font-awesome-icon icon="fa fa-trash" />
             </UIButton>
           </div>
@@ -42,15 +42,15 @@
     </div>
 
     <!-- Creation Modal -->
-    <UIModal class="z-50" v-if="showModal && modalType === 'creation'" title="Create new account" :modalKeyName="modalKeyName"
+    <UIModal data-cy="account-creation-modal" class="z-50" v-if="showModal && modalType === 'creation'" title="Create new account" :modalKeyName="modalKeyName"
       :showModal="showModal">
       <div class="mb-20 flex flex-col  gap-10 md:gap-5">
-        <UIInput label="Name" placeholder="wallet" v-model="accountCreationData.name" />
+        <UIInput data-cy="account-creation-name-input" label="Name" placeholder="wallet" v-model="accountCreationData.name" />
       </div>
       <p class="text-red-500">{{ accountCreationData.error }}</p>
       <div class="flex justify-between gap-5">
         <UIButton type="plain-border" @click="closeModal()"> Cancel </UIButton>
-        <UIButton :disabled="accountCreationDisabled" @click="handleAccountCreation">
+        <UIButton data-cy="account-creation-create-button" :disabled="accountCreationDisabled" @click="handleAccountCreation">
           Create
         </UIButton>
       </div>

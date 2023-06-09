@@ -91,7 +91,6 @@ export default () => {
   }
 
   const logout = async() => {
-    authLoading.value = true
 
     await useFetchApi('/api/auth/logout', {
       method: 'POST',
@@ -102,7 +101,6 @@ export default () => {
 
     useRouter().push("/login")
 
-    authLoading.value = false
   }
 
   const redirect = () => {
