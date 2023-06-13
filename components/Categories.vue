@@ -4,7 +4,7 @@
       <!-- Header -->
       <div class="flex justify-between pb-12 md:pb-5 sticky top-0 bg-white z-10">
         <h2 class="capitalize text-bold text-2xl">Categories</h2>
-        <UIButton v-if="props.account" type="plain" class="w-auto px-2 text-3xl md:text-xl" @click="openCreationModal()">
+        <UIButton data-cy="category-creation-button" v-if="props.account" type="plain" class="w-auto px-2 text-3xl md:text-xl" @click="openCreationModal()">
           <font-awesome-icon icon="fa-solid fa-plus" />
         </UIButton>
       </div>
@@ -24,13 +24,13 @@
       <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden text-sm md:text-base"
           v-for="accountCategory in props.accountCategories" :key="accountCategory.id">
-          <div class="flex items-center gap-4 w-full mt-1 md:mt-0">
+          <div data-cy="category" class="flex items-center gap-4 w-full mt-1 md:mt-0">
             <UICategoryIcon 
               :hex-code="accountCategory.color?.hexCode ? accountCategory.color?.hexCode: ''" 
               :icon-name="accountCategory.icon?.name ? accountCategory.icon?.name: ''" 
               />
             <div  class="flex justify-between items-center w-full gap-4">
-              <p class="font-bold text-left break-all" :class="{
+              <p data-cy="category-name" class="font-bold text-left break-all" :class="{
                 'text-green-500': accountCategory.type === 'income',
                 'text-red-500': accountCategory.type === 'expense'
               }"> 
@@ -41,11 +41,11 @@
               </p>
             </div>
           </div>
-          <div class="flex justify-start gap-1 pl-2 pr-5 transition-all ease-in-out duration-500 w-28 md:w-0 opacity-100 md:opacity-0 group-hover:w-28 group-hover:opacity-100">
+          <div data-cy="category-buttons" class="flex justify-start gap-1 pl-2 pr-5 transition-all ease-in-out duration-500 w-28 md:w-0 opacity-100 md:opacity-0 group-hover:w-28 group-hover:opacity-100">
             <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="openUpdateModal(accountCategory)">
               <font-awesome-icon icon="fa fa-pencil" />
             </UIButton>
-            <UIButton class="w-1 px-2 text-lg md:text-base" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
+            <UIButton data-cy="category-delete-button"  class="w-1 px-2 text-lg md:text-base" type="plain" @click="handleCategoryDeletion(accountCategory.id)">
               <font-awesome-icon icon="fa fa-trash" />
             </UIButton>
           </div>
@@ -54,12 +54,12 @@
     </div>
 
     <!-- Creation Modal -->
-    <UIModal class=" z-50" v-if="showModal && modalType === 'creation'" title="Create new category" :modalKeyName="modalKeyName"
+    <UIModal data-cy="category-creation-modal" class=" z-50" v-if="showModal && modalType === 'creation'" title="Create new category" :modalKeyName="modalKeyName"
       :showModal="showModal">
       <div class="mb-20 flex flex-col  gap-10 md:gap-5">
-        <UISelect label="Type" :selectOptionList="selectList" :value="categoryCreationData.type"
+        <UISelect data-cy="category-creation-type-input" label="Type" :selectOptionList="selectList" :value="categoryCreationData.type"
           v-model="categoryCreationData.type" />
-        <UIInput label="Name" placeholder="groceries" v-model="categoryCreationData.name" />
+        <UIInput data-cy="category-creation-name-input" label="Name" placeholder="groceries" v-model="categoryCreationData.name" />
 
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Selected icon</p>
@@ -68,15 +68,15 @@
 
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select an icon</p>
-        <div class="flex gap-2 flex-wrap w-full">
-            <UICategoryIcon hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="(icon.id as string)" :icon-name="icon.name" @click="selectIcon({type:'creation', iconId: icon.id as string, iconName: icon.name})"/>
-        </div>
+          <div data-cy="category-creation-icon-list" class="flex gap-2 flex-wrap w-full">
+              <UICategoryIcon data-cy="category-creation-icon" hex-code="" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="icon in iconList" :key="(icon.id as string)" :icon-name="icon.name" @click="selectIcon({type:'creation', iconId: icon.id as string, iconName: icon.name})"/>
+          </div>
         </div>
         
         <div>
           <p class="block pl-3 ml-px text-sm font-medium text-gray-700 mb-2">Select a color</p>
-          <div class="flex gap-2 flex-wrap w-full">
-              <UICategoryIcon :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="(color.id as string)" icon-name="" @click="selectColor({type:'creation', colorId: color.id as string, colorHexCode: color.hexCode})"/>
+          <div data-cy="category-creation-color-list" class="flex gap-2 flex-wrap w-full">
+              <UICategoryIcon data-cy="category-creation-color" :hex-code="color.hexCode" class="hover:cursor-pointer hover:ring-2 hover:ring-blue-400 hover:ring-opacity-50" v-for="color in colorList" :key="(color.id as string)" icon-name="" @click="selectColor({type:'creation', colorId: color.id as string, colorHexCode: color.hexCode})"/>
           </div>
         </div>
           
@@ -84,7 +84,7 @@
       <p class="text-red-500">{{ categoryCreationData.error }}</p>
       <div class="flex justify-between gap-5">
         <UIButton type="plain-border" @click="closeModal()"> Cancel </UIButton>
-        <UIButton :disabled="categoryCreationDisabled" @click="handleCategoryCreation">
+        <UIButton data-cy="category-creation-create-button" :disabled="categoryCreationDisabled" @click="handleCategoryCreation">
           Create
         </UIButton>
       </div>

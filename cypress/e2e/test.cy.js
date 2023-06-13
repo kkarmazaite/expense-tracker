@@ -5,7 +5,7 @@ describe('Testing main user flow', () => {
 
   it('login', () => {
     cy.get('[data-cy="login-page"]').should('exist');
-    cy.get('[data-cy="login-input-email"]').type("dev@gmail.com")
+    cy.get('[data-cy="login-input-email"]').type("test@gmail.com")
     cy.get('[data-cy="login-input-password"]').type("password")
     cy.get('[data-cy="login-button"]').click()
     cy.get('[data-cy="main-page"]').should('exist');
@@ -16,15 +16,32 @@ describe('Testing main user flow', () => {
     cy.get('[data-cy="account-creation-modal"]').should('exist');
     cy.get('[data-cy="account-creation-name-input"]').type("Test account")
     cy.get('[data-cy="account-creation-create-button"]').click()
-    cy.get(':nth-child(3) > [data-cy="account"]').should('exist');
-    cy.get(':nth-child(3) > [data-cy="account"] > [data-cy="account-name"]').contains('Test account');
+    cy.get(':nth-child(2) > [data-cy="account"]').should('exist');
+    cy.get(':nth-child(2) > [data-cy="account"] > [data-cy="account-name"]').contains('Test account');
+  })
+
+  it('create category', () => {
+    cy.get(':nth-child(2) > [data-cy="account"]').click()
+    cy.get('[data-cy="category-creation-button"]').click();
+    cy.get('[data-cy="category-creation-modal"]').should('exist');
+    cy.get('[data-cy="category-creation-type-input"] select').select('Income');
+    cy.get('[data-cy="category-creation-name-input"]').type("Test income category")
+    cy.get('[data-cy="category-creation-icon-list"] > :nth-child(1)').click()
+    cy.get('[data-cy="category-creation-create-button"').click()
+    cy.get(':nth-child(1) > [data-cy="category"]').should('exist');
+    cy.get(':nth-child(1) > [data-cy="category"] [data-cy="category-name"]').contains('Test income category');
+  })
+
+  it('delete category', () => {
+    cy.get(':nth-child(1) > [data-cy="category"]').realHover('mouse');
+    cy.get(':nth-child(1) > [data-cy="category-buttons"] > [data-cy="category-delete-button"]').click();
+    cy.get(':nth-child(1) > [data-cy="category"]').should('not.exist');
   })
 
   it('delete account', () => {
-    cy.get(':nth-child(3) > [data-cy="account"]').realHover('mouse');
-    cy.get(':nth-child(3) > [data-cy="account-buttons"] > [data-cy="account-delete-button"]').click();
-    cy.get(':nth-child(3) > [data-cy="account"]').should('not.exist');
-
+    cy.get(':nth-child(2) > [data-cy="account"]').realHover('mouse');
+    cy.get(':nth-child(2) > [data-cy="account-buttons"] > [data-cy="account-delete-button"]').click();
+    cy.get(':nth-child(2) > [data-cy="account"]').should('not.exist');
   })
 
   it('logout', () => {
