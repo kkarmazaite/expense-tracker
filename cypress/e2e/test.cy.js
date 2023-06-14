@@ -32,6 +32,23 @@ describe('Testing main user flow', () => {
     cy.get(':nth-child(1) > [data-cy="category"] [data-cy="category-name"]').contains('Test income category');
   })
 
+  it('create transaction', () => {
+    cy.get(':nth-child(2) > [data-cy="account"]').click()
+    cy.get('[data-cy="transaction-creation-button"]').click();
+    cy.get('[data-cy="transaction-creation-modal"]').should('exist');
+    cy.get('[data-cy="transaction-creation-category-input"] select').select('Test income category');
+    cy.get('[data-cy="transaction-creation-amount-input"]').type(1000);
+    cy.get('[data-cy="transaction-creation-create-button"').click()
+    cy.get(':nth-child(1) > [data-cy="transaction"]').should('exist');
+    cy.get(':nth-child(1) > [data-cy="transaction"] [data-cy="transaction-name"]').contains('Test income category');
+  })
+
+  it('delete transaction', () => {
+    cy.get(':nth-child(1) > [data-cy="transaction"]').realHover('mouse');
+    cy.get(':nth-child(1) > [data-cy="transaction-buttons"] > [data-cy="transaction-delete-button"]').click();
+    cy.get(':nth-child(1) > [data-cy="transaction"]').should('not.exist');
+  })
+
   it('delete category', () => {
     cy.get(':nth-child(1) > [data-cy="category"]').realHover('mouse');
     cy.get(':nth-child(1) > [data-cy="category-buttons"] > [data-cy="category-delete-button"]').click();
