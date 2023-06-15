@@ -2,6 +2,7 @@
   // https://nuxt.com/docs/guide/concepts/typescript
   "extends": "./.nuxt/tsconfig.json",
   "compilerOptions": {
-    "lib": ["es6", "DOM"]
+    "lib": ["es6", "DOM"],
+    "types": ["cypress", "cypress-real-events"]
   }
 }

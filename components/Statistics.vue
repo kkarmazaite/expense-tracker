@@ -6,11 +6,11 @@
         <div v-if="props.loading" class="w-52 h-8 mb-5 bg-gray-100 rounded-md animate-pulse"></div>
         <h2 v-else class="capitalize text-bold text-2xl pb-5 break-all">{{ props.account.name }}</h2>
         <div class="flex justify-between items-center w-full md:w-60 my-2 md:my-0">
-          <UIButton class="w-4 text-xl md:text-base" type="plain" @click="changeMonth('prev')">
+          <UIButton data-cy="statistics-previous-month-button" class="w-4 text-xl md:text-base" type="plain" @click="changeMonth('prev')">
             <font-awesome-icon icon="fa-solid fa-chevron-left" />
           </UIButton>
           <span>{{ dateDisplay }}</span> 
-          <UIButton class="w-4 text-xl md:text-base" type="plain" @click="changeMonth('next')">
+          <UIButton data-cy="statistics-next-month-button" class="w-4 text-xl md:text-base" type="plain" @click="changeMonth('next')">
             <font-awesome-icon icon="fa-solid fa-chevron-right" />
           </UIButton>
         </div>
@@ -29,11 +29,11 @@
             <div v-else class="font-bold text-sm md:text-base flex flex-col gap-5 w-52 ">
               <div class="flex justify-between text-green-500">
                 <span>Income:</span>
-                <span>{{ displayCurrency(props.accountTotalIncome) }}</span>
+                <span data-cy="statistics-income">{{ displayCurrency(props.accountTotalIncome) }}</span>
               </div>
               <div class="flex justify-between text-red-500">
                 <span>Expenses:</span>
-                <span>{{ displayCurrency(props.accountTotalExpenses) }}</span>
+                <span data-cy="statistics-expense">{{ displayCurrency(props.accountTotalExpenses) }}</span>
               </div>
               <div class="flex justify-between" :class="{
                 'text-green-500': accountBalance > 0,
