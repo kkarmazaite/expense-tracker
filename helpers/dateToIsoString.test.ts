@@ -7,5 +7,6 @@ describe('Helper | dateToIsoString', async() => {
     const output = '2023-04-19'
 
     expect(dateToIsoString(input)).toStrictEqual(output)
+    expect(dateToIsoString(input)).toMatchSnapshot()
   })
 })

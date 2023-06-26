@@ -7,5 +7,6 @@ describe('Helper | displayCurrency', async() => {
     const output:string = '20,00 EUR'
 
     expect(displayCurrency(input).replace(/\s/, ' ')).toEqual(output);
+    expect(displayCurrency(input).replace(/\s/, ' ')).toMatchSnapshot()
   })
 })

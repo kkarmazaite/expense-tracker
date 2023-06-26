@@ -4,5 +4,6 @@
   "compilerOptions": {
     "lib": ["es6", "DOM"],
     "types": ["cypress", "cypress-real-events"]
-  }
+  },
+  "exclude": ["cypress"]
 }

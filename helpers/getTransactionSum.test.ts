@@ -51,5 +51,6 @@ describe('Helper | getTransactionSum', async() => {
     const output:number = 300
 
     expect(getTransactionSum(input)).toEqual(output);
+    expect(getTransactionSum(input)).toMatchSnapshot()
   })
 })

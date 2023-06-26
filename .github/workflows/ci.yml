@@ -37,4 +37,7 @@ jobs:
         with:
           start: yarn start
           browser: chrome
+
+      - name: Run unit tests
+        run: yarn test
       

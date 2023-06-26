@@ -10,5 +10,6 @@ describe('Helper | monthFirstAndLastDay', async() => {
     }
 
     expect(monthFirstAndLastDay(input)).toStrictEqual(output)
+    expect(monthFirstAndLastDay(input)).toMatchSnapshot()
   })
 })
