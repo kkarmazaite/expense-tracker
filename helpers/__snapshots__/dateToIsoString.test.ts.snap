@@ -1,0 +1,3 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Helper | dateToIsoString > Check dateToIsoString function 1`] = `"2023-04-19"`;

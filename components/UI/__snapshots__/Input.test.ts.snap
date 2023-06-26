@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Input.vue > Should render 1`] = `
+DOMWrapper {
+  "isDisabled": [Function],
+  "wrapperElement": <div
+    class="w-full"
+  >
+    <label
+      class="block pl-3 ml-px text-sm font-medium text-gray-700"
+      for=""
+    >
+      label
+    </label>
+    <div
+      class="mt-1"
+    >
+      <input
+        class="block w-full px-4 border-b border-gray-300 focus:border-blue-500 sm:text-sm"
+        placeholder="placeholder"
+        type="text"
+      />
+    </div>
+  </div>,
+}
+`;

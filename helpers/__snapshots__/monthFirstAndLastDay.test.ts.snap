@@ -1,0 +1,8 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Helper | monthFirstAndLastDay > Check monthFirstAndLastDay function 1`] = `
+{
+  "firstDay": 2023-04-01T00:00:00.000Z,
+  "lastDay": 2023-04-30T00:00:00.000Z,
+}
+`;
