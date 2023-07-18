@@ -20,7 +20,7 @@
         </div>
       </div>
       <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
-        <div v-for="userAccount in props.userAccounts" :key="userAccount.id"
+        <div data-cy="account-list" v-for="userAccount in props.userAccounts" :key="userAccount.id"
           class="flex justify-between w-full group overflow-hidden">
           <div data-cy="account" class="flex justify-between gap-4 cursor-pointer w-full mt-1 md:mt-0 font-bold text-left text-sm md:text-base" @click="emits('selectAccount', userAccount.id)">
             <p data-cy="account-name" class="break-all">{{ userAccount.name }}</p>

@@ -54,16 +54,20 @@ describe('Testing main user flow', () => {
   })
 
   it('create account', () => {
-    cy.get('[data-cy="account-creation-button"]').click();
-    cy.get('[data-cy="account-creation-modal"]').should('exist');
-    cy.get('[data-cy="account-creation-name-input"]').type(`${testAccount.name}`)
-    cy.get('[data-cy="account-creation-create-button"]').click()
-    cy.get(':nth-child(2) > [data-cy="account"]').should('exist');
-    cy.get(':nth-child(2) > [data-cy="account"] > [data-cy="account-name"]').contains(`${testAccount.name}`);
+    cy.get('[data-cy="account-list"]').then(($accountList) => {
+      const accountCount = $accountList.length
+
+      cy.get('[data-cy="account-creation-button"]').click();
+      cy.get('[data-cy="account-creation-modal"]').should('exist');
+      cy.get('[data-cy="account-creation-name-input"]').type(`${testAccount.name}`)
+      cy.get('[data-cy="account-creation-create-button"]').click()
+      cy.get('[data-cy="account-list"]').should('have.length', accountCount+1)
+    })
+    cy.get('[data-cy="account-list"]').last().find('[data-cy="account-name"]').contains(`${testAccount.name}`)
   })
 
   it('select account', () => {
-    cy.get(':nth-child(2) > [data-cy="account"]').click()
+    cy.get('[data-cy="account-list"]').last().click()
   })
 
   testTransactions.forEach((transaction, idx) => {
