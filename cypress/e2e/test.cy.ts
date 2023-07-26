@@ -51,6 +51,7 @@ describe('Testing main user flow', () => {
     cy.get('[data-cy="login-input-password"]').type(`${testUser.password}`)
     cy.get('[data-cy="login-button"]').click()
     cy.get('[data-cy="main-page"]').should('exist');
+    cy.get('[data-cy="main-page"]').screenshot({ overwrite: true })
   })
 
   it('create account', () => {
@@ -64,10 +65,12 @@ describe('Testing main user flow', () => {
       cy.get('[data-cy="account-list"]').should('have.length', accountCount+1)
     })
     cy.get('[data-cy="account-list"]').last().find('[data-cy="account-name"]').contains(`${testAccount.name}`)
+    cy.get('[data-cy="account-list"]').last().find('[data-cy="account-name"]').screenshot({ overwrite: true })
   })
 
   it('select account', () => {
     cy.get('[data-cy="account-list"]').last().click()
+    cy.get('[data-cy="account-list"]').last().screenshot({ overwrite: true })
   })
 
   testTransactions.forEach((transaction, idx) => {
@@ -81,6 +84,7 @@ describe('Testing main user flow', () => {
       cy.get('[data-cy="category-creation-create-button"').click()
       cy.get(`:nth-child(${ idx+1 }) > [data-cy="category"]`).should('exist');
       cy.get(`:nth-child(${ idx+1 }) > [data-cy="category"] [data-cy="category-name"]`).contains(transaction.categoryName);
+      cy.get(`:nth-child(${ idx+1 }) > [data-cy="category"] [data-cy="category-name"]`).screenshot({ overwrite: true })
     })
   
     it(`create transaction - ${transaction.categoryType}`, () => {
@@ -91,6 +95,7 @@ describe('Testing main user flow', () => {
       cy.get('[data-cy="transaction-creation-create-button"').click()
       cy.get(`:nth-child(${ idx+1 }) > [data-cy="transaction"]`).should('exist');
       cy.get(`:nth-child(${ idx+1 }) > [data-cy="transaction"] [data-cy="transaction-name"]`).contains(transaction.categoryName);
+      cy.get(`:nth-child(${ idx+1 }) > [data-cy="transaction"] [data-cy="transaction-name"]`).screenshot({ overwrite: true })
     })
   });
 
@@ -139,5 +144,6 @@ describe('Testing main user flow', () => {
     cy.get('[data-cy="header-drop-down"]').realHover()
     cy.get('[data-cy="logout-button"]').click()
     cy.get('[data-cy="login-page"]').should('exist');
+    cy.get('[data-cy="login-page"]').screenshot({ overwrite: true })
   })
 })
