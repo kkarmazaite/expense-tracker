@@ -15,11 +15,11 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Invalid parameters', 
     }))
   }
-  const userExists = await getUserByEmail(email)
-  if(userExists){
+
+  if(password.length < 6 || password === password.toLowerCase() || !/\d/.test(password)){
     return sendError(event, createError({
       statusCode: 400,
-      statusMessage: 'User with this email already exists', 
+      statusMessage: 'The password should be at least 6 characters long, contain at least one number and a uppercase letter.', 
     }))
   }
 
@@ -27,6 +27,14 @@ export default defineEventHandler(async (event) => {
     return sendError(event, createError({
       statusCode: 400,
       statusMessage: 'Passwords do not match', 
+    }))
+  }
+
+  const userExists = await getUserByEmail(email)
+  if(userExists){
+    return sendError(event, createError({
+      statusCode: 400,
+      statusMessage: 'User with this email already exists', 
     }))
   }
 
