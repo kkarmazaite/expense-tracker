@@ -27,7 +27,7 @@
       </div>
       <div v-else class="flex flex-col gap-10 md:gap-5 pb-10">
         <div class="flex justify-between w-full group overflow-hidden" v-for="transaction in props.accountTransactions"
-          :key="transaction.id" :title="(transaction.description as string)">
+          :key="transaction.id">
           <div data-cy="transaction" class="flex justify-between w-full gap-4 mt-1 md:mt-0 text-sm md:text-base">
             <div class="flex gap-4 break-all">
               <UICategoryIcon 
@@ -71,6 +71,7 @@
         <UIInput label="Date" type="date" v-model="transactionCreationData.date" />
         <UIInput data-cy="transaction-creation-amount-input" label="Amount" type="number" v-model="transactionCreationData.amount" />
         <UIInput label="Description" v-model="transactionCreationData.description" />
+        <div v-if="transactionCreationData.description && transactionCreationData.description.includes('<') && transactionCreationData.description.includes('>')" v-dompurify-html="transactionCreationData.description" class="w-full"></div>
       </div>
       <p class="text-red-500">{{ transactionCreationData.error }}</p>
       <div class="flex justify-between gap-5">
@@ -91,6 +92,7 @@
         <UIInput label="Date" type="date" v-model="transactionUpdateData.date" />
         <UIInput label="Amount" type="number" v-model="transactionUpdateData.amount" />
         <UIInput label="Description" v-model="transactionUpdateData.description" />
+        <div v-if="transactionUpdateData.description && transactionUpdateData.description.includes('<') && transactionUpdateData.description.includes('>')" v-dompurify-html="transactionUpdateData.description" class="w-full"></div>
       </div>
       <p class="text-red-500">{{ transactionUpdateData.error }}</p>
       <div class="flex justify-between gap-5">
