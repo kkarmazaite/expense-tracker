@@ -9,7 +9,12 @@ export default defineEventHandler(async (event) => {
     '/api/accounts',
     '/api/accounts/:id',
     '/api/categories',
+    '/api/categories/:id',
     '/api/transactions',
+    '/api/transactions/:id',
+    '/api/colors',
+    '/api/date',
+    '/api/icons',
   ]
 
   const isHandledByThisMiddleware = endpoints.some(endpoint => {
